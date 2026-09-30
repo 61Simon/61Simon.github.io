@@ -1447,32 +1447,41 @@
                     <a href="https://www.instagram.com/simonchikssss/"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-            
-            <div class="contact-form fade-in" style="animation-delay: 0.4s;">
-                <form>
-                    <div class="form-group">
-                        <label for="name" class="form-label">Your Name</label>
-                        <input type="text" id="name" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email" class="form-label">Your Email</label>
-                        <input type="email" id="email" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="subject" class="form-label">Subject</label>
-                        <input type="text" id="subject" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message" class="form-label">Your Message</label>
-                        <textarea id="message" class="form-control" required></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                </form>
-            </div>
+                
+<div class="contact-form fade-in" style="animation-delay: 0.4s;">
+    <!-- Перенаправляем форму на сервис Web3Forms -->
+    <form action="https://web3forms.com" method="POST">
+        
+        <!-- ОБЯЗАТЕЛЬНО: Вставьте ваш ключ вместо букв ниже -->
+        <input type="hidden" name="access_key" value="ВАШ_КЛЮЧ_ИЗ_ПИСЬМА">
+
+        <div class="form-group">
+            <label for="name" class="form-label">Your Name</label>
+            <!-- Добавлен name="name" -->
+            <input type="text" id="name" name="name" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email" class="form-label">Your Email</label>
+            <!-- Добавлен name="email" -->
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="subject" class="form-label">Subject</label>
+            <!-- Добавлен name="subject" -->
+            <input type="text" id="subject" name="subject" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="message" class="form-label">Your Message</label>
+            <!-- Добавлен name="message" -->
+            <textarea id="message" name="message" class="form-control" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+</div>
         </div>
     </section>
 
