@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You | Simon</title>
+    <link rel="icon" type="image/jpeg" href="./mak.jpg" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0a0a0a;
+            color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .bg {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(123, 97, 255, 0.18) 0%, #0a0a0a 65%);
+            z-index: -1;
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .container {
+            text-align: center;
+            max-width: 640px;
+            animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .check-circle {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7b61ff, #9d8aff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 52px;
+            box-shadow: 0 20px 50px rgba(123, 97, 255, 0.4);
+            animation: checkPop 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+        }
+        @keyframes checkPop {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .check-circle i {
+            animation: checkDraw 0.6s ease 0.5s both;
+        }
+        @keyframes checkDraw {
+            from { transform: scale(0.3); }
+            to { transform: scale(1); }
+        }
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 42px;
+            margin-bottom: 18px;
+            background: linear-gradient(90deg, #7b61ff, #9d8aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            font-size: 18px;
+            color: #b3b3b3;
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+        .subtitle strong { color: #9d8aff; }
+        .steps {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 35px;
+            text-align: left;
+        }
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .step:last-child { border-bottom: none; padding-bottom: 0; }
+        .step:first-child { padding-top: 0; }
+        .step-num {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(123, 97, 255, 0.15);
+            color: #9d8aff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+        .step-text h4 {
+            font-size: 15px;
+            margin-bottom: 4px;
+            font-family: 'Syne', sans-serif;
+        }
+        .step-text p {
+            font-size: 13px;
+            color: #b3b3b3;
+            line-height: 1.6;
+        }
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .btn-primary {
+            background: #7b61ff;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(123, 97, 255, 0.3);
+        }
+        .btn-primary:hover {
+            background: #9d8aff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(123, 97, 255, 0.4);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #7b61ff;
+            border-color: #7b61ff;
+        }
+        .btn-outline:hover {
+            background: #7b61ff;
+            color: #fff;
+            transform: translateY(-3px);
+        }
+        @media (max-width: 576px) {
+            h1 { font-size: 30px; }
+            .subtitle { font-size: 15px; }
+            .check-circle { width: 90px; height: 90px; font-size: 42px; }
+            .steps { padding: 22px; }
+            .actions { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg"></div>
+    <div class="container">
+        <div class="check-circle">
+            <i class="fas fa-check"></i>
+        </div>
+        <h1>Brief Received!</h1>
+        <p class="subtitle">
+            Thanks for reaching out — I've got your message and I'm already reading it.
+            <br>I'll reply to you <strong>within 24 hours</strong>.
+        </p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                    <h4>I review your brief</h4>
+                    <p>I go through every detail of your project to understand exactly what you need.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                    <h4>I reply within 24 hours</h4>
+                    <p>You'll get an email from me with a few clarifying questions or a project quote.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                    <h4>We start building</h4>
+                    <p>Once everything is agreed, I begin working on your website right away.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="./index.html" class="btn btn-primary"><i class="fas fa-home"></i> Back to Home</a>
+            <a href="https://t.me/simonsssbio" target="_blank" rel="noopener" class="btn btn-outline"><i class="fab fa-telegram"></i> Message me on Telegram</a>
+        </div>
+    </div>
+</body>
+</html>
