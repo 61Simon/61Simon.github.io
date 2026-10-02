@@ -1,11 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simon | Web Designer & Developer</title>
-    <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +7,19 @@
     <meta name="description" content="Welcome to Simon's web development portfolio. Explore my frontend projects like the Hot Wheels catalog. Сайт-портфолио веб-разработчика Саймона: создание сайтов на заказ. Розробка сайтів під замовлення." />
     <meta name="keywords" content="Simon portfolio, web developer, frontend dev, Hot Wheels website, Hot Wheels catalog, 61simon, sites, разработчик сайтов, сайт, на, заказ, сайт на заказ, веб разработчиик, веб-разработчик, портфолио, симон, саймон, портфоліо, веб-розробник, розробник сайтів, замовлення, сайт на замовлення" />
     <meta name="google-site-verification" content="vNHYsfY4x4urVP4pQ7w7XVAIE6HMB90OGYfc3GShoRE" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://61simon.github.io/" />
+    <meta property="og:title" content="Simon | Web Designer & Developer" />
+    <meta property="og:description" content="High-performing websites, custom design, and prices 2.3–2.5× lower than the market." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?auto=format&fit=crop&w=1200&q=80" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Simon | Web Designer & Developer" />
+    <meta name="twitter:description" content="High-performing websites, custom design, and prices 2.3–2.5× lower than the market." />
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?auto=format&fit=crop&w=1200&q=80" />
+
     <link rel="icon" type="image/jpeg" href="./mak.jpg" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,20 +35,23 @@
             --text: #f5f5f5;
             --text-secondary: #b3b3b3;
             --card-bg: #1a1a1a;
+            --card-border: rgba(255, 255, 255, 0.05);
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             --section-padding: 120px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        html[data-theme="light"] {
+            --primary: #ffffff;
+            --secondary: #f5f5f7;
+            --text: #0a0a0a;
+            --text-secondary: #4a4a4a;
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.08);
         }
 
-        html {
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; overflow-x: hidden; }
 
         body {
             font-family: 'Space Grotesk', sans-serif;
@@ -49,385 +59,432 @@
             color: var(--text);
             overflow-x: hidden;
             line-height: 1.7;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-            line-height: 1.2;
-        }
+        h1, h2, h3, h4 { font-family: 'Syne', sans-serif; font-weight: 700; line-height: 1.2; }
+        a { text-decoration: none; color: inherit; }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
+        .container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 40px; }
 
         section {
             padding: var(--section-padding) 0;
             position: relative;
+            scroll-margin-top: 90px;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--card-border), transparent);
+            pointer-events: none;
+        }
+
+        section:first-of-type::before,
+        .stats-section::before { display: none; }
+
+        .reading-progress {
+            position: fixed; top: 0; left: 0;
+            height: 3px; width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            z-index: 9999;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(123, 97, 255, 0.5);
         }
 
         .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px 32px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 16px;
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 16px 32px; border-radius: 50px;
+            font-weight: 600; font-size: 16px;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            border: none;
-            cursor: pointer;
+            position: relative; overflow: hidden;
+            border: none; cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
         }
 
         .btn-primary {
-            background: var(--accent);
-            color: white;
+            background: var(--accent); color: white;
             box-shadow: 0 4px 20px rgba(123, 97, 255, 0.3);
         }
-
         .btn-primary:hover {
             background: var(--accent-light);
             box-shadow: 0 8px 30px rgba(123, 97, 255, 0.4);
             transform: translateY(-3px);
         }
-
         .btn-outline {
             background: transparent;
             border: 2px solid var(--accent);
             color: var(--accent);
         }
-
         .btn-outline:hover {
-            background: var(--accent);
-            color: white;
+            background: var(--accent); color: white;
             transform: translateY(-3px);
         }
 
         .section-title {
-            font-size: 48px;
-            margin-bottom: 80px;
-            position: relative;
-            display: inline-block;
+            font-size: 48px; margin-bottom: 80px;
+            position: relative; display: inline-block;
+            will-change: transform;
+            transition: transform 0.1s linear;
         }
-
         .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 2px;
+            content: ''; position: absolute; bottom: -15px; left: 0;
+            width: 60px; height: 4px; background: var(--accent); border-radius: 2px;
         }
+        .section-title span { color: var(--accent); }
 
-        /* Header */
         header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 20px 0;
+            position: fixed; top: 0; left: 0; width: 100%;
+            z-index: 1000; padding: 20px 0;
             transition: var(--transition);
         }
-
         header.scrolled {
-            background: rgba(10, 10, 10, 0.9);
+            background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(10px);
-            padding: 15px 0;
+            -webkit-backdrop-filter: blur(10px);
+            padding: 12px 0;
             box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
         }
+        html[data-theme="light"] header.scrolled { background: rgba(255, 255, 255, 0.85); }
 
         .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center; gap: 20px;
         }
-
 
         .logo {
             font-family: 'Syne', sans-serif;
-            font-size: 28px;
-            font-weight: 800;
+            font-size: 28px; font-weight: 800;
             background: linear-gradient(90deg, var(--accent), var(--accent-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             transition: var(--transition);
+            flex-shrink: 0;
         }
+        .logo:hover { opacity: 0.8; }
 
-        .logo:hover {
-            opacity: 0.8;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-        }
+        .nav-links { display: flex; gap: 22px; }
 
         .nav-link {
-            font-weight: 500;
-            font-size: 16px;
-            position: relative;
-            transition: var(--transition);
+            font-weight: 500; font-size: 14px;
+            position: relative; transition: var(--transition);
         }
-
         .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
+            content: ''; position: absolute; bottom: -5px; left: 0;
+            width: 0; height: 2px; background: var(--accent);
             transition: var(--transition);
         }
+        .nav-link:hover { color: var(--accent); }
+        .nav-link:hover::after { width: 100%; }
 
-        .nav-link:hover {
-            color: var(--accent);
+        .header-actions {
+            display: flex; align-items: center; gap: 12px; flex-shrink: 0;
         }
 
-        .nav-link:hover::after {
-            width: 100%;
+        .lang-switcher {
+            display: flex; gap: 2px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px; padding: 4px;
+            transition: var(--transition);
+        }
+        .lang-btn {
+            width: 36px; height: 28px; border-radius: 50px;
+            border: none; background: transparent;
+            color: var(--text-secondary);
+            font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+            cursor: pointer; transition: var(--transition);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .lang-btn.active { background: var(--accent); color: white; }
+        .lang-btn:hover:not(.active) { color: var(--text); }
+
+        .theme-toggle {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px; cursor: pointer;
+            transition: var(--transition);
+        }
+        .theme-toggle:hover {
+            background: var(--accent); color: white;
+            border-color: var(--accent);
+            transform: rotate(20deg);
         }
 
         .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text);
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 1001;
+            display: none; background: none; border: none;
+            color: var(--text); font-size: 24px; cursor: pointer;
+            z-index: 1001; width: 40px; height: 40px; border-radius: 50%;
+            transition: var(--transition);
         }
+        .mobile-menu-btn:hover { background: var(--card-bg); }
 
-        /* Hero */
         .hero {
-            height: 100vh;
-            min-height: 800px;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
+            height: 100vh; min-height: 800px;
+            display: flex; align-items: center;
+            position: relative; overflow: hidden;
             padding-top: 80px;
         }
-
         .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 70% 30%, rgba(123, 97, 255, 0.1) 0%, rgba(10, 10, 10, 1) 60%);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(-45deg,
+                rgba(123, 97, 255, 0.08) 0%,
+                var(--primary) 35%,
+                var(--primary) 65%,
+                rgba(123, 97, 255, 0.05) 100%);
+            background-size: 300% 300%;
+            animation: heroGradient 18s ease infinite;
             z-index: -1;
         }
 
-        .hero-content {
-            display: flex;
-            align-items: center;
-            gap: 80px;
+        @keyframes heroGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
-        .hero-text {
-            flex: 1;
-        }
-
-        .hero-image {
-            flex: 1;
-            position: relative;
-        }
+        .hero-content { display: flex; align-items: center; gap: 80px; }
+        .hero-text { flex: 1; }
+        .hero-image { flex: 1; position: relative; }
 
         .hero-image img {
-            width: 100%;
-            max-width: 500px;
+            width: 100%; max-width: 500px;
             border-radius: 20px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-            animation: float 8s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            will-change: transform;
+            transition: transform 0.1s linear;
         }
 
         .hero-subtitle {
-            font-size: 18px;
-            color: var(--accent);
-            font-weight: 500;
-            margin-bottom: 20px;
-            display: inline-block;
-            position: relative;
-            padding-left: 60px;
+            font-size: 18px; color: var(--accent);
+            font-weight: 500; margin-bottom: 20px;
+            display: inline-block; position: relative; padding-left: 60px;
         }
-
         .hero-subtitle::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 40px;
-            height: 2px;
-            background: var(--accent);
+            content: ''; position: absolute; left: 0; top: 50%;
+            width: 40px; height: 2px; background: var(--accent);
         }
 
-        .hero-title {
-            font-size: 72px;
-            margin-bottom: 30px;
-            line-height: 1.1;
-        }
-
+        .hero-title { font-size: 72px; margin-bottom: 30px; line-height: 1.1; }
         .hero-title span {
             background: linear-gradient(90deg, var(--accent), var(--accent-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
         .hero-description {
-            font-size: 18px;
-            color: var(--text-secondary);
-            margin-bottom: 40px;
-            max-width: 600px;
+            font-size: 18px; color: var(--text-secondary);
+            margin-bottom: 40px; max-width: 600px;
         }
 
-        .hero-btns {
-            display: flex;
-            gap: 20px;
-        }
+        .hero-btns { display: flex; gap: 20px; flex-wrap: wrap; }
 
-        .social-links {
-            display: flex;
-            gap: 20px;
-            margin-top: 60px;
-        }
+        .social-links { display: flex; gap: 20px; margin-top: 60px; }
 
         .social-link {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--card-bg);
-            color: var(--text);
-            font-size: 20px;
-            transition: var(--transition);
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--card-bg); color: var(--text);
+            font-size: 20px; transition: var(--transition);
+            border: 1px solid var(--card-border);
         }
-
         .social-link:hover {
-            background: var(--accent);
-            color: white;
+            background: var(--accent); color: white;
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(123, 97, 255, 0.3);
         }
 
-        /* About */
-        .about {
+        .marquee {
+            position: relative; overflow: hidden;
+            padding: 30px 0;
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
             background: var(--secondary);
-            position: relative;
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+            mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+        }
+        .marquee-track {
+            display: flex; gap: 70px;
+            animation: marquee 40s linear infinite;
+            width: fit-content;
+        }
+        .marquee-track:hover { animation-play-state: paused; }
+
+        .marquee-item {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px; font-weight: 700;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            display: flex; align-items: center; gap: 70px;
+            opacity: 0.7;
+        }
+        .marquee-item i { color: var(--accent); font-size: 18px; }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
         }
 
-        .about-container {
+        .stats-section { padding: 80px 0 100px; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 30px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+        }
+        .stat-item:hover {
+            transform: translateY(-6px);
+            border-color: rgba(123, 97, 255, 0.3);
+        }
+        .stat-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 52px; font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .stat-label { color: var(--text-secondary); font-size: 14px; font-weight: 500; }
+
+        .about { background: var(--secondary); position: relative; }
+        .about-container { display: flex; align-items: center; gap: 80px; }
+        .about-image { flex: 1; position: relative; }
+        .about-image img {
+            width: 100%; border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .about-image::after {
+            content: ''; position: absolute; top: 20px; left: 20px;
+            width: 100%; height: 100%;
+            border: 2px solid var(--accent); border-radius: 20px;
+            z-index: -1; transition: var(--transition);
+        }
+        .about-image:hover::after { top: 15px; left: 15px; }
+
+        .about-text { flex: 1; }
+        .about-title { font-size: 36px; margin-bottom: 30px; }
+        .about-title span { color: var(--accent); }
+        .about-description { color: var(--text-secondary); margin-bottom: 30px; }
+
+        .skills-tags {
+            margin-top: 40px;
+        }
+
+        .skills-tags-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+        }
+
+        .skills-tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            transition: var(--transition);
+            cursor: default;
+        }
+
+        .skill-tag i {
+            color: var(--accent);
+            font-size: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: rgba(123, 97, 255, 0.5);
+            background: rgba(123, 97, 255, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .skill-tag:hover i {
+            transform: scale(1.2) rotate(-8deg);
+        }
+
+        .story { position: relative; overflow: hidden; }
+
+        .story-container {
             display: flex;
             align-items: center;
             gap: 80px;
         }
 
-        .about-image {
+        .story-image {
             flex: 1;
             position: relative;
+            display: flex;
+            justify-content: center;
         }
 
-        .about-image img {
+        .story-image img {
             width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 460px;
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
         }
 
-        .about-image::after {
+        .story-image::before {
             content: '';
             position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 100%;
-            height: 100%;
-            border: 2px solid var(--accent);
-            border-radius: 20px;
-            z-index: -1;
-            transition: var(--transition);
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.25) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            animation: pulseGlow 6s ease-in-out infinite;
         }
 
-        .about-image:hover::after {
-            top: 15px;
-            left: 15px;
+        @keyframes pulseGlow {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
         }
 
-        .about-text {
-            flex: 1;
-        }
+        .story-text { flex: 1; }
 
-        .about-title {
-            font-size: 36px;
-            margin-bottom: 30px;
-        }
-
-        .about-title span {
-            color: var(--accent);
-        }
-
-        .about-description {
+        .story-paragraph {
             color: var(--text-secondary);
-            margin-bottom: 30px;
+            margin-bottom: 22px;
+            font-size: 16px;
+            line-height: 1.85;
         }
 
-        .skills {
-            margin-top: 40px;
-        }
+        .story-paragraph:last-child { margin-bottom: 0; }
 
-        .skill-item {
-            margin-bottom: 20px;
-        }
-
-        .skill-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .skill-name {
-            font-weight: 500;
-        }
-
-        .skill-percent {
-            color: var(--text-secondary);
-        }
-
-        .skill-bar {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .skill-progress {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent-light));
-            border-radius: 3px;
-            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* Services */
-        .services {
-            position: relative;
+        .story-highlight {
+            color: var(--accent-light);
+            font-weight: 600;
         }
 
         .services-grid {
@@ -435,108 +492,332 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
-
         .service-card {
+            background: var(--card-bg); border-radius: 20px;
+            padding: 40px; transition: var(--transition);
+            position: relative; overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+        .service-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(123, 97, 255, 0.1), transparent);
+            opacity: 0; transition: var(--transition);
+            pointer-events: none;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            border-color: rgba(123, 97, 255, 0.25);
+        }
+        .service-card:hover::before { opacity: 1; }
+
+        .service-icon { font-size: 40px; color: var(--accent); margin-bottom: 25px; }
+        .service-title { font-size: 22px; margin-bottom: 15px; }
+        .service-description { color: var(--text-secondary); margin-bottom: 20px; }
+
+        .service-link {
+            display: inline-flex; align-items: center;
+            color: var(--accent); font-weight: 500;
+            transition: var(--transition);
+            position: relative; z-index: 2;
+        }
+        .service-link i { margin-left: 8px; transition: var(--transition); }
+        .service-link:hover { color: var(--accent-light); }
+        .service-link:hover i { transform: translateX(5px); }
+
+        .process { background: var(--secondary); }
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
+        }
+        .process-step {
             background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px; padding: 40px 30px;
+            transition: var(--transition);
+        }
+        .process-step:hover {
+            transform: translateY(-8px);
+            border-color: rgba(123, 97, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+        .process-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 56px; font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            line-height: 1; margin-bottom: 20px;
+        }
+        .process-title { font-size: 20px; margin-bottom: 12px; }
+        .process-desc { color: var(--text-secondary); font-size: 15px; }
+
+        .pricing-banner {
+            display: flex; align-items: center; gap: 30px;
+            background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(123, 97, 255, 0.02));
+            border: 1px solid rgba(123, 97, 255, 0.25);
+            border-radius: 20px; padding: 35px 40px;
+            margin-bottom: 60px;
+        }
+        .pricing-banner-icon {
+            flex-shrink: 0;
+            width: 70px; height: 70px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(123, 97, 255, 0.15);
+            color: var(--accent); font-size: 28px;
+        }
+        .pricing-banner-text h3 { font-size: 24px; margin-bottom: 8px; }
+        .pricing-banner-text p { color: var(--text-secondary); }
+        .pricing-banner-text strong { color: var(--accent-light); }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 30px; align-items: stretch;
+        }
+        .pricing-card {
+            position: relative;
+            display: flex; flex-direction: column;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px; padding: 40px;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+        }
+        .pricing-card::after {
+            content: ''; position: absolute; inset: -1px;
+            border: 1px solid rgba(123, 97, 255, 0.55);
             border-radius: 20px;
-            padding: 40px;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.6s ease;
+            box-shadow: 0 0 0 6px rgba(123, 97, 255, 0.05);
+        }
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        .pricing-card:hover::after { opacity: 1; }
+
+        .pricing-card.featured::after { opacity: 0.45; box-shadow: none; }
+        .pricing-card.featured { box-shadow: 0 20px 50px rgba(123, 97, 255, 0.10); }
+        .pricing-card.featured:hover { box-shadow: 0 30px 60px rgba(123, 97, 255, 0.22); }
+        .pricing-card.featured:hover::after {
+            opacity: 1;
+            box-shadow: 0 0 0 6px rgba(123, 97, 255, 0.08);
+        }
+
+        .pricing-badge {
+            position: absolute; top: -14px; right: 30px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            color: #fff; font-size: 12px; font-weight: 700;
+            letter-spacing: 1px; text-transform: uppercase;
+            padding: 8px 18px; border-radius: 50px;
+            box-shadow: 0 6px 20px rgba(123, 97, 255, 0.4);
+            z-index: 2;
+        }
+
+        .pricing-name { font-size: 22px; margin-bottom: 8px; }
+        .pricing-desc { color: var(--text-secondary); font-size: 15px; margin-bottom: 25px; min-height: 44px; }
+
+        .price-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+        .price-new {
+            font-family: 'Syne', sans-serif;
+            font-size: 46px; font-weight: 800; line-height: 1;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .price-old {
+            font-size: 18px; color: var(--text-secondary);
+            text-decoration: line-through; opacity: 0.65;
+        }
+        .price-save {
+            display: inline-block; margin: 10px 0 25px;
+            font-size: 14px; font-weight: 600; color: #4ade80;
+        }
+        .pricing-features { list-style: none; margin-bottom: 30px; flex-grow: 1; }
+        .pricing-features li {
+            display: flex; align-items: flex-start; gap: 12px;
+            margin-bottom: 14px; font-size: 15px; color: var(--text-secondary);
+        }
+        .pricing-features li i {
+            color: var(--accent); font-size: 13px; margin-top: 6px; flex-shrink: 0;
+        }
+        .pricing-card .btn { width: 100%; }
+
+        .pricing-footnote {
+            margin-top: 45px; text-align: center;
+            color: var(--text-secondary); font-size: 15px;
+        }
+        .pricing-footnote strong { color: var(--accent-light); }
+        .pricing-footnote a {
+            color: var(--accent); font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: var(--transition);
+        }
+        .pricing-footnote a:hover { border-bottom-color: var(--accent); }
+
+        .guarantees { background: var(--secondary); position: relative; }
+
+        .guarantees-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .guarantee-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 35px 30px;
             transition: var(--transition);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .service-card::before {
+        .guarantee-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(123, 97, 255, 0.1), transparent);
-            opacity: 0;
-            transition: var(--transition);
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(123, 97, 255, 0.2);
+        .guarantee-card:hover::before { transform: scaleX(1); }
+
+        .guarantee-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(123, 97, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
         }
 
-        .service-card:hover::before {
-            opacity: 1;
-        }
-
-        .service-icon {
-            font-size: 40px;
-            color: var(--accent);
-            margin-bottom: 25px;
-        }
-
-        .service-title {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-
-        .service-description {
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .service-link {
-            display: inline-flex;
+        .guarantee-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: rgba(123, 97, 255, 0.12);
+            display: flex;
             align-items: center;
+            justify-content: center;
             color: var(--accent);
+            font-size: 24px;
+            margin-bottom: 22px;
+            transition: var(--transition);
+        }
+
+        .guarantee-card:hover .guarantee-icon {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05) rotate(-5deg);
+        }
+
+        .guarantee-title { font-size: 18px; margin-bottom: 12px; }
+        .guarantee-desc { color: var(--text-secondary); font-size: 15px; line-height: 1.7; }
+
+        .comparison { position: relative; }
+
+        .comparison-wrapper {
+            overflow-x: auto;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .comparison-table {
+            width: 100%;
+            min-width: 700px;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        .comparison-table thead th {
+            padding: 26px 22px;
+            text-align: left;
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            border-bottom: 1px solid var(--card-border);
+            background: rgba(123, 97, 255, 0.04);
+        }
+
+        .comparison-table thead th:first-child {
+            color: var(--text-secondary);
             font-weight: 500;
-            transition: var(--transition);
         }
 
-        .service-link i {
-            margin-left: 8px;
-            transition: var(--transition);
-        }
-
-        .service-link:hover {
+        .comparison-table thead th.col-simon {
+            background: linear-gradient(180deg, rgba(123, 97, 255, 0.18), rgba(123, 97, 255, 0.05));
             color: var(--accent-light);
-        }
-
-        .service-link:hover i {
-            transform: translateX(5px);
-        }
-
-        /* Portfolio */
-        .portfolio {
-            background: var(--secondary);
             position: relative;
         }
 
-        .portfolio-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 50px;
+        .comparison-table thead th.col-simon::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
         }
 
-        .portfolio-filter {
-            display: flex;
-            gap: 15px;
+        .comparison-table tbody td {
+            padding: 20px 22px;
+            border-bottom: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            transition: background 0.3s ease;
         }
+
+        .comparison-table tbody tr:last-child td { border-bottom: none; }
+
+        .comparison-table tbody td:first-child {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .comparison-table tbody td.col-simon {
+            background: rgba(123, 97, 255, 0.06);
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .comparison-table tbody tr:hover td {
+            background: rgba(123, 97, 255, 0.04);
+        }
+
+        .comparison-table tbody tr:hover td.col-simon {
+            background: rgba(123, 97, 255, 0.1);
+        }
+
+        .cmp-check {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cmp-check i { color: #4ade80; font-size: 14px; }
+        .cmp-cross i { color: #ef4444; font-size: 14px; }
+        .cmp-partial i { color: #fbbf24; font-size: 14px; }
+
+        .portfolio { background: var(--secondary); }
+        .portfolio-header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 50px;
+        }
+        .portfolio-filter { display: flex; gap: 15px; flex-wrap: wrap; }
 
         .filter-btn {
-            padding: 10px 20px;
-            border-radius: 50px;
+            padding: 10px 20px; border-radius: 50px;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
             color: var(--text-secondary);
-            font-weight: 500;
-            cursor: pointer;
+            font-weight: 500; cursor: pointer;
             transition: var(--transition);
+            font-family: 'Space Grotesk', sans-serif;
         }
-
         .filter-btn.active, .filter-btn:hover {
-            background: var(--accent);
-            color: white;
+            background: var(--accent); color: white;
             border-color: var(--accent);
         }
 
@@ -545,800 +826,887 @@
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 30px;
         }
-
         .portfolio-item {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            height: 350px;
+            position: relative; border-radius: 20px;
+            overflow: hidden; height: 350px;
         }
-
         .portfolio-img {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             object-fit: cover;
             transition: var(--transition);
+            background: var(--card-bg);
         }
-
         .portfolio-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, rgba(10, 10, 10, 0.9), transparent);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 30px;
-            opacity: 0;
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.92), transparent);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 30px; opacity: 0;
             transition: var(--transition);
         }
+        .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+        .portfolio-item:hover .portfolio-img { transform: scale(1.1); }
 
-        .portfolio-item:hover .portfolio-overlay {
-            opacity: 1;
-        }
-
-        .portfolio-item:hover .portfolio-img {
-            transform: scale(1.1);
-        }
-
-        .portfolio-category {
-            color: var(--accent);
-            font-weight: 500;
-            margin-bottom: 10px;
-        }
-
-        .portfolio-title {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
+        .portfolio-category { color: var(--accent); font-weight: 500; margin-bottom: 10px; }
+        .portfolio-title { font-size: 24px; margin-bottom: 15px; color: #fff; }
 
         .portfolio-link {
-            display: inline-flex;
-            align-items: center;
-            color: white;
-            font-weight: 500;
+            display: inline-flex; align-items: center;
+            color: white; font-weight: 500;
             transition: var(--transition);
         }
+        .portfolio-link i { margin-left: 8px; transition: var(--transition); }
+        .portfolio-link:hover { color: var(--accent); }
+        .portfolio-link:hover i { transform: translateX(5px); }
 
-        .portfolio-link i {
-            margin-left: 8px;
-            transition: var(--transition);
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 20px;
         }
-
-        .portfolio-link:hover {
-            color: var(--accent);
+        .stack-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 30px 15px; text-align: center;
+            transition: var(--transition); cursor: default;
         }
-
-        .portfolio-link:hover i {
-            transform: translateX(5px);
+        .stack-item:hover {
+            transform: translateY(-8px) scale(1.03);
+            border-color: rgba(123, 97, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(123, 97, 255, 0.15);
         }
-
-        /* Testimonials */
-        .testimonials .section-title {
-            margin-bottom: 50px;
+        .stack-icon {
+            font-size: 38px; color: var(--accent);
+            margin-bottom: 14px;
+            transition: transform 0.4s ease;
         }
+        .stack-item:hover .stack-icon { transform: rotate(-8deg) scale(1.1); }
+        .stack-name { font-size: 14px; font-weight: 600; }
 
-        .testimonials-slider {
-            position: relative;
-        }
-
+        .testimonials .section-title { margin-bottom: 50px; }
         .testimonial-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 40px;
-            margin: 0 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--card-bg); border-radius: 20px;
+            padding: 40px; margin: 0 15px;
+            border: 1px solid var(--card-border);
         }
-
         .testimonial-text {
-            font-size: 18px;
-            font-style: italic;
-            margin-bottom: 30px;
-            position: relative;
+            font-size: 18px; font-style: italic;
+            margin-bottom: 30px; position: relative;
         }
-
         .testimonial-text::before {
-            content: '"';
-            position: absolute;
-            top: -20px;
-            left: -15px;
-            font-size: 60px;
-            color: var(--accent);
-            opacity: 0.3;
-            font-family: serif;
+            content: '"'; position: absolute; top: -20px; left: -15px;
+            font-size: 60px; color: var(--accent);
+            opacity: 0.3; font-family: serif;
         }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-        }
-
+        .testimonial-author { display: flex; align-items: center; }
         .author-img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 20px;
+            width: 60px; height: 60px; border-radius: 50%;
+            overflow: hidden; margin-right: 20px;
         }
+        .author-img img { width: 100%; height: 100%; object-fit: cover; }
+        .author-info h4 { font-size: 18px; margin-bottom: 5px; }
+        .author-info p { color: var(--text-secondary); font-size: 14px; }
 
-        .author-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .author-info h4 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .author-info p {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        /* Contact */
-        .contact {
-            position: relative;
-        }
-
-        .contact-container {
-            display: flex;
-            gap: 80px;
-        }
-
-        .contact-info {
-            flex: 1;
-        }
-
-        .contact-title {
-            font-size: 36px;
-            margin-bottom: 30px;
-        }
-
-        .contact-title span {
-            color: var(--accent);
-        }
-
-        .contact-description {
-            color: var(--text-secondary);
-            margin-bottom: 40px;
-        }
-
-        .contact-details {
-            margin-bottom: 40px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .contact-icon {
-            width: 50px;
-            height: 50px;
+        .faq { background: var(--secondary); }
+        .faq-list { max-width: 900px; margin: 0 auto; }
+        .faq-item {
             background: var(--card-bg);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 20px;
-            color: var(--accent);
-            font-size: 20px;
-        }
-
-        .contact-text h4 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .contact-text p {
-            color: var(--text-secondary);
-        }
-
-        .contact-social {
-            display: flex;
-            gap: 15px;
-        }
-
-        .contact-social a {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: var(--card-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text);
-            font-size: 18px;
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            margin-bottom: 15px; overflow: hidden;
             transition: var(--transition);
         }
+        .faq-item.open { border-color: rgba(123, 97, 255, 0.4); }
+        .faq-question {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 25px 30px; cursor: pointer;
+            font-weight: 600; font-size: 17px;
+            gap: 20px; font-family: 'Syne', sans-serif;
+            user-select: none;
+        }
+        .faq-question i {
+            color: var(--accent); transition: transform 0.3s ease;
+            flex-shrink: 0; font-size: 14px;
+        }
+        .faq-item.open .faq-question i { transform: rotate(45deg); }
 
+        .faq-answer {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 30px;
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 400px;
+            padding: 0 30px 25px;
+        }
+
+        .contact-container { display: flex; gap: 60px; }
+        .contact-info { flex: 1; }
+        .contact-title { font-size: 36px; margin-bottom: 30px; }
+        .contact-title span { color: var(--accent); }
+        .contact-description { color: var(--text-secondary); margin-bottom: 40px; }
+        .contact-details { margin-bottom: 40px; }
+
+        .contact-item { display: flex; align-items: center; margin-bottom: 25px; }
+        .contact-icon {
+            width: 50px; height: 50px;
+            background: var(--card-bg); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 20px; color: var(--accent);
+            font-size: 20px; border: 1px solid var(--card-border);
+            flex-shrink: 0;
+        }
+        .contact-text h4 { font-size: 18px; margin-bottom: 5px; }
+        .contact-text p { color: var(--text-secondary); }
+
+        .contact-social { display: flex; gap: 15px; }
+        .contact-social a {
+            width: 45px; height: 45px; border-radius: 50%;
+            background: var(--card-bg);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text); font-size: 18px;
+            transition: var(--transition);
+            border: 1px solid var(--card-border);
+        }
         .contact-social a:hover {
-            background: var(--accent);
-            color: white;
+            background: var(--accent); color: white;
             transform: translateY(-5px);
+            border-color: var(--accent);
         }
 
         .contact-form {
-            flex: 1;
-            background: var(--card-bg);
-            padding: 50px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex: 1; background: var(--card-bg);
+            padding: 45px; border-radius: 20px;
+            border: 1px solid var(--card-border);
         }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
+        .form-group { margin-bottom: 22px; }
+        .form-label { display: block; margin-bottom: 10px; font-weight: 500; font-size: 14px; }
 
         .form-control {
-            width: 100%;
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: var(--text);
+            width: 100%; padding: 14px 18px;
+            background: rgba(127, 127, 127, 0.06);
+            border: 1px solid var(--card-border);
+            border-radius: 10px; color: var(--text);
             font-family: 'Space Grotesk', sans-serif;
             transition: var(--transition);
+            font-size: 15px;
         }
-
         .form-control:focus {
             outline: none;
             border-color: var(--accent);
             background: rgba(123, 97, 255, 0.05);
         }
+        textarea.form-control { min-height: 130px; resize: vertical; }
 
-        textarea.form-control {
-            min-height: 150px;
-            resize: vertical;
+        .form-checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .form-checkbox {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 9px 18px;
+            background: rgba(127, 127, 127, 0.06);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            cursor: pointer; font-size: 14px;
+            transition: var(--transition);
+            user-select: none;
+        }
+        .form-checkbox:hover { border-color: rgba(123, 97, 255, 0.4); }
+        .form-checkbox input { display: none; }
+        .form-checkbox.checked {
+            background: rgba(123, 97, 255, 0.15);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .form-checkbox.checked::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900; font-size: 11px;
         }
 
-        /* Footer */
         footer {
             background: var(--secondary);
             padding: 60px 0 30px;
             position: relative;
+            border-top: 1px solid var(--card-border);
         }
-
         .footer-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 40px; gap: 30px; flex-wrap: wrap;
         }
-
         .footer-logo {
             font-family: 'Syne', sans-serif;
-            font-size: 24px;
-            font-weight: 800;
+            font-size: 24px; font-weight: 800;
             background: linear-gradient(90deg, var(--accent), var(--accent-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        .footer-links { display: flex; gap: 25px; flex-wrap: wrap; }
+        .footer-link { font-weight: 500; transition: var(--transition); font-size: 14px; }
+        .footer-link:hover { color: var(--accent); }
 
-        .footer-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .footer-link {
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .footer-link:hover {
-            color: var(--accent);
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 20px;
-        }
-
+        .footer-social { display: flex; gap: 15px; }
         .footer-social a {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%;
             background: var(--card-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             transition: var(--transition);
+            border: 1px solid var(--card-border);
         }
-
         .footer-social a:hover {
-            background: var(--accent);
-            color: white;
+            background: var(--accent); color: white;
             transform: translateY(-5px);
+            border-color: var(--accent);
         }
-
         .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: var(--text-secondary);
-            font-size: 14px;
+            text-align: center; padding-top: 30px;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-secondary); font-size: 14px;
         }
 
-        /* Back to top */
         .back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: var(--accent);
-            color: white;
+            position: fixed; bottom: 30px; right: 30px;
+            width: 50px; height: 50px;
+            background: var(--accent); color: white;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; cursor: pointer;
+            opacity: 0; visibility: hidden;
             transition: var(--transition);
             z-index: 999;
             box-shadow: 0 5px 20px rgba(123, 97, 255, 0.3);
+            border: none;
+        }
+        .back-to-top.active { opacity: 1; visibility: visible; }
+        .back-to-top:hover { background: var(--accent-light); transform: translateY(-5px); }
+
+        .float-telegram {
+            position: fixed; bottom: 30px; left: 30px;
+            width: 58px; height: 58px;
+            background: linear-gradient(135deg, #0088cc, #00a2e8);
+            color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 10px 30px rgba(0, 136, 204, 0.45);
+            z-index: 998;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: floatBtn 3.5s ease-in-out infinite;
+        }
+        .float-telegram:hover {
+            transform: scale(1.12);
+            box-shadow: 0 15px 45px rgba(0, 136, 204, 0.6);
+            animation-play-state: paused;
+        }
+        .float-telegram::after {
+            content: ''; position: absolute; inset: 0;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 162, 232, 0.7);
+            animation: pulseRing 2.4s ease-out infinite;
+        }
+        @keyframes floatBtn {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
+        }
+        @keyframes pulseRing {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.5); opacity: 0; }
         }
 
-        .back-to-top.active {
-            opacity: 1;
-            visibility: visible;
+        .live-notification {
+            position: fixed; bottom: 105px; left: 30px;
+            background: var(--card-bg);
+            border: 1px solid rgba(123, 97, 255, 0.3);
+            border-radius: 16px;
+            padding: 14px 18px;
+            display: flex; align-items: center; gap: 14px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+            max-width: 330px; z-index: 997;
+            opacity: 0; transform: translateY(20px);
+            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .live-notification.show { opacity: 1; transform: translateY(0); }
+
+        .live-avatar {
+            width: 42px; height: 42px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700; font-size: 16px;
+            flex-shrink: 0; font-family: 'Syne', sans-serif;
+        }
+        .live-text { font-size: 13px; line-height: 1.5; }
+        .live-text strong { color: var(--accent-light); font-weight: 600; }
+        .live-text small {
+            color: var(--text-secondary);
+            display: block; margin-top: 2px; font-size: 11px;
         }
 
-        .back-to-top:hover {
-            background: var(--accent-light);
-            transform: translateY(-5px);
-        }
-
-        /* Animations */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        .fade-in { animation: fadeIn 1s ease forwards; }
 
-        .fade-in {
-            animation: fadeIn 1s ease forwards;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        .pulse {
-            animation: pulse 3s ease infinite;
-        }
-
-        /* Particles */
-        .particles-js-canvas-el {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        /* Responsive */
         @media (max-width: 1200px) {
-            .hero-title {
-                font-size: 60px;
-            }
-            
-            .section-title {
-                font-size: 40px;
-            }
+            .hero-title { font-size: 60px; }
+            .section-title { font-size: 40px; }
+            .nav-links { gap: 16px; }
+            .nav-link { font-size: 12px; }
         }
-
         @media (max-width: 992px) {
-            .container {
-                padding: 0 30px;
-            }
-            
-            .hero-content, 
-            .about-container,
-            .contact-container {
-                flex-direction: column;
-                gap: 50px;
-            }
-            
-            .hero {
-                min-height: auto;
-                height: auto;
-                padding: 150px 0 100px;
-            }
-            
-            .hero-image {
-                order: -1;
-            }
-            
-            .hero-title {
-                font-size: 48px;
-            }
-            
-            .section-title {
-                font-size: 36px;
-                margin-bottom: 50px;
-            }
-            
-            .portfolio-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-            }
-            
-            .portfolio-filter {
-                flex-wrap: wrap;
-            }
-            
-            .contact-form {
-                padding: 30px;
-            }
+            .container { padding: 0 30px; }
+            .hero-content, .about-container, .contact-container, .story-container { flex-direction: column; gap: 50px; }
+            .hero { min-height: auto; height: auto; padding: 150px 0 100px; }
+            .hero-image { order: -1; }
+            .story-image { order: -1; }
+            .hero-title { font-size: 48px; }
+            .section-title { font-size: 36px; margin-bottom: 50px; }
+            .portfolio-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .contact-form { padding: 30px; }
+            .nav-links { display: none; }
         }
-
         @media (max-width: 768px) {
             .nav-links {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 80%;
-                height: 100vh;
+                position: fixed; top: 0; right: -100%;
+                width: 82%; height: 100vh;
                 background: var(--secondary);
                 flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 30px;
+                align-items: center; justify-content: center;
+                gap: 26px;
                 transition: var(--transition);
                 z-index: 1000;
                 box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+                display: flex;
             }
-            
-            .nav-links.active {
-                right: 0;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-                z-index: 1001;
-            }
-            
-            .hero-title {
-                font-size: 40px;
-            }
-            
-            .hero-btns {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .btn {
-                width: 100%;
-                text-align: center;
-            }
-            
-            .portfolio-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-container {
-                flex-direction: column;
-                gap: 30px;
-                text-align: center;
-            }
-            
-            .footer-links {
-                flex-direction: column;
-                gap: 15px;
-            }
+            .nav-links.active { right: 0; }
+            .nav-link { font-size: 18px; }
+            .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+            .hero-title { font-size: 40px; }
+            .hero-btns { flex-direction: column; gap: 15px; }
+            .hero-btns .btn { width: 100%; text-align: center; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+            .pricing-banner { flex-direction: column; text-align: center; padding: 30px 25px; }
+            .footer-container { flex-direction: column; text-align: center; }
+            .footer-links { justify-content: center; }
+            .lang-btn { width: 32px; height: 26px; font-size: 10px; }
+            .live-notification { max-width: calc(100% - 100px); bottom: 100px; left: 20px; }
+            .float-telegram { bottom: 25px; left: 20px; width: 52px; height: 52px; font-size: 22px; }
+            .back-to-top { bottom: 25px; right: 20px; width: 46px; height: 46px; }
+            .comparison-table thead th,
+            .comparison-table tbody td { padding: 16px 14px; font-size: 13px; }
         }
-
         @media (max-width: 576px) {
-            .container {
-                padding: 0 20px;
-            }
-            
-            section {
-                padding: 80px 0;
-            }
-            
-            .hero-title {
-                font-size: 36px;
-            }
-            
-            .hero-subtitle {
-                font-size: 16px;
-                padding-left: 40px;
-            }
-            
-            .hero-subtitle::before {
-                width: 30px;
-            }
-            
-            .section-title {
-                font-size: 32px;
-            }
-            
-            .service-card, 
-            .testimonial-card {
-                padding: 30px;
-            }
-            
-            .contact-form {
-                padding: 25px;
-            }
+            .container { padding: 0 20px; }
+            section { padding: 80px 0; }
+            .hero-title { font-size: 34px; }
+            .hero-subtitle { font-size: 15px; padding-left: 40px; }
+            .hero-subtitle::before { width: 30px; }
+            .section-title { font-size: 30px; }
+            .service-card, .testimonial-card { padding: 28px; }
+            .pricing-card { padding: 30px 25px; }
+            .price-new { font-size: 38px; }
+            .contact-form { padding: 24px; }
+            .stat-number { font-size: 40px; }
+            .stat-item { padding: 25px 15px; }
+            .stats-section { padding: 60px 0 80px; }
+            .process-number { font-size: 44px; }
+            .marquee-item { font-size: 18px; gap: 45px; }
+            .marquee-track { gap: 45px; }
+            .lang-switcher { padding: 3px; }
+            .lang-btn { width: 28px; height: 24px; font-size: 9px; }
+            .theme-toggle { width: 34px; height: 34px; font-size: 13px; }
+            .mobile-menu-btn { width: 34px; height: 34px; font-size: 20px; }
+            .guarantee-card { padding: 28px 24px; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
+
+    <div class="reading-progress" id="readingProgress"></div>
+
     <header id="header">
         <div class="container header-container">
-            <a href="#" class="logo">Simon</a>
-            
+            <a href="#home" class="logo">Simon</a>
+
             <nav class="nav-links">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#about" class="nav-link">About</a>
-                <a href="#services" class="nav-link">Services</a>
-                <a href="#portfolio" class="nav-link">Portfolio</a>
-                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#home" class="nav-link" data-i18n="nav.home">Home</a>
+                <a href="#about" class="nav-link" data-i18n="nav.about">About</a>
+                <a href="#story" class="nav-link" data-i18n="nav.story">Story</a>
+                <a href="#services" class="nav-link" data-i18n="nav.services">Services</a>
+                <a href="#process" class="nav-link" data-i18n="nav.process">Process</a>
+                <a href="#pricing" class="nav-link" data-i18n="nav.pricing">Pricing</a>
+                <a href="#portfolio" class="nav-link" data-i18n="nav.portfolio">Portfolio</a>
+                <a href="#faq" class="nav-link" data-i18n="nav.faq">FAQ</a>
+                <a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a>
             </nav>
-            
-            <button class="mobile-menu-btn">
-                <i class="fas fa-bars"></i>
-            </button>
+
+            <div class="header-actions">
+                <div class="lang-switcher" role="group" aria-label="Language">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="ru">RU</button>
+                    <button class="lang-btn" data-lang="ua">UA</button>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Hero -->
     <section class="hero" id="home">
         <div class="hero-bg"></div>
-        
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <p class="hero-subtitle fade-in" style="animation-delay: 0.2s;">Web Designer & Developer</p>
-                    <h1 class="hero-title fade-in" style="animation-delay: 0.4s;">Hi, I'm <span>Simon</span></h1>
-                    <p class="hero-description fade-in" style="animation-delay: 0.6s;">
-                        I create stunning, high-performing websites that help businesses grow. 
-                        With 4 years of experience in web design and development, I deliver 
-                        exceptional digital experiences.
+                    <p class="hero-subtitle fade-in" style="animation-delay: 0.2s;" data-i18n="hero.subtitle">Web Designer & Developer</p>
+                    <h1 class="hero-title fade-in" style="animation-delay: 0.4s;">
+                        <span data-i18n="hero.title">Hi, I'm</span> <span>Simon</span>
+                    </h1>
+                    <p class="hero-description fade-in" style="animation-delay: 0.6s;" data-i18n="hero.desc">
+                        I create stunning, high-performing websites that help businesses grow. With 4 years of experience in web design and development, I deliver exceptional digital experiences.
                     </p>
                     <div class="hero-btns fade-in" style="animation-delay: 0.8s;">
-                        <a href="#portfolio" class="btn btn-primary">View My Work</a>
-                        <a href="#contact" class="btn btn-outline">Hire Me</a>
+                        <a href="#portfolio" class="btn btn-primary" data-i18n="hero.viewWork">View My Work</a>
+                        <a href="#contact" class="btn btn-outline" data-i18n="hero.hire">Hire Me</a>
                     </div>
-                    
                     <div class="social-links fade-in" style="animation-delay: 1s;">
-                        <a href="https://t.me/simonsssbio" class="social-link"><i class="fab fa-telegram"></i></a>
-                        <a href="https://steamcommunity.com/profiles/76561199380426859/" class="social-link"><i class="fab fa-steam"></i></a>
-                        <a href="https://github.com/61Simon" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="https://www.instagram.com/simonchikssss/" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://t.me/simonsssbio" class="social-link" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                        <a href="https://steamcommunity.com/profiles/76561199380426859/" class="social-link" aria-label="Steam"><i class="fab fa-steam"></i></a>
+                        <a href="https://github.com/61Simon" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.instagram.com/simonchikssss/" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
-                
                 <div class="hero-image fade-in" style="animation-delay: 0.6s;">
-                    <img src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Simon - Web Designer">
+                    <img id="heroParallax" src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Simon - Web Designer">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About -->
+    <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+            <span class="marquee-item">HTML5 <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">CSS3 <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">JavaScript <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">React <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">Figma <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">Tailwind <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">Webflow <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">Git <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">HTML5 <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">CSS3 <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">JavaScript <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">React <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">Figma <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">Tailwind <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">Webflow <i class="fas fa-circle"></i></span>
+            <span class="marquee-item">Git <i class="fas fa-circle"></i></span>
+        </div>
+    </div>
+
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats">
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-count="50" data-suffix="+">0</div>
+                    <div class="stat-label" data-i18n="stats.projects">Projects Completed</div>
+                </div>
+                <div class="stat-item fade-in" style="animation-delay: 0.1s;">
+                    <div class="stat-number" data-count="4" data-suffix="">0</div>
+                    <div class="stat-label" data-i18n="stats.years">Years of Experience</div>
+                </div>
+                <div class="stat-item fade-in" style="animation-delay: 0.2s;">
+                    <div class="stat-number" data-count="30" data-suffix="+">0</div>
+                    <div class="stat-label" data-i18n="stats.clients">Happy Clients</div>
+                </div>
+                <div class="stat-item fade-in" style="animation-delay: 0.3s;">
+                    <div class="stat-number" data-count="98" data-suffix="%">0</div>
+                    <div class="stat-label" data-i18n="stats.satisfaction">Satisfaction Rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="about" id="about">
         <div class="container about-container">
-            <div class="about-image fade-in" style="animation-delay: 0.2s;">
-                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="About Simon">
+            <div class="about-image fade-in">
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80" alt="About Simon">
             </div>
-            
             <div class="about-text">
-                <h2 class="section-title fade-in" style="animation-delay: 0.4s;">About <span>Me</span></h2>
-                
-                <h3 class="about-title fade-in" style="animation-delay: 0.6s;">Professional Web Designer & Developer</h3>
-                
-                <p class="about-description fade-in" style="animation-delay: 0.8s;">
-                    I'm a passionate web designer and developer based in Ukraine with over 3 years of professional 
-                    experience creating modern, responsive, and user-friendly websites. I specialize in converting 
-                    ideas into beautiful, functional digital experiences.
+                <h2 class="section-title fade-in">
+                    <span data-i18n="about.title1">About</span> <span data-i18n="about.title2">Me</span>
+                </h2>
+                <h3 class="about-title fade-in" data-i18n="about.subtitle">Professional Web Designer & Developer</h3>
+                <p class="about-description fade-in" data-i18n="about.p1">
+                    I'm a passionate web designer and developer based in Ukraine with over 3 years of professional experience creating modern, responsive, and user-friendly websites. I specialize in converting ideas into beautiful, functional digital experiences.
                 </p>
-                
-                <p class="about-description fade-in" style="animation-delay: 1s;">
-                    My approach combines aesthetic design with technical excellence to deliver websites that not 
-                    only look amazing but also perform exceptionally well across all devices.
+                <p class="about-description fade-in" data-i18n="about.p2">
+                    My approach combines aesthetic design with technical excellence to deliver websites that not only look amazing but also perform exceptionally well across all devices.
                 </p>
-                
-                <div class="skills fade-in" style="animation-delay: 1.2s;">
-                    <div class="skill-item">
-                        <div class="skill-info">
-                            <span class="skill-name">Web Design</span>
-                            <span class="skill-percent">95%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="width: 95%;"></div>
-                        </div>
+
+                <div class="skills-tags fade-in">
+                    <div class="skills-tags-title" data-i18n="skills.tags.frontend">Frontend</div>
+                    <div class="skills-tags-list">
+                        <span class="skill-tag"><i class="fab fa-html5"></i> HTML5</span>
+                        <span class="skill-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
+                        <span class="skill-tag"><i class="fab fa-js"></i> JavaScript ES6+</span>
+                        <span class="skill-tag"><i class="fab fa-react"></i> React</span>
                     </div>
-                    
-                    <div class="skill-item">
-                        <div class="skill-info">
-                            <span class="skill-name">UI/UX Design</span>
-                            <span class="skill-percent">90%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="width: 90%;"></div>
-                        </div>
+
+                    <div class="skills-tags-title" style="margin-top: 25px;" data-i18n="skills.tags.styling">Styling & Design</div>
+                    <div class="skills-tags-list">
+                        <span class="skill-tag"><i class="fas fa-wind"></i> Tailwind</span>
+                        <span class="skill-tag"><i class="fab fa-sass"></i> SCSS</span>
+                        <span class="skill-tag"><i class="fas fa-magic"></i> CSS Animations</span>
+                        <span class="skill-tag"><i class="fab fa-figma"></i> Figma</span>
                     </div>
-                    
-                    <div class="skill-item">
-                        <div class="skill-info">
-                            <span class="skill-name">Frontend Development</span>
-                            <span class="skill-percent">85%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="width: 85%;"></div>
-                        </div>
+
+                    <div class="skills-tags-title" style="margin-top: 25px;" data-i18n="skills.tags.tools">Tools</div>
+                    <div class="skills-tags-list">
+                        <span class="skill-tag"><i class="fab fa-git-alt"></i> Git</span>
+                        <span class="skill-tag"><i class="fas fa-bolt"></i> Webflow</span>
+                        <span class="skill-tag"><i class="fas fa-code"></i> VS Code</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Services -->
+    <section class="story" id="story">
+        <div class="container story-container">
+            <div class="story-image fade-in">
+                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Simon's workspace">
+            </div>
+            <div class="story-text">
+                <h2 class="section-title fade-in">
+                    <span data-i18n="story.title1">My</span> <span data-i18n="story.title2">Story</span>
+                </h2>
+                <p class="story-paragraph fade-in" data-i18n="story.p1">
+                    I got into web development back in 2021 — not through courses or a bootcamp, but by curiosity. I wanted to make my own website, opened a code editor, and never looked back. What started as a hobby quickly turned into a craft.
+                </p>
+                <p class="story-paragraph fade-in" data-i18n="story.p2">
+                    Since then, I've built over 50 websites — from landing pages for local businesses to full e-commerce stores. Every project taught me something new, and every client taught me to listen better. <span class="story-highlight">I don't just write code — I help people grow their business.</span>
+                </p>
+                <p class="story-paragraph fade-in" data-i18n="story.p3">
+                    Today I work as an independent web designer and developer. I keep my prices low while I build my portfolio and reputation, because I believe great websites shouldn't cost a fortune. If you're reading this — I'd love to hear about your project.
+                </p>
+            </div>
+        </div>
+    </section>
+
     <section class="services" id="services">
         <div class="container">
-            <h2 class="section-title fade-in" style="animation-delay: 0.2s;">My <span>Services</span></h2>
-            
+            <h2 class="section-title fade-in">
+                <span data-i18n="services.title1">My</span> <span data-i18n="services.title2">Services</span>
+            </h2>
             <div class="services-grid">
-                <div class="service-card fade-in" style="animation-delay: 0.2s;">
-                    <div class="service-icon">
-                        <i class="fas fa-paint-brush"></i>
-                    </div>
-                    <h3 class="service-title">Web Design</h3>
-                    <p class="service-description">
-                        Custom website designs that are visually stunning, user-friendly, and optimized for conversions.
-                    </p>
-                    <a href="#portfolio" class="service-link">
-                        View My Work <i class="fas fa-arrow-down"></i>
-                    </a>
+                <div class="service-card fade-in">
+                    <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3 class="service-title" data-i18n="services.webdesign">Web Design</h3>
+                    <p class="service-description" data-i18n="services.webdesign.desc">Custom website designs that are visually stunning, user-friendly, and optimized for conversions.</p>
+                    <a href="#portfolio" class="service-link" data-i18n="services.view">View My Work</a>
                 </div>
-                
-                <div class="service-card fade-in" style="animation-delay: 0.4s;">
-                    <div class="service-icon">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <h3 class="service-title">Web Development</h3>
-                    <p class="service-description">
-                        Clean, efficient code that brings designs to life with perfect functionality across all devices.
-                    </p>
-                    <a href="#portfolio" class="service-link">
-                        View My Work <i class="fas fa-arrow-down"></i>
-                    </a>
+                <div class="service-card fade-in">
+                    <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3 class="service-title" data-i18n="services.webdev">Web Development</h3>
+                    <p class="service-description" data-i18n="services.webdev.desc">Clean, efficient code that brings designs to life with perfect functionality across all devices.</p>
+                    <a href="#portfolio" class="service-link" data-i18n="services.view">View My Work</a>
                 </div>
-                
-                <div class="service-card fade-in" style="animation-delay: 0.6s;">
-                    <div class="service-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3 class="service-title">Responsive Design</h3>
-                    <p class="service-description">
-                        Websites that look and work perfectly on any device, from desktop to mobile.
-                    </p>
-                    <a href="#portfolio" class="service-link">
-                        View My Work <i class="fas fa-arrow-down"></i>
-                    </a>
+                <div class="service-card fade-in">
+                    <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3 class="service-title" data-i18n="services.responsive">Responsive Design</h3>
+                    <p class="service-description" data-i18n="services.responsive.desc">Websites that look and work perfectly on any device, from desktop to mobile.</p>
+                    <a href="#portfolio" class="service-link" data-i18n="services.view">View My Work</a>
                 </div>
-                
-                <div class="service-card fade-in" style="animation-delay: 0.2s;">
-                    <div class="service-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3 class="service-title">UI/UX Design</h3>
-                    <p class="service-description">
-                        Intuitive interfaces and seamless user experiences that keep visitors engaged.
-                    </p>
-                    <a href="#portfolio" class="service-link">
-                        View My Work <i class="fas fa-arrow-down"></i>
-                    </a>
+                <div class="service-card fade-in">
+                    <div class="service-icon"><i class="fas fa-search"></i></div>
+                    <h3 class="service-title" data-i18n="services.uiux">UI/UX Design</h3>
+                    <p class="service-description" data-i18n="services.uiux.desc">Intuitive interfaces and seamless user experiences that keep visitors engaged.</p>
+                    <a href="#portfolio" class="service-link" data-i18n="services.view">View My Work</a>
                 </div>
-                
             </div>
         </div>
     </section>
 
-    <!-- Portfolio -->
+    <section class="process" id="process">
+        <div class="container">
+            <h2 class="section-title fade-in">
+                <span data-i18n="process.title1">How I</span> <span data-i18n="process.title2">Work</span>
+            </h2>
+            <div class="process-grid">
+                <div class="process-step fade-in">
+                    <div class="process-number">01</div>
+                    <h3 class="process-title" data-i18n="process.step1.title">Briefing</h3>
+                    <p class="process-desc" data-i18n="process.step1.desc">We discuss your project, goals, target audience and requirements — free of charge.</p>
+                </div>
+                <div class="process-step fade-in" style="animation-delay: 0.1s;">
+                    <div class="process-number">02</div>
+                    <h3 class="process-title" data-i18n="process.step2.title">Design Concept</h3>
+                    <p class="process-desc" data-i18n="process.step2.desc">I create a custom design concept for your approval before a single line of code is written.</p>
+                </div>
+                <div class="process-step fade-in" style="animation-delay: 0.2s;">
+                    <div class="process-number">03</div>
+                    <h3 class="process-title" data-i18n="process.step3.title">Development</h3>
+                    <p class="process-desc" data-i18n="process.step3.desc">I code your website with clean, efficient code — responsive, fast and SEO-ready.</p>
+                </div>
+                <div class="process-step fade-in" style="animation-delay: 0.3s;">
+                    <div class="process-number">04</div>
+                    <h3 class="process-title" data-i18n="process.step4.title">Launch & Support</h3>
+                    <p class="process-desc" data-i18n="process.step4.desc">We deploy, test everything, and I provide ongoing support after launch.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title fade-in">
+                <span data-i18n="pricing.title1">My</span> <span data-i18n="pricing.title2">Pricing</span>
+            </h2>
+
+            <div class="pricing-banner fade-in">
+                <div class="pricing-banner-icon"><i class="fas fa-tags"></i></div>
+                <div class="pricing-banner-text">
+                    <h3 data-i18n="pricing.bannerTitle">Prices 2.3–2.5× Lower Than the Market</h3>
+                    <p data-i18n="pricing.bannerDesc">
+                        I'm building my portfolio and reputation right now, so my rates are 2.3–2.5 times lower than the average market price — with no compromise on quality, speed or support.
+                    </p>
+                </div>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in">
+                    <h3 class="pricing-name" data-i18n="pricing.landing.name">Landing Page</h3>
+                    <p class="pricing-desc" data-i18n="pricing.landing.desc">One-page website to present a product, service or personal brand.</p>
+                    <div class="price-row">
+                        <span class="price-new">$120</span>
+                        <span class="price-old">$300</span>
+                    </div>
+                    <span class="price-save"><i class="fas fa-arrow-down"></i> <span data-i18n="pricing.landing.save">2.5× cheaper than the market</span></span>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.landing.f1">1 page, up to 6 sections</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.landing.f2">Custom design — no ready-made templates</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.landing.f3">Fully responsive on all devices</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.landing.f4">Contact form & social links</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.landing.f5">Basic SEO + fast loading</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.landing.f6">Delivery in 3–5 days</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.landing.f7">2 rounds of revisions</span></li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline" data-i18n="pricing.order">Order Now</a>
+                </div>
+
+                <div class="pricing-card featured fade-in" style="animation-delay: 0.1s;">
+                    <span class="pricing-badge" data-i18n="pricing.popular">Most Popular</span>
+                    <h3 class="pricing-name" data-i18n="pricing.business.name">Business Website</h3>
+                    <p class="pricing-desc" data-i18n="pricing.business.desc">Multi-page website for a company, studio or online service.</p>
+                    <div class="price-row">
+                        <span class="price-new">$300</span>
+                        <span class="price-old">$750</span>
+                    </div>
+                    <span class="price-save"><i class="fas fa-arrow-down"></i> <span data-i18n="pricing.business.save">2.5× cheaper than the market</span></span>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.business.f1">Up to 5 unique pages</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.business.f2">Individual UI/UX design</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.business.f3">Animations & interactive elements</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.business.f4">Easy content management</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.business.f5">Advanced SEO & performance setup</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.business.f6">Delivery in 7–14 days</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.business.f7">3 rounds of revisions</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.business.f8">30 days of free support</span></li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline" data-i18n="pricing.order">Order Now</a>
+                </div>
+
+                <div class="pricing-card fade-in" style="animation-delay: 0.2s;">
+                    <h3 class="pricing-name" data-i18n="pricing.store.name">Online Store</h3>
+                    <p class="pricing-desc" data-i18n="pricing.store.desc">E-commerce website with a product catalog and online payments.</p>
+                    <div class="price-row">
+                        <span class="price-new">$600</span>
+                        <span class="price-old">$1500</span>
+                    </div>
+                    <span class="price-save"><i class="fas fa-arrow-down"></i> <span data-i18n="pricing.store.save">2.5× cheaper than the market</span></span>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.store.f1">Product catalog with filters & search</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.store.f2">Shopping cart & checkout flow</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.store.f3">Payment & delivery integration</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.store.f4">Admin panel for products & orders</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.store.f5">Mobile-first responsive design</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.store.f6">Delivery in 2–3 weeks</span></li>
+                        <li><i class="fas fa-check"></i><span data-i18n="pricing.store.f7">60 days of free support</span></li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline" data-i18n="pricing.order">Order Now</a>
+                </div>
+            </div>
+
+            <p class="pricing-footnote fade-in">
+                <span data-i18n="pricing.footnote1">Prices are</span> <strong data-i18n="pricing.footnote2">starting points</strong> <span data-i18n="pricing.footnote3">— the final quote depends on the project scope.</span>
+                <br><span data-i18n="pricing.footnote4">Need something custom?</span> <a href="#contact" data-i18n="pricing.footnote5">Tell me about your idea</a> <span data-i18n="pricing.footnote6">and I'll send a free estimate within 24 hours.</span>
+            </p>
+        </div>
+    </section>
+
+    <section class="guarantees" id="guarantees">
+        <div class="container">
+            <h2 class="section-title fade-in">
+                <span data-i18n="guarantees.title1">My</span> <span data-i18n="guarantees.title2">Guarantees</span>
+            </h2>
+            <div class="guarantees-grid">
+                <div class="guarantee-card fade-in">
+                    <div class="guarantee-icon"><i class="fas fa-shield-halved"></i></div>
+                    <h3 class="guarantee-title" data-i18n="guarantees.g1.title">Revisions Until You're Happy</h3>
+                    <p class="guarantee-desc" data-i18n="guarantees.g1.desc">Within your plan's revision limits, I'll keep adjusting the design until it matches your vision — no rush, no pressure.</p>
+                </div>
+                <div class="guarantee-card fade-in" style="animation-delay: 0.1s;">
+                    <div class="guarantee-icon"><i class="fas fa-bolt"></i></div>
+                    <h3 class="guarantee-title" data-i18n="guarantees.g2.title">On-Time or 20% Off</h3>
+                    <p class="guarantee-desc" data-i18n="guarantees.g2.desc">If I miss the agreed deadline without a valid reason, you get a 20% discount. Your time matters, and I respect that.</p>
+                </div>
+                <div class="guarantee-card fade-in" style="animation-delay: 0.2s;">
+                    <div class="guarantee-icon"><i class="fas fa-comments"></i></div>
+                    <h3 class="guarantee-title" data-i18n="guarantees.g3.title">Reply Within 24 Hours</h3>
+                    <p class="guarantee-desc" data-i18n="guarantees.g3.desc">I answer every message within one business day. No ghosts, no ignoring — you always know what's happening.</p>
+                </div>
+                <div class="guarantee-card fade-in" style="animation-delay: 0.3s;">
+                    <div class="guarantee-icon"><i class="fas fa-key"></i></div>
+                    <h3 class="guarantee-title" data-i18n="guarantees.g4.title">Code & Sources Are Yours</h3>
+                    <p class="guarantee-desc" data-i18n="guarantees.g4.desc">When the project is done, you own everything — source code, design files, hosting, domain. No lock-in, ever.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison">
+        <div class="container">
+            <h2 class="section-title fade-in">
+                <span data-i18n="comparison.title1">Simon vs</span> <span data-i18n="comparison.title2">The Market</span>
+            </h2>
+
+            <div class="comparison-wrapper fade-in">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="comparison.feature">Feature</th>
+                            <th class="col-simon">Simon</th>
+                            <th data-i18n="comparison.agency">Agency</th>
+                            <th data-i18n="comparison.freelancer">Freelancer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-i18n="comparison.r1.feature">Price</td>
+                            <td class="col-simon"><span class="cmp-check"><i class="fas fa-check-circle"></i> <span data-i18n="comparison.r1.simon">2.3–2.5× lower</span></span></td>
+                            <td>$$$</td>
+                            <td>$$</td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="comparison.r2.feature">Delivery time</td>
+                            <td class="col-simon"><span class="cmp-check"><i class="fas fa-check-circle"></i> <span data-i18n="comparison.r2.simon">3–14 days</span></span></td>
+                            <td data-i18n="comparison.r2.agency">4–8 weeks</td>
+                            <td data-i18n="comparison.r2.freelancer">Variable</td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="comparison.r3.feature">Communication</td>
+                            <td class="col-simon"><span class="cmp-check"><i class="fas fa-check-circle"></i> <span data-i18n="comparison.r3.simon">Direct with me</span></span></td>
+                            <td data-i18n="comparison.r3.agency">Through manager</td>
+                            <td data-i18n="comparison.r3.freelancer">Direct</td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="comparison.r4.feature">Revisions</td>
+                            <td class="col-simon"><span class="cmp-check"><i class="fas fa-check-circle"></i> <span data-i18n="comparison.r4.simon">Included (2–3)</span></span></td>
+                            <td data-i18n="comparison.r4.agency">Paid extra</td>
+                            <td data-i18n="comparison.r4.freelancer">Limited</td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="comparison.r5.feature">Post-launch support</td>
+                            <td class="col-simon"><span class="cmp-check"><i class="fas fa-check-circle"></i> <span data-i18n="comparison.r5.simon">30–60 days free</span></span></td>
+                            <td data-i18n="comparison.r5.agency">Hourly rate</td>
+                            <td data-i18n="comparison.r5.freelancer">Rarely</td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="comparison.r6.feature">Ownership</td>
+                            <td class="col-simon"><span class="cmp-check"><i class="fas fa-check-circle"></i> <span data-i18n="comparison.r6.simon">100% yours</span></span></td>
+                            <td data-i18n="comparison.r6.agency">Yours</td>
+                            <td data-i18n="comparison.r6.freelancer">Yours</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
     <section class="portfolio" id="portfolio">
         <div class="container">
-            <div class="portfolio-header fade-in" style="animation-delay: 0.2s;">
-                <h2 class="section-title">My <span>Portfolio</span></h2>
+            <div class="portfolio-header fade-in">
+                <h2 class="section-title">
+                    <span data-i18n="portfolio.title1">My</span> <span data-i18n="portfolio.title2">Portfolio</span>
+                </h2>
                 <div class="portfolio-filter">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="web">Web Design</button>
-                    <button class="filter-btn" data-filter="app">App UI</button>
-                    <!--    <button class="filter-btn" data-filter="ecommerce">E-commerce</button>     -->
+                    <button class="filter-btn active" data-filter="all" data-i18n="portfolio.filter.all">All</button>
+                    <button class="filter-btn" data-filter="web" data-i18n="portfolio.filter.web">Web Design</button>
+                    <button class="filter-btn" data-filter="app" data-i18n="portfolio.filter.app">App UI</button>
                 </div>
             </div>
-            
+
             <div class="portfolio-grid">
-                <div class="portfolio-item fade-in" style="animation-delay: 0.3s;" data-category="web">
-                    <img src="https://i.ibb.co/BHjsPVpK/image.png" alt="Web Design Project" class="portfolio-img">
+                <div class="portfolio-item fade-in" data-category="web">
+                    <img src="https://i.ibb.co/BHjsPVpK/image.png" alt="Hot Wheels Market" class="portfolio-img">
                     <div class="portfolio-overlay">
-                        <span class="portfolio-category">Web Design</span>
+                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
                         <h3 class="portfolio-title">Hot Wheels Market</h3>
-                        <a href="https://61simon.github.io/Hot-Wheels-Market/" class="portfolio-link">
-                            View Project Hot Wheels <i class="fas fa-arrow-right"></i>
+                        <a href="https://61simon.github.io/Hot-Wheels-Market/" class="portfolio-link" target="_blank" rel="noopener">
+                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
-                
-                <div class="portfolio-item fade-in" style="animation-delay: 0.4s;" data-category="web">
-                    <img src="" alt="Mobile App Design" class="portfolio-img">
+                <div class="portfolio-item fade-in" data-category="web">
+                    <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=800&q=80" alt="Project" class="portfolio-img">
                     <div class="portfolio-overlay">
-                        <span class="portfolio-category">Web Design</span>
+                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
                         <h3 class="portfolio-title">Nothing</h3>
-                        <a href="https://61simon.github.io/" target="_blank">View Project</a>
-                    </div>
-                </div>
-                
-                <div class="portfolio-item fade-in" style="animation-delay: 0.5s;" data-category="web">
-                    <img src="" alt="E-commerce Project" class="portfolio-img">
-                    <div class="portfolio-overlay">
-                        <span class="portfolio-category">Web Design</span>
-                        <h3 class="portfolio-title">Nothing</h3>
-                        <a href="https://61simon.github.io/" class="portfolio-link">
-                            View Project <i class="fas fa-arrow-right"></i>
+                        <a href="https://61simon.github.io/" class="portfolio-link" target="_blank" rel="noopener">
+                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
-                
-                <div class="portfolio-item fade-in" style="animation-delay: 0.3s;" data-category="web">
-                    <img src="" alt="Web Design Project" class="portfolio-img">
+                <div class="portfolio-item fade-in" data-category="web">
+                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80" alt="Project" class="portfolio-img">
                     <div class="portfolio-overlay">
-                        <span class="portfolio-category">Web Design</span>
+                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
                         <h3 class="portfolio-title">Nothing</h3>
-                        <a href="https://61simon.github.io/" class="portfolio-link">
-                            View Project <i class="fas fa-arrow-right"></i>
+                        <a href="https://61simon.github.io/" class="portfolio-link" target="_blank" rel="noopener">
+                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
-                
-                <div class="portfolio-item fade-in" style="animation-delay: 0.4s;" data-category="web">
-                    <img src="" alt="Mobile App Design" class="portfolio-img">
+                <div class="portfolio-item fade-in" data-category="web">
+                    <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=800&q=80" alt="Project" class="portfolio-img">
                     <div class="portfolio-overlay">
-                        <span class="portfolio-category">Web Design</span>
+                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
                         <h3 class="portfolio-title">Nothing</h3>
-                        <a href="https://61simon.github.io/" class="portfolio-link">
-                            View Project <i class="fas fa-arrow-right"></i>
+                        <a href="https://61simon.github.io/" class="portfolio-link" target="_blank" rel="noopener">
+                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
-                
-                <div class="portfolio-item fade-in" style="animation-delay: 0.5s;" data-category="web">
-                    <img src="" alt="E-commerce Project" class="portfolio-img">
+                <div class="portfolio-item fade-in" data-category="web">
+                    <img src="https://images.unsplash.com/photo-1481487196290-c152efe083f5?auto=format&fit=crop&w=800&q=80" alt="Project" class="portfolio-img">
                     <div class="portfolio-overlay">
-                        <span class="portfolio-category">Web Design</span>
+                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
                         <h3 class="portfolio-title">Nothing</h3>
-                        <a href="https://61simon.github.io/" class="portfolio-link">
-                            View Project <i class="fas fa-arrow-right"></i>
+                        <a href="https://61simon.github.io/" class="portfolio-link" target="_blank" rel="noopener">
+                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="portfolio-item fade-in" data-category="web">
+                    <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=800&q=80" alt="Project" class="portfolio-img">
+                    <div class="portfolio-overlay">
+                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
+                        <h3 class="portfolio-title">Nothing</h3>
+                        <a href="https://61simon.github.io/" class="portfolio-link" target="_blank" rel="noopener">
+                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
@@ -1346,325 +1714,866 @@
         </div>
     </section>
 
-    <!-- Testimonials -->
+    <section class="stack" id="stack">
+        <div class="container">
+            <h2 class="section-title fade-in">
+                <span data-i18n="stack.title1">My</span> <span data-i18n="stack.title2">Stack</span>
+            </h2>
+            <div class="stack-grid">
+                <div class="stack-item fade-in"><div class="stack-icon"><i class="fab fa-html5"></i></div><div class="stack-name">HTML5</div></div>
+                <div class="stack-item fade-in" style="animation-delay: 0.05s;"><div class="stack-icon"><i class="fab fa-css3-alt"></i></div><div class="stack-name">CSS3</div></div>
+                <div class="stack-item fade-in" style="animation-delay: 0.1s;"><div class="stack-icon"><i class="fab fa-js"></i></div><div class="stack-name">JavaScript</div></div>
+                <div class="stack-item fade-in" style="animation-delay: 0.15s;"><div class="stack-icon"><i class="fab fa-react"></i></div><div class="stack-name">React</div></div>
+                <div class="stack-item fade-in" style="animation-delay: 0.2s;"><div class="stack-icon"><i class="fab fa-figma"></i></div><div class="stack-name">Figma</div></div>
+                <div class="stack-item fade-in" style="animation-delay: 0.25s;"><div class="stack-icon"><i class="fab fa-git-alt"></i></div><div class="stack-name">Git</div></div>
+                <div class="stack-item fade-in" style="animation-delay: 0.3s;"><div class="stack-icon"><i class="fas fa-wind"></i></div><div class="stack-name">Tailwind</div></div>
+                <div class="stack-item fade-in" style="animation-delay: 0.35s;"><div class="stack-icon"><i class="fas fa-bolt"></i></div><div class="stack-name">Webflow</div></div>
+            </div>
+        </div>
+    </section>
+
     <section class="testimonials">
         <div class="container">
-            <h2 class="section-title fade-in" style="animation-delay: 0.2s;">Client <span>Testimonials</span></h2>
-            
-            <div class="testimonials-slider fade-in" style="animation-delay: 0.4s;">
+            <h2 class="section-title fade-in">
+                <span data-i18n="testimonials.title1">Client</span> <span data-i18n="testimonials.title2">Testimonials</span>
+            </h2>
+            <div class="testimonials-slider fade-in">
                 <div class="testimonial-card">
-                    <p class="testimonial-text">
-                        Simon delivered an exceptional website that perfectly captured our brand identity. 
-                        His attention to detail and creative approach resulted in a site that has significantly 
-                        increased our online conversions.
-                    </p>
+                    <p class="testimonial-text" data-i18n="testimonials.t1.text">Simon delivered an exceptional website that perfectly captured our brand identity. His attention to detail and creative approach resulted in a site that has significantly increased our online conversions.</p>
                     <div class="testimonial-author">
-                        <div class="author-img">
-                            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sarah Johnson">
-                        </div>
-                        <div class="author-info">
-                            <h4>Sarah Johnson</h4>
-                            <p>CEO, Creative Agency</p>
-                        </div>
+                        <div class="author-img"><img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sarah Johnson"></div>
+                        <div class="author-info"><h4>Sarah Johnson</h4><p data-i18n="testimonials.t1.role">CEO, Creative Agency</p></div>
                     </div>
                 </div>
-                
                 <div class="testimonial-card">
-                    <p class="testimonial-text">
-                        Working with Simon was a pleasure. He understood our requirements perfectly and 
-                        delivered a stunning e-commerce solution ahead of schedule. The site performs 
-                        flawlessly on all devices.
-                    </p>
+                    <p class="testimonial-text" data-i18n="testimonials.t2.text">Working with Simon was a pleasure. He understood our requirements perfectly and delivered a stunning e-commerce solution ahead of schedule. The site performs flawlessly on all devices.</p>
                     <div class="testimonial-author">
-                        <div class="author-img">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen">
-                        </div>
-                        <div class="author-info">
-                            <h4>Michael Chen</h4>
-                            <p>Founder, Fashion Brand</p>
-                        </div>
+                        <div class="author-img"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen"></div>
+                        <div class="author-info"><h4>Michael Chen</h4><p data-i18n="testimonials.t2.role">Founder, Fashion Brand</p></div>
                     </div>
                 </div>
-                
                 <div class="testimonial-card">
-                    <p class="testimonial-text">
-                        Simon's UI/UX design skills transformed our mobile app. The intuitive interface 
-                        he created has received overwhelmingly positive feedback from our users and 
-                        significantly improved engagement metrics.
-                    </p>
+                    <p class="testimonial-text" data-i18n="testimonials.t3.text">Simon's UI/UX design skills transformed our mobile app. The intuitive interface he created has received overwhelmingly positive feedback from our users and significantly improved engagement metrics.</p>
                     <div class="testimonial-author">
-                        <div class="author-img">
-                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma Rodriguez">
-                        </div>
-                        <div class="author-info">
-                            <h4>Emma Rodriguez</h4>
-                            <p>Product Manager, Tech Startup</p>
-                        </div>
+                        <div class="author-img"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma Rodriguez"></div>
+                        <div class="author-info"><h4>Emma Rodriguez</h4><p data-i18n="testimonials.t3.role">Product Manager, Tech Startup</p></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2 class="section-title fade-in">
+                <span data-i18n="faq.title1">Frequently Asked</span> <span data-i18n="faq.title2">Questions</span>
+            </h2>
+            <div class="faq-list">
+                <div class="faq-item fade-in">
+                    <div class="faq-question">
+                        <span data-i18n="faq.q1">How long does it take to build a website?</span>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.a1">A landing page usually takes 3–5 days, a business website 7–14 days, and an online store 2–3 weeks. The exact timeline depends on the project scope and how quickly you provide content.</div>
+                </div>
+                <div class="faq-item fade-in">
+                    <div class="faq-question">
+                        <span data-i18n="faq.q2">Do you require an upfront payment?</span>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.a2">Yes — I take a 50% deposit to start the project, and the remaining 50% is paid after you approve the finished website. This protects both of us.</div>
+                </div>
+                <div class="faq-item fade-in">
+                    <div class="faq-question">
+                        <span data-i18n="faq.q3">What do I need to prepare before we start?</span>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.a3">Just a general idea of what you want. If you have a logo, brand colors, or text — great. If not, I can help you with copywriting suggestions and design direction.</div>
+                </div>
+                <div class="faq-item fade-in">
+                    <div class="faq-question">
+                        <span data-i18n="faq.q4">Do you offer revisions after the site is done?</span>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.a4">Every plan includes 2–3 rounds of revisions during the design and development stage. After launch, I also provide free support for 30–60 days depending on your plan.</div>
+                </div>
+                <div class="faq-item fade-in">
+                    <div class="faq-question">
+                        <span data-i18n="faq.q5">What about hosting, domain and SEO?</span>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.a5">I'll help you set up hosting and a domain — you own them, no lock-in. Basic SEO (meta tags, sitemap, fast loading, mobile optimization) is included with every project.</div>
+                </div>
+                <div class="faq-item fade-in">
+                    <div class="faq-question">
+                        <span data-i18n="faq.q6">Why are your prices so much lower than the market?</span>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.a6">I'm actively building my portfolio and client base, so I offer premium quality at 2.3–2.5× lower prices than the average market. Same quality, faster delivery, and personal attention — just a lower price tag while I grow.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="contact" id="contact">
         <div class="container contact-container">
-            <div class="contact-info fade-in" style="animation-delay: 0.2s;">
-                <h2 class="contact-title">Get In <span>Touch</span></h2>
-                <p class="contact-description">
-                    Have a project in mind or want to discuss potential opportunities? 
-                    Feel free to reach out and I'll get back to you as soon as possible.
+            <div class="contact-info fade-in">
+                <h2 class="contact-title">
+                    <span data-i18n="contact.title1">Get In</span> <span data-i18n="contact.title2">Touch</span>
+                </h2>
+                <p class="contact-description" data-i18n="contact.desc">
+                    Have a project in mind or want to discuss potential opportunities? Fill out the brief below or reach out directly — I'll get back to you within 24 hours.
                 </p>
-                
                 <div class="contact-details">
                     <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="contact-text">
-                            <h4>Location</h4>
-                            <p>Zaporozhye, Ukraine</p>
-                        </div>
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="contact-text"><h4 data-i18n="contact.location">Location</h4><p>Zaporozhye, Ukraine</p></div>
                     </div>
-                    
                     <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="contact-text">
-                            <h4>Email</h4>
-                            <p>simonchiksssss@gmail.com</p>
-                        </div>
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="contact-text"><h4 data-i18n="contact.email">Email</h4><p>simonchiksssss@gmail.com</p></div>
                     </div>
-                    
                     <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone-alt"></i>
-                        </div>
-                        <div class="contact-text">
-                            <h4>Phone</h4>
-                            <p>**** ** *** ****</p>
-                        </div>
+                        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div class="contact-text"><h4 data-i18n="contact.phone">Phone</h4><p>**** ** *** ****</p></div>
                     </div>
                 </div>
-                
                 <div class="contact-social">
-                    <a href="https://t.me/simonsssbio"><i class="fab fa-telegram"></i></a>
-                    <a href="https://steamcommunity.com/profiles/76561199380426859/"><i class="fab fa-steam"></i></a>
-                    <a href="https://github.com/61Simon"><i class="fab fa-github"></i></a>
-                    <a href="https://www.instagram.com/simonchikssss/"><i class="fab fa-instagram"></i></a>
+                    <a href="https://t.me/simonsssbio" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    <a href="https://steamcommunity.com/profiles/76561199380426859/" aria-label="Steam"><i class="fab fa-steam"></i></a>
+                    <a href="https://github.com/61Simon" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.instagram.com/simonchikssss/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-                
-<div class="contact-form fade-in" style="animation-delay: 0.4s;">
-    <!-- Подключаем отправку формы через Web3Forms -->
-        <form action="https://api.web3forms.com/submit" method="POST">
 
-        <!-- Ваш секретный ключ, который вы получили -->
-        <input type="hidden" name="access_key" value="c31d6295-1a76-4daa-9014-7738a3d3205a">
-        <input type="hidden" name="subject" value="New Message from Portfolio">
-        <div class="form-group">
-            <label for="name" class="form-label">Your Name</label>
-            <input type="text" id="name" name="name" class="form-control" required>
-        </div>
+            <div class="contact-form fade-in">
+                <form action="https://api.web3forms.com/submit" method="POST" id="briefForm">
+                    <input type="hidden" name="access_key" value="c31d6295-1a76-4daa-9014-7738a3d3205a">
+                    <input type="hidden" name="subject" value="New Brief from Portfolio">
+                    <input type="hidden" name="redirect" value="https://61simon.github.io/thanks.html">
 
-        <div class="form-group">
-            <label for="email" class="form-label">Your Email</label>
-            <input type="email" id="email" name="email" class="form-control" required>
-        </div>
+                    <div class="form-group">
+                        <label for="name" class="form-label" data-i18n="form.name">Your Name *</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
 
-        <div class="form-group">
-            <label for="subject" class="form-label">Subject</label>
-            <input type="text" id="subject" name="msg_subject" class="form-control" required>
-        </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label" data-i18n="form.email">Your Email *</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
 
-        <div class="form-group">
-            <label for="message" class="form-label">Your Message</label>
-            <textarea id="message" name="message" class="form-control" required></textarea>
-        </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form.need">What do you need? (select all that apply)</label>
+                        <div class="form-checkbox-group">
+                            <label class="form-checkbox"><input type="checkbox" name="project_type" value="Landing Page"><span data-i18n="form.opt.landing">Landing Page</span></label>
+                            <label class="form-checkbox"><input type="checkbox" name="project_type" value="Business Website"><span data-i18n="form.opt.business">Business Website</span></label>
+                            <label class="form-checkbox"><input type="checkbox" name="project_type" value="Online Store"><span data-i18n="form.opt.store">Online Store</span></label>
+                            <label class="form-checkbox"><input type="checkbox" name="project_type" value="Redesign"><span data-i18n="form.opt.redesign">Redesign</span></label>
+                            <label class="form-checkbox"><input type="checkbox" name="project_type" value="Custom"><span data-i18n="form.opt.custom">Something Custom</span></label>
+                        </div>
+                    </div>
 
-        <button type="submit" class="btn btn-primary">Send Message</button>
-    </form>
-</div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form.budget">Approximate Budget</label>
+                        <div class="form-checkbox-group">
+                            <label class="form-checkbox"><input type="radio" name="budget" value="Under $200"><span data-i18n="form.budget.b1">Under $200</span></label>
+                            <label class="form-checkbox"><input type="radio" name="budget" value="$200-$500"><span data-i18n="form.budget.b2">$200–$500</span></label>
+                            <label class="form-checkbox"><input type="radio" name="budget" value="$500-$1000"><span data-i18n="form.budget.b3">$500–$1000</span></label>
+                            <label class="form-checkbox"><input type="radio" name="budget" value="$1000+"><span data-i18n="form.budget.b4">$1000+</span></label>
+                        </div>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="message" class="form-label" data-i18n="form.message">Tell me about your project *</label>
+                        <textarea id="message" name="message" class="form-control" data-i18n-placeholder="form.message.placeholder" placeholder="Goals, deadline, references, anything that helps…" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" data-i18n="contact.send">Send Brief</button>
+                </form>
+            </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-container">
-                <a href="#" class="footer-logo">Simon</a>
-                
+                <a href="#home" class="footer-logo">Simon</a>
                 <div class="footer-links">
-                    <a href="#home" class="footer-link">Home</a>
-                    <a href="#about" class="footer-link">About</a>
-                    <a href="#services" class="footer-link">Services</a>
-                    <a href="#portfolio" class="footer-link">Portfolio</a>
-                    <a href="#contact" class="footer-link">Contact</a>
+                    <a href="#home" class="footer-link" data-i18n="nav.home">Home</a>
+                    <a href="#about" class="footer-link" data-i18n="nav.about">About</a>
+                    <a href="#story" class="footer-link" data-i18n="nav.story">Story</a>
+                    <a href="#services" class="footer-link" data-i18n="nav.services">Services</a>
+                    <a href="#pricing" class="footer-link" data-i18n="nav.pricing">Pricing</a>
+                    <a href="#portfolio" class="footer-link" data-i18n="nav.portfolio">Portfolio</a>
+                    <a href="#faq" class="footer-link" data-i18n="nav.faq">FAQ</a>
+                    <a href="#contact" class="footer-link" data-i18n="nav.contact">Contact</a>
                 </div>
-                
                 <div class="footer-social">
-                    <a href="https://t.me/simonsssbio"><i class="fab fa-telegram"></i></a>
-                    <a href="https://steamcommunity.com/profiles/76561199380426859/"><i class="fab fa-steam"></i></a>
-                    <a href="https://github.com/61Simon"><i class="fab fa-github"></i></a>
-                    <a href="https://www.instagram.com/simonchikssss/"><i class="fab fa-instagram"></i></a>
+                    <a href="https://t.me/simonsssbio" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    <a href="https://steamcommunity.com/profiles/76561199380426859/" aria-label="Steam"><i class="fab fa-steam"></i></a>
+                    <a href="https://github.com/61Simon" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.instagram.com/simonchikssss/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-            
             <div class="footer-bottom">
                 <p>&copy; 2026 Simon. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top -->
-    <div class="back-to-top">
+    <button class="back-to-top" aria-label="Back to top">
         <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <a href="https://t.me/simonsssbio" class="float-telegram" target="_blank" rel="noopener" aria-label="Chat on Telegram">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+    <div class="live-notification" id="liveNotif" aria-live="polite">
+        <div class="live-avatar" id="liveAvatar">M</div>
+        <div class="live-text">
+            <span id="liveText"><strong>Michael</strong> from Kyiv just ordered a Landing Page</span>
+            <small id="liveTime">5 hours ago</small>
+        </div>
     </div>
 
     <script>
-        // Mobile Menu Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        const htmlEl = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        htmlEl.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const current = htmlEl.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            htmlEl.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        function updateThemeIcon(theme) {
+            themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        const translations = {
+            en: {
+                "nav.home": "Home", "nav.about": "About", "nav.story": "Story", "nav.services": "Services",
+                "nav.process": "Process", "nav.pricing": "Pricing", "nav.portfolio": "Portfolio",
+                "nav.faq": "FAQ", "nav.contact": "Contact",
+                "hero.subtitle": "Web Designer & Developer", "hero.title": "Hi, I'm",
+                "hero.desc": "I create stunning, high-performing websites that help businesses grow. With 4 years of experience in web design and development, I deliver exceptional digital experiences.",
+                "hero.viewWork": "View My Work", "hero.hire": "Hire Me",
+                "stats.projects": "Projects Completed", "stats.years": "Years of Experience",
+                "stats.clients": "Happy Clients", "stats.satisfaction": "Satisfaction Rate",
+                "about.title1": "About", "about.title2": "Me",
+                "about.subtitle": "Professional Web Designer & Developer",
+                "about.p1": "I'm a passionate web designer and developer based in Ukraine with over 3 years of professional experience creating modern, responsive, and user-friendly websites. I specialize in converting ideas into beautiful, functional digital experiences.",
+                "about.p2": "My approach combines aesthetic design with technical excellence to deliver websites that not only look amazing but also perform exceptionally well across all devices.",
+                "skills.tags.frontend": "Frontend", "skills.tags.styling": "Styling & Design", "skills.tags.tools": "Tools",
+                "story.title1": "My", "story.title2": "Story",
+                "story.p1": "I got into web development back in 2021 — not through courses or a bootcamp, but by curiosity. I wanted to make my own website, opened a code editor, and never looked back. What started as a hobby quickly turned into a craft.",
+                "story.p2": "Since then, I've built over 50 websites — from landing pages for local businesses to full e-commerce stores. Every project taught me something new, and every client taught me to listen better. I don't just write code — I help people grow their business.",
+                "story.p3": "Today I work as an independent web designer and developer. I keep my prices low while I build my portfolio and reputation, because I believe great websites shouldn't cost a fortune. If you're reading this — I'd love to hear about your project.",
+                "services.title1": "My", "services.title2": "Services",
+                "services.view": "View My Work",
+                "services.webdesign": "Web Design", "services.webdev": "Web Development",
+                "services.responsive": "Responsive Design", "services.uiux": "UI/UX Design",
+                "services.webdesign.desc": "Custom website designs that are visually stunning, user-friendly, and optimized for conversions.",
+                "services.webdev.desc": "Clean, efficient code that brings designs to life with perfect functionality across all devices.",
+                "services.responsive.desc": "Websites that look and work perfectly on any device, from desktop to mobile.",
+                "services.uiux.desc": "Intuitive interfaces and seamless user experiences that keep visitors engaged.",
+                "process.title1": "How I", "process.title2": "Work",
+                "process.step1.title": "Briefing", "process.step1.desc": "We discuss your project, goals, target audience and requirements — free of charge.",
+                "process.step2.title": "Design Concept", "process.step2.desc": "I create a custom design concept for your approval before a single line of code is written.",
+                "process.step3.title": "Development", "process.step3.desc": "I code your website with clean, efficient code — responsive, fast and SEO-ready.",
+                "process.step4.title": "Launch & Support", "process.step4.desc": "We deploy, test everything, and I provide ongoing support after launch.",
+                "pricing.title1": "My", "pricing.title2": "Pricing",
+                "pricing.bannerTitle": "Prices 2.3–2.5× Lower Than the Market",
+                "pricing.bannerDesc": "I'm building my portfolio and reputation right now, so my rates are 2.3–2.5 times lower than the average market price — with no compromise on quality, speed or support.",
+                "pricing.landing.name": "Landing Page", "pricing.landing.desc": "One-page website to present a product, service or personal brand.",
+                "pricing.landing.save": "2.5× cheaper than the market",
+                "pricing.landing.f1": "1 page, up to 6 sections",
+                "pricing.landing.f2": "Custom design — no ready-made templates",
+                "pricing.landing.f3": "Fully responsive on all devices",
+                "pricing.landing.f4": "Contact form & social links",
+                "pricing.landing.f5": "Basic SEO + fast loading",
+                "pricing.landing.f6": "Delivery in 3–5 days",
+                "pricing.landing.f7": "2 rounds of revisions",
+                "pricing.business.name": "Business Website", "pricing.business.desc": "Multi-page website for a company, studio or online service.",
+                "pricing.business.save": "2.5× cheaper than the market",
+                "pricing.business.f1": "Up to 5 unique pages",
+                "pricing.business.f2": "Individual UI/UX design",
+                "pricing.business.f3": "Animations & interactive elements",
+                "pricing.business.f4": "Easy content management",
+                "pricing.business.f5": "Advanced SEO & performance setup",
+                "pricing.business.f6": "Delivery in 7–14 days",
+                "pricing.business.f7": "3 rounds of revisions",
+                "pricing.business.f8": "30 days of free support",
+                "pricing.store.name": "Online Store", "pricing.store.desc": "E-commerce website with a product catalog and online payments.",
+                "pricing.store.save": "2.5× cheaper than the market",
+                "pricing.store.f1": "Product catalog with filters & search",
+                "pricing.store.f2": "Shopping cart & checkout flow",
+                "pricing.store.f3": "Payment & delivery integration",
+                "pricing.store.f4": "Admin panel for products & orders",
+                "pricing.store.f5": "Mobile-first responsive design",
+                "pricing.store.f6": "Delivery in 2–3 weeks",
+                "pricing.store.f7": "60 days of free support",
+                "pricing.popular": "Most Popular", "pricing.order": "Order Now",
+                "pricing.footnote1": "Prices are", "pricing.footnote2": "starting points", "pricing.footnote3": "— the final quote depends on the project scope.",
+                "pricing.footnote4": "Need something custom?", "pricing.footnote5": "Tell me about your idea", "pricing.footnote6": "and I'll send a free estimate within 24 hours.",
+                "guarantees.title1": "My", "guarantees.title2": "Guarantees",
+                "guarantees.g1.title": "Revisions Until You're Happy", "guarantees.g1.desc": "Within your plan's revision limits, I'll keep adjusting the design until it matches your vision — no rush, no pressure.",
+                "guarantees.g2.title": "On-Time or 20% Off", "guarantees.g2.desc": "If I miss the agreed deadline without a valid reason, you get a 20% discount. Your time matters, and I respect that.",
+                "guarantees.g3.title": "Reply Within 24 Hours", "guarantees.g3.desc": "I answer every message within one business day. No ghosts, no ignoring — you always know what's happening.",
+                "guarantees.g4.title": "Code & Sources Are Yours", "guarantees.g4.desc": "When the project is done, you own everything — source code, design files, hosting, domain. No lock-in, ever.",
+                "comparison.title1": "Simon vs", "comparison.title2": "The Market",
+                "comparison.feature": "Feature", "comparison.agency": "Agency", "comparison.freelancer": "Freelancer",
+                "comparison.r1.feature": "Price", "comparison.r1.simon": "2.3–2.5× lower",
+                "comparison.r2.feature": "Delivery time", "comparison.r2.simon": "3–14 days", "comparison.r2.agency": "4–8 weeks", "comparison.r2.freelancer": "Variable",
+                "comparison.r3.feature": "Communication", "comparison.r3.simon": "Direct with me", "comparison.r3.agency": "Through manager", "comparison.r3.freelancer": "Direct",
+                "comparison.r4.feature": "Revisions", "comparison.r4.simon": "Included (2–3)", "comparison.r4.agency": "Paid extra", "comparison.r4.freelancer": "Limited",
+                "comparison.r5.feature": "Post-launch support", "comparison.r5.simon": "30–60 days free", "comparison.r5.agency": "Hourly rate", "comparison.r5.freelancer": "Rarely",
+                "comparison.r6.feature": "Ownership", "comparison.r6.simon": "100% yours", "comparison.r6.agency": "Yours", "comparison.r6.freelancer": "Yours",
+                "portfolio.title1": "My", "portfolio.title2": "Portfolio",
+                "portfolio.filter.all": "All", "portfolio.filter.web": "Web Design", "portfolio.filter.app": "App UI",
+                "portfolio.cat.web": "Web Design", "portfolio.view": "View Project",
+                "stack.title1": "My", "stack.title2": "Stack",
+                "testimonials.title1": "Client", "testimonials.title2": "Testimonials",
+                "testimonials.t1.text": "Simon delivered an exceptional website that perfectly captured our brand identity. His attention to detail and creative approach resulted in a site that has significantly increased our online conversions.",
+                "testimonials.t1.role": "CEO, Creative Agency",
+                "testimonials.t2.text": "Working with Simon was a pleasure. He understood our requirements perfectly and delivered a stunning e-commerce solution ahead of schedule. The site performs flawlessly on all devices.",
+                "testimonials.t2.role": "Founder, Fashion Brand",
+                "testimonials.t3.text": "Simon's UI/UX design skills transformed our mobile app. The intuitive interface he created has received overwhelmingly positive feedback from our users and significantly improved engagement metrics.",
+                "testimonials.t3.role": "Product Manager, Tech Startup",
+                "faq.title1": "Frequently Asked", "faq.title2": "Questions",
+                "faq.q1": "How long does it take to build a website?",
+                "faq.a1": "A landing page usually takes 3–5 days, a business website 7–14 days, and an online store 2–3 weeks. The exact timeline depends on the project scope and how quickly you provide content.",
+                "faq.q2": "Do you require an upfront payment?",
+                "faq.a2": "Yes — I take a 50% deposit to start the project, and the remaining 50% is paid after you approve the finished website. This protects both of us.",
+                "faq.q3": "What do I need to prepare before we start?",
+                "faq.a3": "Just a general idea of what you want. If you have a logo, brand colors, or text — great. If not, I can help you with copywriting suggestions and design direction.",
+                "faq.q4": "Do you offer revisions after the site is done?",
+                "faq.a4": "Every plan includes 2–3 rounds of revisions during the design and development stage. After launch, I also provide free support for 30–60 days depending on your plan.",
+                "faq.q5": "What about hosting, domain and SEO?",
+                "faq.a5": "I'll help you set up hosting and a domain — you own them, no lock-in. Basic SEO (meta tags, sitemap, fast loading, mobile optimization) is included with every project.",
+                "faq.q6": "Why are your prices so much lower than the market?",
+                "faq.a6": "I'm actively building my portfolio and client base, so I offer premium quality at 2.3–2.5× lower prices than the average market. Same quality, faster delivery, and personal attention — just a lower price tag while I grow.",
+                "contact.title1": "Get In", "contact.title2": "Touch", "contact.send": "Send Brief",
+                "contact.desc": "Have a project in mind or want to discuss potential opportunities? Fill out the brief below or reach out directly — I'll get back to you within 24 hours.",
+                "contact.location": "Location", "contact.email": "Email", "contact.phone": "Phone",
+                "form.name": "Your Name *", "form.email": "Your Email *",
+                "form.need": "What do you need? (select all that apply)",
+                "form.budget": "Approximate Budget",
+                "form.message": "Tell me about your project *",
+                "form.message.placeholder": "Goals, deadline, references, anything that helps…",
+                "form.opt.landing": "Landing Page", "form.opt.business": "Business Website",
+                "form.opt.store": "Online Store", "form.opt.redesign": "Redesign", "form.opt.custom": "Something Custom",
+                "form.budget.b1": "Under $200", "form.budget.b2": "$200–$500",
+                "form.budget.b3": "$500–$1000", "form.budget.b4": "$1000+"
+            },
+            ru: {
+                "nav.home": "Главная", "nav.about": "Обо мне", "nav.story": "История", "nav.services": "Услуги",
+                "nav.process": "Процесс", "nav.pricing": "Цены", "nav.portfolio": "Портфолио",
+                "nav.faq": "FAQ", "nav.contact": "Контакты",
+                "hero.subtitle": "Веб-дизайнер и разработчик", "hero.title": "Привет, я",
+                "hero.desc": "Я создаю впечатляющие, высокопроизводительные сайты, которые помогают бизнесу расти. 4 года опыта в веб-дизайне и разработке.",
+                "hero.viewWork": "Мои работы", "hero.hire": "Нанять меня",
+                "stats.projects": "Проектов выполнено", "stats.years": "Лет опыта",
+                "stats.clients": "Довольных клиентов", "stats.satisfaction": "Уровень довольства",
+                "about.title1": "Обо", "about.title2": "мне",
+                "about.subtitle": "Профессиональный веб-дизайнер и разработчик",
+                "about.p1": "Я страстный веб-дизайнер и разработчик из Украины с более чем 3-летним профессиональным опытом создания современных, адаптивных и удобных сайтов. Специализируюсь на превращении идей в красивые и функциональные цифровые продукты.",
+                "about.p2": "Мой подход сочетает эстетичный дизайн с техническим совершенством, чтобы сайты не только впечатляли внешне, но и отлично работали на всех устройствах.",
+                "skills.tags.frontend": "Фронтенд", "skills.tags.styling": "Стили и дизайн", "skills.tags.tools": "Инструменты",
+                "story.title1": "Моя", "story.title2": "история",
+                "story.p1": "Я начал заниматься веб-разработкой в 2021 году — не на курсах и не в буткемпе, а из любопытства. Хотел сделать свой сайт, открыл редактор кода и уже не оглядывался назад. Хобби быстро превратилось в ремесло.",
+                "story.p2": "С тех пор я сделал более 50 сайтов — от лендингов для локального бизнеса до полноценных интернет-магазинов. Каждый проект научил меня чему-то новому, каждый клиент — лучше слушать. Я не просто пишу код — я помогаю людям развивать их бизнес.",
+                "story.p3": "Сегодня я работаю как независимый веб-дизайнер и разработчик. Держу цены низкими, пока набираю портфолио и репутацию, потому что верю: хороший сайт не должен стоить целое состояние. Если ты это читаешь — расскажи о своём проекте, буду рад помочь.",
+                "services.title1": "Мои", "services.title2": "услуги",
+                "services.view": "Мои работы",
+                "services.webdesign": "Веб-дизайн", "services.webdev": "Веб-разработка",
+                "services.responsive": "Адаптивный дизайн", "services.uiux": "UI/UX дизайн",
+                "services.webdesign.desc": "Индивидуальный дизайн сайтов — визуально впечатляющий, удобный и оптимизированный под конверсию.",
+                "services.webdev.desc": "Чистый, эффективный код, оживляющий дизайн с идеальной работой на всех устройствах.",
+                "services.responsive.desc": "Сайты, которые идеально выглядят и работают на любом устройстве — от десктопа до мобильного.",
+                "services.uiux.desc": "Интуитивные интерфейсы и бесшовный пользовательский опыт, удерживающий посетителей.",
+                "process.title1": "Как я", "process.title2": "работаю",
+                "process.step1.title": "Брифинг", "process.step1.desc": "Обсуждаем ваш проект, цели, аудиторию и требования — бесплатно.",
+                "process.step2.title": "Дизайн-концепт", "process.step2.desc": "Создаю индивидуальную концепцию дизайна на утверждение до написания кода.",
+                "process.step3.title": "Разработка", "process.step3.desc": "Пишу чистый, эффективный код — адаптивный, быстрый и SEO-готовый.",
+                "process.step4.title": "Запуск и поддержка", "process.step4.desc": "Разворачиваем, тестируем и я обеспечиваю поддержку после запуска.",
+                "pricing.title1": "Мои", "pricing.title2": "цены",
+                "pricing.bannerTitle": "Цены в 2.3–2.5× ниже рынка",
+                "pricing.bannerDesc": "Сейчас я набираю портфолио и репутацию, поэтому мои цены в 2.3–2.5 раза ниже среднерыночных — без потери качества, скорости и поддержки.",
+                "pricing.landing.name": "Лендинг", "pricing.landing.desc": "Одностраничный сайт для продукта, услуги или личного бренда.",
+                "pricing.landing.save": "в 2.5× дешевле рынка",
+                "pricing.landing.f1": "1 страница, до 6 секций",
+                "pricing.landing.f2": "Индивидуальный дизайн — без готовых шаблонов",
+                "pricing.landing.f3": "Полная адаптивность под все устройства",
+                "pricing.landing.f4": "Контактная форма и соцсети",
+                "pricing.landing.f5": "Базовое SEO + быстрая загрузка",
+                "pricing.landing.f6": "Срок сдачи 3–5 дней",
+                "pricing.landing.f7": "2 раунда правок",
+                "pricing.business.name": "Бизнес-сайт", "pricing.business.desc": "Многостраничный сайт для компании, студии или сервиса.",
+                "pricing.business.save": "в 2.5× дешевле рынка",
+                "pricing.business.f1": "До 5 уникальных страниц",
+                "pricing.business.f2": "Индивидуальный UI/UX дизайн",
+                "pricing.business.f3": "Анимации и интерактивные элементы",
+                "pricing.business.f4": "Удобное управление контентом",
+                "pricing.business.f5": "Продвинутое SEO и оптимизация скорости",
+                "pricing.business.f6": "Срок сдачи 7–14 дней",
+                "pricing.business.f7": "3 раунда правок",
+                "pricing.business.f8": "30 дней бесплатной поддержки",
+                "pricing.store.name": "Интернет-магазин", "pricing.store.desc": "E-commerce сайт с каталогом товаров и онлайн-оплатой.",
+                "pricing.store.save": "в 2.5× дешевле рынка",
+                "pricing.store.f1": "Каталог товаров с фильтрами и поиском",
+                "pricing.store.f2": "Корзина и оформление заказа",
+                "pricing.store.f3": "Интеграция оплаты и доставки",
+                "pricing.store.f4": "Админ-панель для товаров и заказов",
+                "pricing.store.f5": "Mobile-first адаптивный дизайн",
+                "pricing.store.f6": "Срок сдачи 2–3 недели",
+                "pricing.store.f7": "60 дней бесплатной поддержки",
+                "pricing.popular": "Популярное", "pricing.order": "Заказать",
+                "pricing.footnote1": "Цены указаны", "pricing.footnote2": "от", "pricing.footnote3": "— итоговая зависит от объёма.",
+                "pricing.footnote4": "Нужно что-то своё?", "pricing.footnote5": "Расскажите об идее", "pricing.footnote6": "— пришлю бесплатную оценку в течение 24 часов.",
+                "guarantees.title1": "Мои", "guarantees.title2": "гарантии",
+                "guarantees.g1.title": "Правки до результата", "guarantees.g1.desc": "В рамках лимита вашего тарифа буду дорабатывать дизайн, пока он не совпадёт с вашим видением — без спешки и давления.",
+                "guarantees.g2.title": "В срок или −20%", "guarantees.g2.desc": "Если пропущу согласованный дедлайн без уважительной причины — вы получаете скидку 20%. Ваше время ценно, и я это уважаю.",
+                "guarantees.g3.title": "Ответ в течение 24 часов", "guarantees.g3.desc": "Отвечаю на каждое сообщение в течение одного рабочего дня. Без игнора и пропаданий — вы всегда знаете, что происходит.",
+                "guarantees.g4.title": "Код и исходники — ваши", "guarantees.g4.desc": "После завершения проекта вам принадлежит всё — исходный код, файлы дизайна, хостинг, домен. Без привязки, навсегда.",
+                "comparison.title1": "Simon vs", "comparison.title2": "рынок",
+                "comparison.feature": "Критерий", "comparison.agency": "Агентство", "comparison.freelancer": "Фрилансер",
+                "comparison.r1.feature": "Цена", "comparison.r1.simon": "в 2.3–2.5× ниже",
+                "comparison.r2.feature": "Срок сдачи", "comparison.r2.simon": "3–14 дней", "comparison.r2.agency": "4–8 недель", "comparison.r2.freelancer": "Непредсказуемо",
+                "comparison.r3.feature": "Общение", "comparison.r3.simon": "Напрямую со мной", "comparison.r3.agency": "Через менеджера", "comparison.r3.freelancer": "Напрямую",
+                "comparison.r4.feature": "Правки", "comparison.r4.simon": "Включены (2–3)", "comparison.r4.agency": "Отдельная оплата", "comparison.r4.freelancer": "Ограниченно",
+                "comparison.r5.feature": "Поддержка после запуска", "comparison.r5.simon": "30–60 дней бесплатно", "comparison.r5.agency": "По часам", "comparison.r5.freelancer": "Редко",
+                "comparison.r6.feature": "Права", "comparison.r6.simon": "100% ваши", "comparison.r6.agency": "Ваши", "comparison.r6.freelancer": "Ваши",
+                "portfolio.title1": "Моё", "portfolio.title2": "портфолио",
+                "portfolio.filter.all": "Все", "portfolio.filter.web": "Веб-дизайн", "portfolio.filter.app": "App UI",
+                "portfolio.cat.web": "Веб-дизайн", "portfolio.view": "Смотреть проект",
+                "stack.title1": "Мой", "stack.title2": "стек",
+                "testimonials.title1": "Отзывы", "testimonials.title2": "клиентов",
+                "testimonials.t1.text": "Саймон сделал исключительный сайт, который идеально передал наш фирменный стиль. Внимание к деталям и креативный подход привели к значительному росту онлайн-конверсий.",
+                "testimonials.t1.role": "CEO, креативное агентство",
+                "testimonials.t2.text": "Работать с Саймоном — одно удовольствие. Он идеально понял наши требования и сдал впечатляющее e-commerce решение раньше срока. Сайт безупречно работает на всех устройствах.",
+                "testimonials.t2.role": "Основатель, fashion-бренд",
+                "testimonials.t3.text": "Навыки UI/UX дизайна Саймона преобразили наше мобильное приложение. Интуитивный интерфейс получил массу положительных отзывов и значительно повысил вовлечённость.",
+                "testimonials.t3.role": "Продакт-менеджер, tech-стартап",
+                "faq.title1": "Частые", "faq.title2": "вопросы",
+                "faq.q1": "Сколько времени занимает разработка сайта?",
+                "faq.a1": "Лендинг обычно занимает 3–5 дней, бизнес-сайт — 7–14 дней, интернет-магазин — 2–3 недели. Точные сроки зависят от объёма проекта и того, как быстро вы предоставите контент.",
+                "faq.q2": "Нужна ли предоплата?",
+                "faq.a2": "Да — я беру 50% предоплаты для старта проекта, а оставшиеся 50% оплачиваются после вашего утверждения готового сайта. Это защищает обе стороны.",
+                "faq.q3": "Что нужно подготовить перед началом?",
+                "faq.a3": "Достаточно общей идеи того, что вы хотите. Если есть логотип, фирменные цвета или текст — отлично. Если нет — помогу с копирайтингом и направлением дизайна.",
+                "faq.q4": "Делаете ли правки после сдачи сайта?",
+                "faq.a4": "Каждый тариф включает 2–3 раунда правок на этапе дизайна и разработки. После запуска я также даю бесплатную поддержку 30–60 дней в зависимости от тарифа.",
+                "faq.q5": "А как насчёт хостинга, домена и SEO?",
+                "faq.a5": "Помогу настроить хостинг и домен — они принадлежат вам, без привязки. Базовое SEO (мета-теги, sitemap, быстрая загрузка, мобильная оптимизация) включено в каждый проект.",
+                "faq.q6": "Почему ваши цены намного ниже рынка?",
+                "faq.a6": "Я активно набираю портфолио и базу клиентов, поэтому предлагаю премиум-качество по цене в 2.3–2.5 раза ниже среднерыночной. То же качество, быстрее сдача и персональное внимание — просто ниже цена, пока я расту.",
+                "contact.title1": "Связаться", "contact.title2": "со мной", "contact.send": "Отправить бриф",
+                "contact.desc": "Есть идея проекта или хотите обсудить возможности? Заполните бриф ниже или свяжитесь напрямую — отвечу в течение 24 часов.",
+                "contact.location": "Локация", "contact.email": "Email", "contact.phone": "Телефон",
+                "form.name": "Ваше имя *", "form.email": "Ваш Email *",
+                "form.need": "Что вам нужно? (можно выбрать несколько)",
+                "form.budget": "Примерный бюджет",
+                "form.message": "Расскажите о проекте *",
+                "form.message.placeholder": "Цели, сроки, референсы — всё, что поможет…",
+                "form.opt.landing": "Лендинг", "form.opt.business": "Бизнес-сайт",
+                "form.opt.store": "Интернет-магазин", "form.opt.redesign": "Редизайн", "form.opt.custom": "Что-то своё",
+                "form.budget.b1": "До $200", "form.budget.b2": "$200–$500",
+                "form.budget.b3": "$500–$1000", "form.budget.b4": "$1000+"
+            },
+            ua: {
+                "nav.home": "Головна", "nav.about": "Про мене", "nav.story": "Історія", "nav.services": "Послуги",
+                "nav.process": "Процес", "nav.pricing": "Ціни", "nav.portfolio": "Портфоліо",
+                "nav.faq": "FAQ", "nav.contact": "Контакти",
+                "hero.subtitle": "Веб-дизайнер і розробник", "hero.title": "Привіт, я",
+                "hero.desc": "Я створюю вражаючі, високопродуктивні сайти, які допомагають бізнесу зростати. 4 роки досвіду у веб-дизайні та розробці.",
+                "hero.viewWork": "Мої роботи", "hero.hire": "Найняти мене",
+                "stats.projects": "Проєктів виконано", "stats.years": "Років досвіду",
+                "stats.clients": "Задоволених клієнтів", "stats.satisfaction": "Рівень задоволення",
+                "about.title1": "Про", "about.title2": "мене",
+                "about.subtitle": "Професійний веб-дизайнер і розробник",
+                "about.p1": "Я пристрасний веб-дизайнер і розробник з України з понад 3-річним професійним досвідом створення сучасних, адаптивних і зручних сайтів. Спеціалізуюся на перетворенні ідей у красиві та функціональні цифрові продукти.",
+                "about.p2": "Мій підхід поєднує естетичний дизайн з технічною досконалістю, щоб сайти не лише вражали зовні, а й чудово працювали на всіх пристроях.",
+                "skills.tags.frontend": "Фронтенд", "skills.tags.styling": "Стилі та дизайн", "skills.tags.tools": "Інструменти",
+                "story.title1": "Моя", "story.title2": "історія",
+                "story.p1": "Я почав займатися веб-розробкою у 2021 році — не на курсах і не в буткемпі, а з цікавості. Хотів зробити свій сайт, відкрив редактор коду і вже не озирався назад. Хобі швидко перетворилося на ремесло.",
+                "story.p2": "З того часу я зробив понад 50 сайтів — від лендінгів для локального бізнесу до повноцінних інтернет-магазинів. Кожен проєкт навчив мене чомусь новому, кожен клієнт — краще слухати. Я не просто пишу код — я допомагаю людям розвивати їхній бізнес.",
+                "story.p3": "Сьогодні я працюю як незалежний веб-дизайнер і розробник. Тримаю ціни низькими, поки набираю портфоліо та репутацію, бо вірю: хороший сайт не повинен коштувати цілий статок. Якщо ти це читаєш — розкажи про свій проєкт, буду радий допомогти.",
+                "services.title1": "Мої", "services.title2": "послуги",
+                "services.view": "Мої роботи",
+                "services.webdesign": "Веб-дизайн", "services.webdev": "Веб-розробка",
+                "services.responsive": "Адаптивний дизайн", "services.uiux": "UI/UX дизайн",
+                "services.webdesign.desc": "Індивідуальний дизайн сайтів — візуально вражаючий, зручний та оптимізований під конверсію.",
+                "services.webdev.desc": "Чистий, ефективний код, що оживляє дизайн з ідеальною роботою на всіх пристроях.",
+                "services.responsive.desc": "Сайти, які ідеально виглядають і працюють на будь-якому пристрої — від десктопа до мобільного.",
+                "services.uiux.desc": "Інтуїтивні інтерфейси та безшовний користувацький досвід, що утримує відвідувачів.",
+                "process.title1": "Як я", "process.title2": "працюю",
+                "process.step1.title": "Брифінг", "process.step1.desc": "Обговорюємо ваш проєкт, цілі, аудиторію та вимоги — безкоштовно.",
+                "process.step2.title": "Дизайн-концепт", "process.step2.desc": "Створюю індивідуальну концепцію дизайну на затвердження до написання коду.",
+                "process.step3.title": "Розробка", "process.step3.desc": "Пишу чистий, ефективний код — адаптивний, швидкий та SEO-готовий.",
+                "process.step4.title": "Запуск і підтримка", "process.step4.desc": "Розгортаємо, тестуємо, і я забезпечую підтримку після запуску.",
+                "pricing.title1": "Мої", "pricing.title2": "ціни",
+                "pricing.bannerTitle": "Ціни в 2.3–2.5× нижчі за ринок",
+                "pricing.bannerDesc": "Зараз я набираю портфоліо та репутацію, тому мої ціни в 2.3–2.5 раза нижчі за середньоринкові — без втрати якості, швидкості та підтримки.",
+                "pricing.landing.name": "Лендінг", "pricing.landing.desc": "Односторінковий сайт для продукту, послуги чи особистого бренду.",
+                "pricing.landing.save": "у 2.5× дешевше за ринок",
+                "pricing.landing.f1": "1 сторінка, до 6 секцій",
+                "pricing.landing.f2": "Індивідуальний дизайн — без готових шаблонів",
+                "pricing.landing.f3": "Повна адаптивність під усі пристрої",
+                "pricing.landing.f4": "Контактна форма та соцмережі",
+                "pricing.landing.f5": "Базове SEO + швидке завантаження",
+                "pricing.landing.f6": "Термін здачі 3–5 днів",
+                "pricing.landing.f7": "2 раунди правок",
+                "pricing.business.name": "Бізнес-сайт", "pricing.business.desc": "Багатосторінковий сайт для компанії, студії чи сервісу.",
+                "pricing.business.save": "у 2.5× дешевше за ринок",
+                "pricing.business.f1": "До 5 унікальних сторінок",
+                "pricing.business.f2": "Індивідуальний UI/UX дизайн",
+                "pricing.business.f3": "Анімації та інтерактивні елементи",
+                "pricing.business.f4": "Зручне керування контентом",
+                "pricing.business.f5": "Просунуте SEO та оптимізація швидкості",
+                "pricing.business.f6": "Термін здачі 7–14 днів",
+                "pricing.business.f7": "3 раунди правок",
+                "pricing.business.f8": "30 днів безкоштовної підтримки",
+                "pricing.store.name": "Інтернет-магазин", "pricing.store.desc": "E-commerce сайт з каталогом товарів та онлайн-оплатою.",
+                "pricing.store.save": "у 2.5× дешевше за ринок",
+                "pricing.store.f1": "Каталог товарів з фільтрами та пошуком",
+                "pricing.store.f2": "Кошик та оформлення замовлення",
+                "pricing.store.f3": "Інтеграція оплати й доставки",
+                "pricing.store.f4": "Адмін-панель для товарів і замовлень",
+                "pricing.store.f5": "Mobile-first адаптивний дизайн",
+                "pricing.store.f6": "Термін здачі 2–3 тижні",
+                "pricing.store.f7": "60 днів безкоштовної підтримки",
+                "pricing.popular": "Популярне", "pricing.order": "Замовити",
+                "pricing.footnote1": "Ціни вказані", "pricing.footnote2": "від", "pricing.footnote3": "— остаточна залежить від обсягу.",
+                "pricing.footnote4": "Потрібно щось своє?", "pricing.footnote5": "Розкажіть про ідею", "pricing.footnote6": "— надішлю безкоштовну оцінку протягом 24 годин.",
+                "guarantees.title1": "Мої", "guarantees.title2": "гарантії",
+                "guarantees.g1.title": "Правки до результату", "guarantees.g1.desc": "У межах ліміту вашого тарифу доопрацьовуватиму дизайн, доки він не збіжиться з вашим баченням — без поспіху та тиску.",
+                "guarantees.g2.title": "Вчасно або −20%", "guarantees.g2.desc": "Якщо пропущу узгоджений дедлайн без поважної причини — ви отримуєте знижку 20%. Ваш час цінний, і я це поважаю.",
+                "guarantees.g3.title": "Відповідь протягом 24 годин", "guarantees.g3.desc": "Відповідаю на кожне повідомлення протягом одного робочого дня. Без ігнору та зникнень — ви завжди знаєте, що відбувається.",
+                "guarantees.g4.title": "Код і вихідники — ваші", "guarantees.g4.desc": "Після завершення проєкту вам належить усе — вихідний код, файли дизайну, хостинг, домен. Без прив'язки, назавжди.",
+                "comparison.title1": "Simon vs", "comparison.title2": "ринок",
+                "comparison.feature": "Критерій", "comparison.agency": "Агенція", "comparison.freelancer": "Фрилансер",
+                "comparison.r1.feature": "Ціна", "comparison.r1.simon": "у 2.3–2.5× нижче",
+                "comparison.r2.feature": "Термін здачі", "comparison.r2.simon": "3–14 днів", "comparison.r2.agency": "4–8 тижнів", "comparison.r2.freelancer": "Непередбачувано",
+                "comparison.r3.feature": "Спілкування", "comparison.r3.simon": "Напряму зі мною", "comparison.r3.agency": "Через менеджера", "comparison.r3.freelancer": "Напряму",
+                "comparison.r4.feature": "Правки", "comparison.r4.simon": "Включено (2–3)", "comparison.r4.agency": "Окрема оплата", "comparison.r4.freelancer": "Обмежено",
+                "comparison.r5.feature": "Підтримка після запуску", "comparison.r5.simon": "30–60 днів безкоштовно", "comparison.r5.agency": "Погодинно", "comparison.r5.freelancer": "Рідко",
+                "comparison.r6.feature": "Права", "comparison.r6.simon": "100% ваші", "comparison.r6.agency": "Ваші", "comparison.r6.freelancer": "Ваші",
+                "portfolio.title1": "Моє", "portfolio.title2": "портфоліо",
+                "portfolio.filter.all": "Усі", "portfolio.filter.web": "Веб-дизайн", "portfolio.filter.app": "App UI",
+                "portfolio.cat.web": "Веб-дизайн", "portfolio.view": "Дивитися проєкт",
+                "stack.title1": "Мій", "stack.title2": "стек",
+                "testimonials.title1": "Відгуки", "testimonials.title2": "клієнтів",
+                "testimonials.t1.text": "Саймон створив винятковий сайт, який ідеально передав наш фірмовий стиль. Увага до деталей і креативний підхід призвели до значного зростання онлайн-конверсій.",
+                "testimonials.t1.role": "CEO, креативна агенція",
+                "testimonials.t2.text": "Працювати з Саймоном — одне задоволення. Він ідеально зрозумів наші вимоги та здав вражаюче e-commerce рішення раніше терміну. Сайт бездоганно працює на всіх пристроях.",
+                "testimonials.t2.role": "Засновник, fashion-бренд",
+                "testimonials.t3.text": "Навички UI/UX дизайну Саймона перетворили наш мобільний застосунок. Інтуїтивний інтерфейс отримав безліч позитивних відгуків і суттєво підвищив залученість.",
+                "testimonials.t3.role": "Продакт-менеджер, tech-стартап",
+                "faq.title1": "Часті", "faq.title2": "питання",
+                "faq.q1": "Скільки часу займає розробка сайту?",
+                "faq.a1": "Лендінг зазвичай займає 3–5 днів, бізнес-сайт — 7–14 днів, інтернет-магазин — 2–3 тижні. Точні терміни залежать від обсягу проєкту та того, як швидко ви надасте контент.",
+                "faq.q2": "Чи потрібна передоплата?",
+                "faq.a2": "Так — я беру 50% передоплати для старту проєкту, а решта 50% — після вашого затвердження готового сайту. Це захищає обидві сторони.",
+                "faq.q3": "Що потрібно підготувати перед початком?",
+                "faq.a3": "Достатньо загальної ідеї того, що ви хочете. Якщо є логотип, фірмові кольори чи текст — чудово. Якщо ні — допоможу з копірайтингом і напрямком дизайну.",
+                "faq.q4": "Чи робите правки після здачі сайту?",
+                "faq.a4": "Кожен тариф включає 2–3 раунди правок на етапі дизайну та розробки. Після запуску я також надаю безкоштовну підтримку 30–60 днів залежно від тарифу.",
+                "faq.q5": "А як щодо хостингу, домену та SEO?",
+                "faq.a5": "Допоможу налаштувати хостинг і домен — вони належать вам, без прив'язки. Базове SEO (мета-теги, sitemap, швидке завантаження, мобільна оптимізація) включено в кожен проєкт.",
+                "faq.q6": "Чому ваші ціни набагато нижчі за ринок?",
+                "faq.a6": "Я активно набираю портфоліо та базу клієнтів, тому пропоную преміум-якість за ціною в 2.3–2.5 раза нижчою за середньоринкову. Та ж якість, швидша здача та персональна увага — просто нижча ціна, поки я зростаю.",
+                "contact.title1": "Зв'язатися", "contact.title2": "зі мною", "contact.send": "Надіслати бриф",
+                "contact.desc": "Є ідея проєкту чи хочете обговорити можливості? Заповніть бриф нижче або зв'яжіться напряму — відповім протягом 24 годин.",
+                "contact.location": "Локація", "contact.email": "Email", "contact.phone": "Телефон",
+                "form.name": "Ваше ім'я *", "form.email": "Ваш Email *",
+                "form.need": "Що вам потрібно? (можна обрати кілька)",
+                "form.budget": "Приблизний бюджет",
+                "form.message": "Розкажіть про проєкт *",
+                "form.message.placeholder": "Цілі, терміни, референси — усе, що допоможе…",
+                "form.opt.landing": "Лендінг", "form.opt.business": "Бізнес-сайт",
+                "form.opt.store": "Інтернет-магазин", "form.opt.redesign": "Редизайн", "form.opt.custom": "Щось своє",
+                "form.budget.b1": "До $200", "form.budget.b2": "$200–$500",
+                "form.budget.b3": "$500–$1000", "form.budget.b4": "$1000+"
+            }
+        };
+
+        const langBtns = document.querySelectorAll('.lang-btn');
+
+        function applyLanguage(lang) {
+            const dict = translations[lang];
+            if (!dict) return;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key] === undefined) return;
+
+                const icon = el.querySelector('i');
+                if (icon && el.children.length > 0 && !el.matches('.faq-answer, .service-description, .testimonial-text, .pricing-desc, .stack-name, .story-paragraph, .guarantee-desc, .cmp-check')) {
+                    let replaced = false;
+                    [...el.childNodes].forEach(node => {
+                        if (node.nodeType === 3 && node.textContent.trim()) {
+                            node.textContent = dict[key] + ' ';
+                            replaced = true;
+                        }
+                    });
+                    if (!replaced && !el.querySelector('span')) {
+                        el.insertBefore(document.createTextNode(dict[key] + ' '), el.firstChild);
+                    }
+                } else {
+                    el.textContent = dict[key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
+            });
+
+            document.documentElement.lang = lang;
+            localStorage.setItem('lang', lang);
+        }
+
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                langBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                applyLanguage(btn.dataset.lang);
+            });
+        });
+
+        const savedLang = localStorage.getItem('lang') || 'en';
+        const activeLangBtn = document.querySelector(`.lang-btn[data-lang="${savedLang}"]`);
+        if (activeLangBtn) {
+            langBtns.forEach(b => b.classList.remove('active'));
+            activeLangBtn.classList.add('active');
+            applyLanguage(savedLang);
+        }
+
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
-        
+
         mobileMenuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
-            mobileMenuBtn.innerHTML = navLinks.classList.contains('active') 
-                ? '<i class="fas fa-times"></i>' 
+            mobileMenuBtn.innerHTML = navLinks.classList.contains('active')
+                ? '<i class="fas fa-times"></i>'
                 : '<i class="fas fa-bars"></i>';
         });
-        
-        // Close mobile menu when clicking on a link
+
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
                 mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
             });
         });
-        
-        // Header scroll effect
+
         const header = document.getElementById('header');
-        
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
+            header.classList.toggle('scrolled', window.scrollY > 100);
         });
-        
-        // Portfolio filtering
+
+        const readingProgress = document.getElementById('readingProgress');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            readingProgress.style.width = pct + '%';
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if (!target) return;
+                e.preventDefault();
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - 80;
+                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+            });
+        });
+
         const filterBtns = document.querySelectorAll('.filter-btn');
         const portfolioItems = document.querySelectorAll('.portfolio-item');
-        
+
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Remove active class from all buttons
-                filterBtns.forEach(btn => btn.classList.remove('active'));
-                // Add active class to clicked button
+                filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                
-                const filter = btn.getAttribute('data-filter');
-                
+                const filter = btn.dataset.filter;
                 portfolioItems.forEach(item => {
-                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
+                    const show = filter === 'all' || item.dataset.category === filter;
+                    item.style.display = show ? 'block' : 'none';
                 });
             });
         });
-        
-        // Testimonials slider (simple version)
+
         let currentTestimonial = 0;
         const testimonials = document.querySelectorAll('.testimonial-card');
-        
+
         function showTestimonial(index) {
-            testimonials.forEach((testimonial, i) => {
-                testimonial.style.display = i === index ? 'block' : 'none';
+            testimonials.forEach((t, i) => {
+                t.style.display = i === index ? 'block' : 'none';
             });
         }
-        
-        // Initialize - show first testimonial
-        showTestimonial(currentTestimonial);
-        
-        // Auto-rotate testimonials
+        showTestimonial(0);
         setInterval(() => {
             currentTestimonial = (currentTestimonial + 1) % testimonials.length;
             showTestimonial(currentTestimonial);
-        }, 5000);
-        
-        // Back to top button
+        }, 5500);
+
         const backToTopBtn = document.querySelector('.back-to-top');
-        
         window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.add('active');
-            } else {
-                backToTopBtn.classList.remove('active');
-            }
+            backToTopBtn.classList.toggle('active', window.pageYOffset > 300);
         });
-        
-        backToTopBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-        
-        // Animate elements on scroll
+
         const animateOnScroll = () => {
             const elements = document.querySelectorAll('.fade-in');
             const windowHeight = window.innerHeight;
-            
-            elements.forEach(element => {
-                const elementPosition = element.getBoundingClientRect().top;
-                
-                if (elementPosition < windowHeight - 100) {
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
+            elements.forEach(el => {
+                const pos = el.getBoundingClientRect().top;
+                if (pos < windowHeight - 100) {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
                 }
             });
         };
-        
-        // Initialize animations
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+        });
         window.addEventListener('load', animateOnScroll);
         window.addEventListener('scroll', animateOnScroll);
-        
-        // Set initial state for animated elements
-        document.querySelectorAll('.fade-in').forEach(element => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(30px)';
-            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        });
-        
-        // Animate skill bars on scroll
-        const animateSkills = () => {
-            const skillsSection = document.querySelector('.skills');
-            const skillBars = document.querySelectorAll('.skill-progress');
-            
-            if (isElementInViewport(skillsSection)) {
-                skillBars.forEach(bar => {
-                    const width = bar.parentElement.previousElementSibling.lastElementChild.textContent;
-                    bar.style.width = width;
-                });
-                // Remove event listener after animation
-                window.removeEventListener('scroll', animateSkills);
-            }
-        };
-        
-        // Check if element is in viewport
-        function isElementInViewport(el) {
-            const rect = el.getBoundingClientRect();
-            return (
-                rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-                rect.bottom >= 0
-            );
+
+        const counters = document.querySelectorAll('.stat-number');
+        let countersStarted = false;
+
+        function animateCounters() {
+            counters.forEach(counter => {
+                const target = +counter.dataset.count;
+                const suffix = counter.dataset.suffix || '';
+                const duration = 1800;
+                const startTime = performance.now();
+                function step(now) {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    counter.textContent = Math.floor(target * eased) + suffix;
+                    if (progress < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            });
         }
-        window.addEventListener('scroll', animateSkills);
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !countersStarted) {
+                    countersStarted = true;
+                    animateCounters();
+                }
+            });
+        }, { threshold: 0.4 });
+
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) statsObserver.observe(statsSection);
+
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!isOpen) item.classList.add('open');
+            });
+        });
+
+        document.querySelectorAll('.form-checkbox').forEach(label => {
+            const input = label.querySelector('input');
+            if (!input) return;
+            if (input.checked) label.classList.add('checked');
+            input.addEventListener('change', () => {
+                if (input.type === 'radio') {
+                    document.querySelectorAll(`input[name="${input.name}"]`).forEach(r => {
+                        r.closest('.form-checkbox').classList.toggle('checked', r.checked);
+                    });
+                } else {
+                    label.classList.toggle('checked', input.checked);
+                }
+            });
+        });
+
+        const heroImg = document.getElementById('heroParallax');
+        let parallaxTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!parallaxTicking) {
+                requestAnimationFrame(() => {
+                    const y = window.scrollY;
+                    if (y < window.innerHeight && heroImg) {
+                        heroImg.style.transform = `translateY(${y * 0.15}px)`;
+                    }
+                    parallaxTicking = false;
+                });
+                parallaxTicking = true;
+            }
+        });
+
+        let titleTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!titleTicking) {
+                requestAnimationFrame(() => {
+                    const vh = window.innerHeight;
+                    document.querySelectorAll('.section-title').forEach(title => {
+                        const rect = title.getBoundingClientRect();
+                        const center = rect.top + rect.height / 2;
+                        const offset = (center - vh / 2) * 0.03;
+                        title.style.transform = `translateY(${offset}px)`;
+                    });
+                    titleTicking = false;
+                });
+                titleTicking = true;
+            }
+        });
+
+        const notifData = [
+            { name: 'Michael', city: 'Kyiv', item: 'a Landing Page', time: '5 hours ago', initial: 'M' },
+            { name: 'Anna', city: 'Lviv', item: 'a Business Website', time: '2 hours ago', initial: 'A' },
+            { name: 'Dmytro', city: 'Odesa', item: 'an Online Store', time: '3 hours ago', initial: 'D' },
+            { name: 'Sophie', city: 'Berlin', item: 'a Landing Page', time: '6 hours ago', initial: 'S' },
+            { name: 'Oliver', city: 'Warsaw', item: 'a Business Website', time: '8 hours ago', initial: 'O' },
+            { name: 'Kateryna', city: 'Kharkiv', item: 'a Portfolio Website', time: '11 hours ago', initial: 'K' },
+            { name: 'James', city: 'London', item: 'an Online Store', time: '1 day ago', initial: 'J' }
+        ];
+
+        const notifEl = document.getElementById('liveNotif');
+        const liveAvatar = document.getElementById('liveAvatar');
+        const liveText = document.getElementById('liveText');
+        const liveTime = document.getElementById('liveTime');
+        let notifIndex = 0;
+
+        function showNotification() {
+            const data = notifData[notifIndex % notifData.length];
+            liveAvatar.textContent = data.initial;
+            liveText.innerHTML = `<strong>${data.name}</strong> from ${data.city} just ordered ${data.item}`;
+            liveTime.textContent = data.time;
+            notifEl.classList.add('show');
+            setTimeout(() => notifEl.classList.remove('show'), 5500);
+            notifIndex++;
+        }
+
+        setTimeout(() => {
+            showNotification();
+            setInterval(showNotification, 32000);
+        }, 12000);
     </script>
 </body>
 </html>
