@@ -378,9 +378,7 @@
         .about-title span { color: var(--accent); }
         .about-description { color: var(--text-secondary); margin-bottom: 30px; }
 
-        .skills-tags {
-            margin-top: 40px;
-        }
+        .skills-tags { margin-top: 40px; }
 
         .skills-tags-title {
             font-size: 14px;
@@ -797,66 +795,157 @@
         }
 
         .cmp-check i { color: #4ade80; font-size: 14px; }
-        .cmp-cross i { color: #ef4444; font-size: 14px; }
-        .cmp-partial i { color: #fbbf24; font-size: 14px; }
 
         .portfolio { background: var(--secondary); }
-        .portfolio-header {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 50px;
-        }
-        .portfolio-filter { display: flex; gap: 15px; flex-wrap: wrap; }
 
-        .filter-btn {
-            padding: 10px 20px; border-radius: 50px;
-            background: transparent;
-            border: 1px solid var(--card-border);
-            color: var(--text-secondary);
-            font-weight: 500; cursor: pointer;
-            transition: var(--transition);
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--accent); color: white;
-            border-color: var(--accent);
+        .portfolio-featured {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            height: 520px;
+            margin-bottom: 45px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
         }
 
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
-        .portfolio-item {
-            position: relative; border-radius: 20px;
-            overflow: hidden; height: 350px;
-        }
-        .portfolio-img {
-            width: 100%; height: 100%;
+        .portfolio-featured .portfolio-img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             transition: var(--transition);
+        }
+
+        .portfolio-featured .portfolio-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.4) 50%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 50px;
+            opacity: 1;
+        }
+
+        .portfolio-featured .portfolio-category {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .portfolio-featured .portfolio-title {
+            font-size: 44px;
+            margin-bottom: 15px;
+            color: #fff;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .portfolio-featured .portfolio-desc {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 17px;
+            max-width: 620px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .portfolio-featured .portfolio-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 14px 28px;
+            background: var(--accent);
+            border-radius: 50px;
+            transition: var(--transition);
+            align-self: flex-start;
+            box-shadow: 0 4px 20px rgba(123, 97, 255, 0.4);
+        }
+
+        .portfolio-featured .portfolio-link i {
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-featured .portfolio-link:hover {
+            background: var(--accent-light);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(123, 97, 255, 0.5);
+        }
+
+        .portfolio-featured .portfolio-link:hover i {
+            transform: translateX(5px);
+        }
+
+        .portfolio-featured:hover .portfolio-img {
+            transform: scale(1.05);
+        }
+
+        .portfolio-cta {
+            text-align: center;
+            padding: 70px 40px;
             background: var(--card-bg);
+            border: 2px dashed rgba(123, 97, 255, 0.35);
+            border-radius: 24px;
+            position: relative;
+            transition: var(--transition);
+            overflow: hidden;
         }
-        .portfolio-overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(10, 10, 10, 0.92), transparent);
-            display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 30px; opacity: 0;
+
+        .portfolio-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(123, 97, 255, 0.08) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .portfolio-cta:hover::before { opacity: 1; }
+
+        .portfolio-cta:hover {
+            border-color: rgba(123, 97, 255, 0.6);
+        }
+
+        .portfolio-cta-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: rgba(123, 97, 255, 0.12);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
             transition: var(--transition);
         }
-        .portfolio-item:hover .portfolio-overlay { opacity: 1; }
-        .portfolio-item:hover .portfolio-img { transform: scale(1.1); }
 
-        .portfolio-category { color: var(--accent); font-weight: 500; margin-bottom: 10px; }
-        .portfolio-title { font-size: 24px; margin-bottom: 15px; color: #fff; }
-
-        .portfolio-link {
-            display: inline-flex; align-items: center;
-            color: white; font-weight: 500;
-            transition: var(--transition);
+        .portfolio-cta:hover .portfolio-cta-icon {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.08) rotate(-8deg);
         }
-        .portfolio-link i { margin-left: 8px; transition: var(--transition); }
-        .portfolio-link:hover { color: var(--accent); }
-        .portfolio-link:hover i { transform: translateX(5px); }
+
+        .portfolio-cta h3 {
+            font-size: 30px;
+            margin-bottom: 15px;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .portfolio-cta p {
+            color: var(--text-secondary);
+            max-width: 620px;
+            margin: 0 auto 32px;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .portfolio-cta .btn {
+            padding: 16px 38px;
+        }
 
         .stack-grid {
             display: grid;
@@ -1160,9 +1249,13 @@
             .story-image { order: -1; }
             .hero-title { font-size: 48px; }
             .section-title { font-size: 36px; margin-bottom: 50px; }
-            .portfolio-header { flex-direction: column; align-items: flex-start; gap: 20px; }
             .contact-form { padding: 30px; }
             .nav-links { display: none; }
+
+            .portfolio-featured { height: 420px; }
+            .portfolio-featured .portfolio-overlay { padding: 35px; }
+            .portfolio-featured .portfolio-title { font-size: 34px; }
+            .portfolio-featured .portfolio-desc { font-size: 15px; }
         }
         @media (max-width: 768px) {
             .nav-links {
@@ -1183,7 +1276,6 @@
             .hero-title { font-size: 40px; }
             .hero-btns { flex-direction: column; gap: 15px; }
             .hero-btns .btn { width: 100%; text-align: center; }
-            .portfolio-grid { grid-template-columns: 1fr; }
             .pricing-banner { flex-direction: column; text-align: center; padding: 30px 25px; }
             .footer-container { flex-direction: column; text-align: center; }
             .footer-links { justify-content: center; }
@@ -1193,6 +1285,15 @@
             .back-to-top { bottom: 25px; right: 20px; width: 46px; height: 46px; }
             .comparison-table thead th,
             .comparison-table tbody td { padding: 16px 14px; font-size: 13px; }
+
+            .portfolio-featured { height: 380px; margin-bottom: 35px; }
+            .portfolio-featured .portfolio-overlay { padding: 28px; }
+            .portfolio-featured .portfolio-title { font-size: 28px; }
+            .portfolio-featured .portfolio-desc { font-size: 14px; }
+
+            .portfolio-cta { padding: 50px 25px; }
+            .portfolio-cta h3 { font-size: 24px; }
+            .portfolio-cta p { font-size: 15px; }
         }
         @media (max-width: 576px) {
             .container { padding: 0 20px; }
@@ -1216,6 +1317,17 @@
             .theme-toggle { width: 34px; height: 34px; font-size: 13px; }
             .mobile-menu-btn { width: 34px; height: 34px; font-size: 20px; }
             .guarantee-card { padding: 28px 24px; }
+
+            .portfolio-featured { height: 340px; }
+            .portfolio-featured .portfolio-overlay { padding: 22px; }
+            .portfolio-featured .portfolio-title { font-size: 22px; }
+            .portfolio-featured .portfolio-desc { font-size: 13px; margin-bottom: 18px; }
+            .portfolio-featured .portfolio-link { padding: 12px 22px; font-size: 14px; }
+
+            .portfolio-cta { padding: 40px 22px; }
+            .portfolio-cta-icon { width: 65px; height: 65px; font-size: 26px; }
+            .portfolio-cta h3 { font-size: 22px; }
+            .portfolio-cta .btn { width: 100%; }
         }
     </style>
 </head>
@@ -1638,78 +1750,31 @@
 
     <section class="portfolio" id="portfolio">
         <div class="container">
-            <div class="portfolio-header fade-in">
-                <h2 class="section-title">
-                    <span data-i18n="portfolio.title1">My</span> <span data-i18n="portfolio.title2">Portfolio</span>
-                </h2>
-                <div class="portfolio-filter">
-                    <button class="filter-btn active" data-filter="all" data-i18n="portfolio.filter.all">All</button>
-                    <button class="filter-btn" data-filter="web" data-i18n="portfolio.filter.web">Web Design</button>
-                    <button class="filter-btn" data-filter="app" data-i18n="portfolio.filter.app">App UI</button>
+            <h2 class="section-title fade-in">
+                <span data-i18n="portfolio.title1">My</span> <span data-i18n="portfolio.title2">Portfolio</span>
+            </h2>
+
+            <div class="portfolio-featured fade-in">
+                <img src="https://i.ibb.co/BHjsPVpK/image.png" alt="Hot Wheels Market" class="portfolio-img">
+                <div class="portfolio-overlay">
+                    <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
+                    <h3 class="portfolio-title">Hot Wheels Market</h3>
+                    <p class="portfolio-desc" data-i18n="portfolio.featured.desc">A full e-commerce catalog for Hot Wheels collectors — with product filtering, search, category pages and a modern dark UI. Built from scratch with HTML, CSS and JavaScript.</p>
+                    <a href="https://61simon.github.io/Hot-Wheels-Market/" class="portfolio-link" target="_blank" rel="noopener">
+                        <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
 
-            <div class="portfolio-grid">
-                <div class="portfolio-item fade-in" data-category="web">
-                    <img src="https://i.ibb.co/BHjsPVpK/image.png" alt="Hot Wheels Market" class="portfolio-img">
-                    <div class="portfolio-overlay">
-                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
-                        <h3 class="portfolio-title">Hot Wheels Market</h3>
-                        <a href="https://61simon.github.io/Hot-Wheels-Market/" class="portfolio-link" target="_blank" rel="noopener">
-                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
+            <div class="portfolio-cta fade-in">
+                <div class="portfolio-cta-icon">
+                    <i class="fas fa-hammer"></i>
                 </div>
-                <div class="portfolio-item fade-in" data-category="web">
-                    <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=800&q=80" alt="Project" class="portfolio-img">
-                    <div class="portfolio-overlay">
-                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
-                        <h3 class="portfolio-title">Nothing</h3>
-                        <a href="https://61simon.github.io/" class="portfolio-link" target="_blank" rel="noopener">
-                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="portfolio-item fade-in" data-category="web">
-                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80" alt="Project" class="portfolio-img">
-                    <div class="portfolio-overlay">
-                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
-                        <h3 class="portfolio-title">Nothing</h3>
-                        <a href="https://61simon.github.io/" class="portfolio-link" target="_blank" rel="noopener">
-                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="portfolio-item fade-in" data-category="web">
-                    <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=800&q=80" alt="Project" class="portfolio-img">
-                    <div class="portfolio-overlay">
-                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
-                        <h3 class="portfolio-title">Nothing</h3>
-                        <a href="https://61simon.github.io/" class="portfolio-link" target="_blank" rel="noopener">
-                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="portfolio-item fade-in" data-category="web">
-                    <img src="https://images.unsplash.com/photo-1481487196290-c152efe083f5?auto=format&fit=crop&w=800&q=80" alt="Project" class="portfolio-img">
-                    <div class="portfolio-overlay">
-                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
-                        <h3 class="portfolio-title">Nothing</h3>
-                        <a href="https://61simon.github.io/" class="portfolio-link" target="_blank" rel="noopener">
-                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="portfolio-item fade-in" data-category="web">
-                    <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=800&q=80" alt="Project" class="portfolio-img">
-                    <div class="portfolio-overlay">
-                        <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
-                        <h3 class="portfolio-title">Nothing</h3>
-                        <a href="https://61simon.github.io/" class="portfolio-link" target="_blank" rel="noopener">
-                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
+                <h3 data-i18n="portfolio.cta.title">Portfolio in Progress</h3>
+                <p data-i18n="portfolio.cta.desc">
+                    I'm actively taking on my first commercial projects right now. Your work could take this spot within two weeks — with a case study, screenshots, and a full breakdown.
+                </p>
+                <a href="#contact" class="btn btn-primary" data-i18n="portfolio.cta.btn">Start Your Project</a>
             </div>
         </div>
     </section>
@@ -2040,6 +2105,10 @@
                 "portfolio.title1": "My", "portfolio.title2": "Portfolio",
                 "portfolio.filter.all": "All", "portfolio.filter.web": "Web Design", "portfolio.filter.app": "App UI",
                 "portfolio.cat.web": "Web Design", "portfolio.view": "View Project",
+                "portfolio.featured.desc": "A full e-commerce catalog for Hot Wheels collectors — with product filtering, search, category pages and a modern dark UI. Built from scratch with HTML, CSS and JavaScript.",
+                "portfolio.cta.title": "Portfolio in Progress",
+                "portfolio.cta.desc": "I'm actively taking on my first commercial projects right now. Your work could take this spot within two weeks — with a case study, screenshots, and a full breakdown.",
+                "portfolio.cta.btn": "Start Your Project",
                 "stack.title1": "My", "stack.title2": "Stack",
                 "testimonials.title1": "Client", "testimonials.title2": "Testimonials",
                 "testimonials.t1.text": "Simon delivered an exceptional website that perfectly captured our brand identity. His attention to detail and creative approach resulted in a site that has significantly increased our online conversions.",
@@ -2155,6 +2224,10 @@
                 "portfolio.title1": "Моё", "portfolio.title2": "портфолио",
                 "portfolio.filter.all": "Все", "portfolio.filter.web": "Веб-дизайн", "portfolio.filter.app": "App UI",
                 "portfolio.cat.web": "Веб-дизайн", "portfolio.view": "Смотреть проект",
+                "portfolio.featured.desc": "Полноценный e-commerce каталог для коллекционеров Hot Wheels — с фильтрацией товаров, поиском, категориями и современным тёмным интерфейсом. Сделан с нуля на HTML, CSS и JavaScript.",
+                "portfolio.cta.title": "Портфолио в разработке",
+                "portfolio.cta.desc": "Сейчас я активно беру первые коммерческие проекты. Ваша работа может занять это место уже через две недели — с подробным разбором кейса, скриншотами и описанием процесса.",
+                "portfolio.cta.btn": "Начать проект",
                 "stack.title1": "Мой", "stack.title2": "стек",
                 "testimonials.title1": "Отзывы", "testimonials.title2": "клиентов",
                 "testimonials.t1.text": "Саймон сделал исключительный сайт, который идеально передал наш фирменный стиль. Внимание к деталям и креативный подход привели к значительному росту онлайн-конверсий.",
@@ -2270,6 +2343,10 @@
                 "portfolio.title1": "Моє", "portfolio.title2": "портфоліо",
                 "portfolio.filter.all": "Усі", "portfolio.filter.web": "Веб-дизайн", "portfolio.filter.app": "App UI",
                 "portfolio.cat.web": "Веб-дизайн", "portfolio.view": "Дивитися проєкт",
+                "portfolio.featured.desc": "Повноцінний e-commerce каталог для колекціонерів Hot Wheels — з фільтрацією товарів, пошуком, категоріями та сучасним темним інтерфейсом. Зроблений з нуля на HTML, CSS та JavaScript.",
+                "portfolio.cta.title": "Портфоліо в розробці",
+                "portfolio.cta.desc": "Зараз я активно беру перші комерційні проєкти. Ваша робота може зайняти це місце вже за два тижні — з детальним розбором кейсу, скриншотами та описом процесу.",
+                "portfolio.cta.btn": "Почати проєкт",
                 "stack.title1": "Мій", "stack.title2": "стек",
                 "testimonials.title1": "Відгуки", "testimonials.title2": "клієнтів",
                 "testimonials.t1.text": "Саймон створив винятковий сайт, який ідеально передав наш фірмовий стиль. Увага до деталей і креативний підхід призвели до значного зростання онлайн-конверсій.",
@@ -2397,21 +2474,6 @@
                 e.preventDefault();
                 const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - 80;
                 window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-            });
-        });
-
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const portfolioItems = document.querySelectorAll('.portfolio-item');
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const filter = btn.dataset.filter;
-                portfolioItems.forEach(item => {
-                    const show = filter === 'all' || item.dataset.category === filter;
-                    item.style.display = show ? 'block' : 'none';
-                });
             });
         });
 
