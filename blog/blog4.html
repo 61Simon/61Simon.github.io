@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">How I Built FinBoard — A React Dashboard | Simon's Blog</title>
+    <meta name="description" content="Building a small business dashboard with React, Vite, Recharts and live APIs. Architecture, API rate limits, and deployment without a backend.">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #131313;
+            --accent: #7b61ff;
+            --accent-light: #9d8aff;
+            --text: #f5f5f5;
+            --text-secondary: #b3b3b3;
+            --card-bg: #1a1a1a;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        html[data-theme="light"] {
+            --primary: #ffffff;
+            --secondary: #f5f5f7;
+            --text: #0a0a0a;
+            --text-secondary: #3d3d3d;
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--primary);
+            color: var(--text);
+            line-height: 1.8;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        h1, h2, h3 { font-family: 'Syne', sans-serif; font-weight: 700; line-height: 1.2; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { color: var(--accent-light); }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+        header {
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--card-border);
+        }
+        html[data-theme="light"] header { background: rgba(255, 255, 255, 0.85); }
+
+        .header-inner {
+            display: flex; justify-content: space-between; align-items: center; gap: 14px;
+        }
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px; font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 14px; font-weight: 500; color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        .back-link:hover { color: var(--accent); }
+        .back-link i { transition: transform 0.3s ease; }
+        .back-link:hover i { transform: translateX(-4px); }
+
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+
+        .lang-switcher {
+            display: flex; gap: 2px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px; padding: 4px;
+        }
+        .lang-btn {
+            width: 34px; height: 26px; border-radius: 50px;
+            border: none; background: transparent;
+            color: var(--text-secondary);
+            font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+            cursor: pointer; transition: var(--transition);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .lang-btn.active { background: var(--accent); color: white; }
+        .lang-btn:hover:not(.active) { color: var(--text); }
+
+        .theme-toggle {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; cursor: pointer;
+            transition: var(--transition);
+        }
+        .theme-toggle:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+        article { padding: 60px 0 100px; }
+
+        .article-meta {
+            display: flex; align-items: center; gap: 14px;
+            margin-bottom: 24px;
+            font-size: 13px; text-transform: uppercase;
+            letter-spacing: 1.5px; font-weight: 600;
+        }
+        .article-tag { color: var(--accent); }
+        .article-date { color: var(--text-secondary); opacity: 0.7; }
+
+        .article-title {
+            font-size: 52px;
+            line-height: 1.15;
+            margin-bottom: 24px;
+        }
+
+        .article-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .article-hero {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .article-body h2 {
+            font-size: 32px;
+            margin: 60px 0 22px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--card-border);
+        }
+
+        .article-body h3 {
+            font-size: 22px;
+            margin: 40px 0 16px;
+            color: var(--accent-light);
+        }
+
+        .article-body p {
+            color: var(--text-secondary);
+            margin-bottom: 22px;
+            font-size: 17px;
+        }
+
+        .article-body ul, .article-body ol {
+            color: var(--text-secondary);
+            margin-bottom: 22px;
+            padding-left: 24px;
+            font-size: 17px;
+        }
+
+        .article-body li { margin-bottom: 10px; }
+
+        .article-body strong { color: var(--text); }
+
+        .article-body code {
+            background: rgba(123, 97, 255, 0.1);
+            border: 1px solid rgba(123, 97, 255, 0.2);
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 15px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-light);
+        }
+
+        .article-body pre {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 24px 28px;
+            overflow-x: auto;
+            margin-bottom: 28px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .article-body pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--text);
+        }
+
+        .callout {
+            background: rgba(123, 97, 255, 0.08);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 12px 12px 0;
+            padding: 24px 28px;
+            margin: 32px 0;
+        }
+
+        .callout p {
+            margin-bottom: 0;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .article-footer {
+            margin-top: 70px;
+            padding-top: 40px;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .article-footer-text { color: var(--text-secondary); font-size: 15px; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border-radius: 50px;
+            font-weight: 600; font-size: 15px;
+            transition: var(--transition);
+            border: none; cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            color: inherit;
+        }
+        .btn-primary {
+            background: var(--accent); color: #ffffff;
+            box-shadow: 0 4px 20px rgba(123, 97, 255, 0.3);
+        }
+        .btn-primary:hover {
+            background: var(--accent-light);
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(123, 97, 255, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .article-title { font-size: 36px; }
+            .article-subtitle { font-size: 17px; }
+            .article-body h2 { font-size: 26px; }
+            .article-body pre { padding: 18px 20px; font-size: 13px; }
+            .back-link span { display: none; }
+        }
+        @media (max-width: 576px) {
+            .article-title { font-size: 28px; }
+            .article-body p, .article-body ul, .article-body ol { font-size: 16px; }
+            .lang-btn { width: 30px; height: 24px; font-size: 9px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container header-inner">
+        <a href="../index.html" class="logo">Simon</a>
+        <a href="../index.html#blog" class="back-link">
+            <i class="fas fa-arrow-left"></i> <span data-i18n="nav.back">Back to Blog</span>
+        </a>
+        <div class="header-actions">
+            <div class="lang-switcher" role="group" aria-label="Language">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="ua">UA</button>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class="fas fa-sun"></i></button>
+        </div>
+    </div>
+</header>
+
+<article>
+    <div class="container">
+        <div class="article-meta">
+            <span class="article-tag" data-i18n="meta.tag">Case Study</span>
+            <span class="article-date" data-i18n="meta.date">October 2026</span>
+        </div>
+
+        <h1 class="article-title" data-i18n="article.title">How I Built FinBoard — A React Dashboard for Small Business</h1>
+        <p class="article-subtitle" data-i18n="article.subtitle">Building a small business dashboard with React, Vite, Recharts and live APIs. Architecture, API rate limits, and deployment without a backend.</p>
+
+        <img src="https://i.ibb.co/2Yh2Cgxg/image.png" alt="FinBoard Dashboard" class="article-hero">
+
+        <div class="article-body">
+            <p data-i18n="body.intro1">Every small business owner I've talked to has the same problem: their numbers live in ten different places. Revenue is in a spreadsheet, crypto is in a wallet app, foreign invoices are tracked in a notes file, and ad spend is buried in Meta's dashboard. Nobody sees the full picture.</p>
+
+            <p data-i18n="body.intro2">FinBoard started as a personal project — <strong>could I build a single dashboard that answers one question: "Am I making money this month, and where is it coming from?"</strong> It turned into my first real React application, and the first project in my portfolio that uses live third-party APIs.</p>
+
+            <p data-i18n="body.intro3">Here's the whole story: why I chose React, how I structured it, what broke along the way, and what I'd do differently.</p>
+
+            <h2 data-i18n="h.whyReact">Why React (and Why Now)</h2>
+
+            <p data-i18n="body.why1">My previous projects — the Hot Wheels Market, ZERNARIA — were built with vanilla JavaScript. That was intentional: no frameworks meant I learned how the DOM actually works. But at some point, the limitations become obvious.</p>
+
+            <p data-i18n="body.why2">A dashboard is <strong>stateful UI</strong>. Tabs switch, charts re-render, API responses come in asynchronously, and the whole interface reacts to user input. Doing this in vanilla JS means manually managing DOM nodes and event listeners everywhere. That's where React earns its place.</p>
+
+            <div class="callout">
+                <p data-i18n="callout.rule">💡 <strong>Rule:</strong> Vanilla JS is great when the page is mostly static. React is great when the page is mostly state. FinBoard is 90% state — that's why React is the right tool here.</p>
+            </div>
+
+            <p data-i18n="body.why3">I also wanted to close a gap in my portfolio. I had "React" listed in my skills but no project to prove it. This was the moment to change that.</p>
+
+            <h2 data-i18n="h.stack">The Stack</h2>
+
+            <p data-i18n="body.stack1">Before writing a single line, I picked the tools. Here's what went in and why:</p>
+
+            <ul>
+                <li data-i18n="li.stack1"><strong>React 18</strong> — components, hooks, no class syntax.</li>
+                <li data-i18n="li.stack2"><strong>Vite</strong> — instant dev server, fast builds, zero config.</li>
+                <li data-i18n="li.stack3"><strong>Tailwind CSS 3</strong> — utility classes, dark theme, no separate CSS files per component.</li>
+                <li data-i18n="li.stack4"><strong>Recharts</strong> — declarative chart library built for React.</li>
+                <li data-i18n="li.stack5"><strong>Two public APIs</strong> — CoinGecko for crypto prices, open.er-api.com for currency rates.</li>
+                <li data-i18n="li.stack6"><strong>No backend</strong> — everything runs client-side. GitHub Pages as host.</li>
+            </ul>
+
+            <p data-i18n="body.stack2">No Redux, no React Query, no fancy state manager. For a project this size, that would be over-engineering. Plain <code>useState</code> and <code>useMemo</code> are enough.</p>
+
+            <h2 data-i18n="h.architecture">Architecture: Components First</h2>
+
+            <p data-i18n="body.arch1">The best part of React is how naturally you break things into pieces. My structure was obvious from day one:</p>
+
+<pre><code>src/
+├── App.jsx              ← main layout, tab router
+├── main.jsx             ← React entry point
+├── index.css            ← Tailwind + global styles
+├── hooks/
+│   └── useApi.js        ← reusable data-fetching hook
+├── data/
+│   └── demoData.js      ← demo financials
+└── components/
+    ├── Sidebar.jsx
+    ├── StatCard.jsx
+    ├── RevenueChart.jsx
+    ├── ExpenseChart.jsx
+    ├── CryptoPanel.jsx
+    ├── CurrencyConverter.jsx
+    └── AdCalculator.jsx</code></pre>
+
+            <p data-i18n="body.arch2">Each component has <strong>one job</strong>. <code>StatCard</code> shows a number with a delta. <code>RevenueChart</code> renders the area chart. <code>CryptoPanel</code> fetches and displays the top 5 coins. If I need to change a color or layout, I open one file — not five.</p>
+
+            <h3 data-i18n="h3.hook">The useApi Hook</h3>
+
+            <p data-i18n="body.hook1">Both CryptoPanel and CurrencyConverter need to fetch data from remote APIs. Instead of duplicating the loading/error/success logic, I wrote it once as a custom hook:</p>
+
+<pre><code>export function useApi(url, { intervalMs = 0, retryMs = 30000, transform } = {}) {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const dataRef = useRef(null);
+
+    const fetchData = useCallback(async () => {
+        try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const json = await res.json();
+            setData(transform ? transform(json) : json);
+            setError(null);
+        } catch (e) {
+            // If we already have data, keep showing it
+            if (dataRef.current) return;
+            setError(e.message);
+        } finally {
+            setLoading(false);
+        }
+    }, [url]);
+
+    // ... effect with setInterval and auto-retry
+
+    return { data, loading, error, refetch: fetchData };
+}</code></pre>
+
+            <p data-i18n="body.hook2">Now both panels use the exact same code:</p>
+
+<pre><code>const { data, loading, error, refetch } = useApi(
+    'https://api.coingecko.com/api/v3/simple/price?...'
+);</code></pre>
+
+            <p data-i18n="body.hook3">Three lines. No repeated <code>useState</code> dance, no duplicated error handling. This is what people mean by "React helps you scale your code, not just your UI."</p>
+
+            <h2 data-i18n="h.charts">Charts That Don't Fight You</h2>
+
+            <p data-i18n="body.charts1">I tried three chart libraries before settling on Recharts. The problem with most of them is that they're built for <em>dashboards</em> — heavy, opinionated, and hard to theme.</p>
+
+            <p data-i18n="body.charts2">Recharts is different. It's actually <strong>React components all the way down</strong>:</p>
+
+<pre><code>&lt;AreaChart data={revenueData}&gt;
+    &lt;defs&gt;
+        &lt;linearGradient id="revGrad"&gt;
+            &lt;stop offset="0%" stopColor="#7b61ff" stopOpacity={0.5} /&gt;
+            &lt;stop offset="100%" stopColor="#7b61ff" stopOpacity={0} /&gt;
+        &lt;/linearGradient&gt;
+    &lt;/defs&gt;
+    &lt;CartesianGrid strokeDasharray="3 3" /&gt;
+    &lt;XAxis dataKey="month" /&gt;
+    &lt;YAxis /&gt;
+    &lt;Tooltip /&gt;
+    &lt;Area dataKey="revenue" stroke="#7b61ff" fill="url(#revGrad)" /&gt;
+&lt;/AreaChart&gt;</code></pre>
+
+            <p data-i18n="body.charts3">This reads like JSX because it <em>is</em> JSX. Any color, any gradient, any thickness — all controlled by props. Customizing the chart to match my dark palette took about 10 minutes.</p>
+
+            <h2 data-i18n="h.rateLimit">When the API Rate Limit Hits</h2>
+
+            <p data-i18n="body.rate1">Halfway through testing, the Crypto panel started showing errors: <code>Failed to fetch</code>. The problem wasn't my code — it was CoinGecko's rate limit.</p>
+
+            <p data-i18n="body.rate2">CoinGecko's free tier allows only about <strong>10–30 requests per minute per IP</strong>. My auto-refresh was every 60 seconds, but during development I was hitting refresh constantly. Same IP, same limit — and every time I reloaded, one more request burned.</p>
+
+            <p data-i18n="body.rate3">Here's what I did:</p>
+
+            <ol>
+                <li data-i18n="li.rate1"><strong>Bumped the refresh interval</strong> from 60 seconds to 3 minutes. Crypto prices don't change dramatically in 3 minutes anyway.</li>
+                <li data-i18n="li.rate2"><strong>Silent fallback on error</strong> — if we already have data, keep showing it. A stale price is infinitely better than a red error banner.</li>
+                <li data-i18n="li.rate3"><strong>Auto-retry after 30 seconds</strong> — if a request fails and we have no data, try again automatically.</li>
+                <li data-i18n="li.rate4"><strong>Manual refresh button</strong> — for the user who wants to force it now.</li>
+            </ol>
+
+            <p data-i18n="body.rate4">The lesson: <strong>every external API will fail eventually</strong>. Design for the failure, not just the happy path.</p>
+
+            <div class="callout">
+                <p data-i18n="callout.rate">💡 <strong>Production tip:</strong> Real apps don't hit public APIs directly. They route through a backend that caches the response, so the API is called once per minute regardless of how many users are on the site.</p>
+            </div>
+
+            <h2 data-i18n="h.theme">Dark Theme, Same Palette</h2>
+
+            <p data-i18n="body.theme1">I wanted FinBoard to feel like part of the same family as my portfolio, Hot Wheels Market, and ZERNARIA. That meant the exact same accent color <code>#7b61ff</code>, the same dark background <code>#06060a</code>, and the same typography — Syne for headers, Space Grotesk for body.</p>
+
+            <p data-i18n="body.theme2">Tailwind made this trivial. Instead of using Tailwind's default colors, I defined custom tokens in <code>tailwind.config.js</code>:</p>
+
+<pre><code>theme: {
+    extend: {
+        colors: {
+            bg: '#06060a',
+            card: '#13131c',
+            accent: '#7b61ff',
+            'accent-light': '#9d8aff',
+        },
+        fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['Space Grotesk', 'sans-serif'],
+        },
+    },
+}</code></pre>
+
+            <p data-i18n="body.theme3">Now everywhere in the code I write <code>bg-accent</code> or <code>text-accent-light</code> — Tailwind resolves them to my brand colors. Change one line in the config, and the whole app updates.</p>
+
+            <h2 data-i18n="h.deploy">Deploy Without a Backend</h2>
+
+            <p data-i18n="body.deploy1">This is the part that still surprises people: <strong>FinBoard has zero server-side code.</strong> No Node.js backend, no database, no Docker. It's a static site.</p>
+
+            <p data-i18n="body.deploy2">Here's how deployment works:</p>
+
+            <ol>
+                <li data-i18n="li.deploy1">Write the React code in <code>src/</code>.</li>
+                <li data-i18n="li.deploy2">Run <code>npm run build</code> — Vite compiles everything into a <code>dist/</code> folder of HTML, CSS and JS files.</li>
+                <li data-i18n="li.deploy3">Upload <code>dist/</code> to GitHub Pages.</li>
+                <li data-i18n="li.deploy4">Done. The site is live at <code>61simon.github.io/finboard/</code>.</li>
+            </ol>
+
+            <p data-i18n="body.deploy3">The browser handles all the API calls, all the state, all the rendering. The server just serves files.</p>
+
+            <p data-i18n="body.deploy4">This costs <strong>$0/month</strong> to host, scales infinitely (because it's just static files on a CDN), and requires zero maintenance. For a small business dashboard, this is more than enough.</p>
+
+            <h2 data-i18n="h.lessons">What I'd Do Differently</h2>
+
+            <p data-i18n="body.lessons1">Every project teaches you something you didn't expect. If I started FinBoard again today:</p>
+
+            <ol>
+                <li data-i18n="li.lessons1"><strong>Move the demo data into a form.</strong> Right now <code>demoData.js</code> is hardcoded. In a real product, users would enter their own numbers, and those would persist in <code>localStorage</code> or a database.</li>
+                <li data-i18n="li.lessons2"><strong>Use URL state for tabs.</strong> Right now if you refresh the page, you're back on Overview. Better: sync the active tab to the URL hash so links are shareable.</li>
+                <li data-i18n="li.lessons3"><strong>Add real charts for currency history.</strong> The converter only shows the current rate. A 30-day line chart would be much more useful.</li>
+                <li data-i18n="li.lessons4"><strong>Use TanStack Query instead of custom useApi.</strong> My hook works, but TanStack Query (formerly React Query) does caching, retries, background refetching, and deduplication out of the box. In a real app, that's a no-brainer.</li>
+                <li data-i18n="li.lessons5"><strong>Write at least one test.</strong> Even a single test for the AdCalculator math would have caught a bug where I mixed up two formulas.</li>
+            </ol>
+
+            <h2 data-i18n="h.final">Final Thoughts</h2>
+
+            <p data-i18n="body.final1">FinBoard taught me more about React than any tutorial could. Because I wasn't following a step-by-step guide, every decision was mine — and every mistake was mine too.</p>
+
+            <p data-i18n="body.final2">The biggest lesson: <strong>frameworks don't make projects easier. They make them scalable.</strong> React isn't "faster to build" than vanilla JS — it's "easier to keep building." Once your UI has state, components, and async data, vanilla JS becomes a tangle. React keeps it organized.</p>
+
+            <p data-i18n="body.final3">If you're building something similar: start with a rough version. Make it work. Then refactor. Then make it pretty. The dashboard you see took three complete rewrites before it looked like this.</p>
+
+            <p data-i18n="body.final4">The <a href="https://61simon.github.io/finboard/" target="_blank" rel="noopener">live FinBoard is here</a> — go play with it and let me know what you think.</p>
+        </div>
+
+        <div class="article-footer">
+            <span class="article-footer-text" data-i18n="footer.text">Written by Simon · Web Designer & Developer</span>
+            <a href="../index.html#contact" class="btn btn-primary">
+                <span data-i18n="footer.cta">Start Your Project</span> <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</article>
+
+<script>
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+    themeToggle.addEventListener('click', () => {
+        const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        htmlEl.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        themeIcon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    });
+
+    const translations = {
+        en: {
+            "page.title": "How I Built FinBoard — A React Dashboard | Simon's Blog",
+            "nav.back": "Back to Blog",
+            "meta.tag": "Case Study",
+            "meta.date": "October 2026",
+            "article.title": "How I Built FinBoard — A React Dashboard for Small Business",
+            "article.subtitle": "Building a small business dashboard with React, Vite, Recharts and live APIs. Architecture, API rate limits, and deployment without a backend.",
+            "body.intro1": "Every small business owner I've talked to has the same problem: their numbers live in ten different places. Revenue is in a spreadsheet, crypto is in a wallet app, foreign invoices are tracked in a notes file, and ad spend is buried in Meta's dashboard. Nobody sees the full picture.",
+            "body.intro2": "FinBoard started as a personal project — <strong>could I build a single dashboard that answers one question: \"Am I making money this month, and where is it coming from?\"</strong> It turned into my first real React application, and the first project in my portfolio that uses live third-party APIs.",
+            "body.intro3": "Here's the whole story: why I chose React, how I structured it, what broke along the way, and what I'd do differently.",
+            "h.whyReact": "Why React (and Why Now)",
+            "body.why1": "My previous projects — the Hot Wheels Market, ZERNARIA — were built with vanilla JavaScript. That was intentional: no frameworks meant I learned how the DOM actually works. But at some point, the limitations become obvious.",
+            "body.why2": "A dashboard is <strong>stateful UI</strong>. Tabs switch, charts re-render, API responses come in asynchronously, and the whole interface reacts to user input. Doing this in vanilla JS means manually managing DOM nodes and event listeners everywhere. That's where React earns its place.",
+            "callout.rule": "💡 <strong>Rule:</strong> Vanilla JS is great when the page is mostly static. React is great when the page is mostly state. FinBoard is 90% state — that's why React is the right tool here.",
+            "body.why3": "I also wanted to close a gap in my portfolio. I had \"React\" listed in my skills but no project to prove it. This was the moment to change that.",
+            "h.stack": "The Stack",
+            "body.stack1": "Before writing a single line, I picked the tools. Here's what went in and why:",
+            "li.stack1": "<strong>React 18</strong> — components, hooks, no class syntax.",
+            "li.stack2": "<strong>Vite</strong> — instant dev server, fast builds, zero config.",
+            "li.stack3": "<strong>Tailwind CSS 3</strong> — utility classes, dark theme, no separate CSS files per component.",
+            "li.stack4": "<strong>Recharts</strong> — declarative chart library built for React.",
+            "li.stack5": "<strong>Two public APIs</strong> — CoinGecko for crypto prices, open.er-api.com for currency rates.",
+            "li.stack6": "<strong>No backend</strong> — everything runs client-side. GitHub Pages as host.",
+            "body.stack2": "No Redux, no React Query, no fancy state manager. For a project this size, that would be over-engineering. Plain useState and useMemo are enough.",
+            "h.architecture": "Architecture: Components First",
+            "body.arch1": "The best part of React is how naturally you break things into pieces. My structure was obvious from day one:",
+            "body.arch2": "Each component has <strong>one job</strong>. StatCard shows a number with a delta. RevenueChart renders the area chart. CryptoPanel fetches and displays the top 5 coins. If I need to change a color or layout, I open one file — not five.",
+            "h3.hook": "The useApi Hook",
+            "body.hook1": "Both CryptoPanel and CurrencyConverter need to fetch data from remote APIs. Instead of duplicating the loading/error/success logic, I wrote it once as a custom hook:",
+            "body.hook2": "Now both panels use the exact same code:",
+            "body.hook3": "Three lines. No repeated useState dance, no duplicated error handling. This is what people mean by \"React helps you scale your code, not just your UI.\"",
+            "h.charts": "Charts That Don't Fight You",
+            "body.charts1": "I tried three chart libraries before settling on Recharts. The problem with most of them is that they're built for dashboards — heavy, opinionated, and hard to theme.",
+            "body.charts2": "Recharts is different. It's actually <strong>React components all the way down</strong>:",
+            "body.charts3": "This reads like JSX because it is JSX. Any color, any gradient, any thickness — all controlled by props. Customizing the chart to match my dark palette took about 10 minutes.",
+            "h.rateLimit": "When the API Rate Limit Hits",
+            "body.rate1": "Halfway through testing, the Crypto panel started showing errors: Failed to fetch. The problem wasn't my code — it was CoinGecko's rate limit.",
+            "body.rate2": "CoinGecko's free tier allows only about <strong>10–30 requests per minute per IP</strong>. My auto-refresh was every 60 seconds, but during development I was hitting refresh constantly. Same IP, same limit — and every time I reloaded, one more request burned.",
+            "body.rate3": "Here's what I did:",
+            "li.rate1": "<strong>Bumped the refresh interval</strong> from 60 seconds to 3 minutes. Crypto prices don't change dramatically in 3 minutes anyway.",
+            "li.rate2": "<strong>Silent fallback on error</strong> — if we already have data, keep showing it. A stale price is infinitely better than a red error banner.",
+            "li.rate3": "<strong>Auto-retry after 30 seconds</strong> — if a request fails and we have no data, try again automatically.",
+            "li.rate4": "<strong>Manual refresh button</strong> — for the user who wants to force it now.",
+            "body.rate4": "The lesson: <strong>every external API will fail eventually</strong>. Design for the failure, not just the happy path.",
+            "callout.rate": "💡 <strong>Production tip:</strong> Real apps don't hit public APIs directly. They route through a backend that caches the response, so the API is called once per minute regardless of how many users are on the site.",
+            "h.theme": "Dark Theme, Same Palette",
+            "body.theme1": "I wanted FinBoard to feel like part of the same family as my portfolio, Hot Wheels Market, and ZERNARIA. That meant the exact same accent color #7b61ff, the same dark background #06060a, and the same typography — Syne for headers, Space Grotesk for body.",
+            "body.theme2": "Tailwind made this trivial. Instead of using Tailwind's default colors, I defined custom tokens in tailwind.config.js:",
+            "body.theme3": "Now everywhere in the code I write bg-accent or text-accent-light — Tailwind resolves them to my brand colors. Change one line in the config, and the whole app updates.",
+            "h.deploy": "Deploy Without a Backend",
+            "body.deploy1": "This is the part that still surprises people: <strong>FinBoard has zero server-side code.</strong> No Node.js backend, no database, no Docker. It's a static site.",
+            "body.deploy2": "Here's how deployment works:",
+            "li.deploy1": "Write the React code in src/.",
+            "li.deploy2": "Run npm run build — Vite compiles everything into a dist/ folder of HTML, CSS and JS files.",
+            "li.deploy3": "Upload dist/ to GitHub Pages.",
+            "li.deploy4": "Done. The site is live at 61simon.github.io/finboard/.",
+            "body.deploy3": "The browser handles all the API calls, all the state, all the rendering. The server just serves files.",
+            "body.deploy4": "This costs <strong>$0/month</strong> to host, scales infinitely (because it's just static files on a CDN), and requires zero maintenance. For a small business dashboard, this is more than enough.",
+            "h.lessons": "What I'd Do Differently",
+            "body.lessons1": "Every project teaches you something you didn't expect. If I started FinBoard again today:",
+            "li.lessons1": "<strong>Move the demo data into a form.</strong> Right now demoData.js is hardcoded. In a real product, users would enter their own numbers, and those would persist in localStorage or a database.",
+            "li.lessons2": "<strong>Use URL state for tabs.</strong> Right now if you refresh the page, you're back on Overview. Better: sync the active tab to the URL hash so links are shareable.",
+            "li.lessons3": "<strong>Add real charts for currency history.</strong> The converter only shows the current rate. A 30-day line chart would be much more useful.",
+            "li.lessons4": "<strong>Use TanStack Query instead of custom useApi.</strong> My hook works, but TanStack Query does caching, retries, background refetching, and deduplication out of the box. In a real app, that's a no-brainer.",
+            "li.lessons5": "<strong>Write at least one test.</strong> Even a single test for the AdCalculator math would have caught a bug where I mixed up two formulas.",
+            "h.final": "Final Thoughts",
+            "body.final1": "FinBoard taught me more about React than any tutorial could. Because I wasn't following a step-by-step guide, every decision was mine — and every mistake was mine too.",
+            "body.final2": "The biggest lesson: <strong>frameworks don't make projects easier. They make them scalable.</strong> React isn't \"faster to build\" than vanilla JS — it's \"easier to keep building.\" Once your UI has state, components, and async data, vanilla JS becomes a tangle. React keeps it organized.",
+            "body.final3": "If you're building something similar: start with a rough version. Make it work. Then refactor. Then make it pretty. The dashboard you see took three complete rewrites before it looked like this.",
+            "body.final4": "The <a href=\"https://61simon.github.io/finboard/\" target=\"_blank\" rel=\"noopener\">live FinBoard is here</a> — go play with it and let me know what you think.",
+            "footer.text": "Written by Simon · Web Designer & Developer",
+            "footer.cta": "Start Your Project"
+        },
+        ru: {
+            "page.title": "Как я сделал FinBoard — React-дашборд | Блог Саймона",
+            "nav.back": "Назад в блог",
+            "meta.tag": "Кейс",
+            "meta.date": "Октябрь 2026",
+            "article.title": "Как я сделал FinBoard — React-дашборд для малого бизнеса",
+            "article.subtitle": "Создание дашборда для малого бизнеса на React, Vite, Recharts и живых API. Архитектура, лимиты API и деплой без бэкенда.",
+            "body.intro1": "У каждого владельца малого бизнеса, с которым я говорил, одна и та же проблема: цифры живут в десяти разных местах. Выручка — в таблице, крипта — в кошельке, иностранные счёта — в заметках, а расходы на рекламу — в кабинете Meta. Никто не видит общей картины.",
+            "body.intro2": "FinBoard начинался как личный проект — <strong>смогу ли я сделать один дашборд, отвечающий на вопрос: «Зарабатываю ли я в этом месяце и откуда приходят деньги?»</strong> Он превратился в моё первое настоящее React-приложение и первый проект в портфолио, который использует живые сторонние API.",
+            "body.intro3": "Вот вся история: почему я выбрал React, как структурировал проект, что ломалось по пути и что бы я сделал иначе.",
+            "h.whyReact": "Почему React (и почему сейчас)",
+            "body.why1": "Мои прошлые проекты — Hot Wheels Market, ZERNARIA — были сделаны на чистом JavaScript. Это было намеренно: без фреймворков я изучил, как DOM устроен на самом деле. Но в какой-то момент ограничения становятся очевидны.",
+            "body.why2": "Дашборд — это <strong>интерфейс, полный состояний</strong>. Табы переключаются, графики перерисовываются, ответы API приходят асинхронно, весь интерфейс реагирует на действия пользователя. Делать это на чистом JS означает вручную управлять DOM-узлами и слушателями событий везде. Здесь React заслуживает своё место.",
+            "callout.rule": "💡 <strong>Правило:</strong> Чистый JS хорош, когда страница в основном статична. React хорош, когда страница — это в основном состояние. FinBoard на 90% состоит из состояний — поэтому React здесь правильный инструмент.",
+            "body.why3": "Ещё я хотел закрыть пробел в портфолио. У меня в навыках был указан «React», но не было проекта, который это доказывал. Это был момент это исправить.",
+            "h.stack": "Стек",
+            "body.stack1": "Прежде чем написать хоть строку, я выбрал инструменты. Вот что вошло и почему:",
+            "li.stack1": "<strong>React 18</strong> — компоненты, хуки, без классов.",
+            "li.stack2": "<strong>Vite</strong> — мгновенный dev-сервер, быстрая сборка, ноль конфигурации.",
+            "li.stack3": "<strong>Tailwind CSS 3</strong> — утилитарные классы, тёмная тема, без отдельных CSS-файлов на каждый компонент.",
+            "li.stack4": "<strong>Recharts</strong> — декларативная библиотека графиков, сделанная под React.",
+            "li.stack5": "<strong>Два публичных API</strong> — CoinGecko для крипты, open.er-api.com для курсов валют.",
+            "li.stack6": "<strong>Без бэкенда</strong> — всё работает на клиенте. Хостинг — GitHub Pages.",
+            "body.stack2": "Без Redux, без React Query, без модных менеджеров состояний. Для проекта такого размера это было бы over-engineering. Обычных useState и useMemo достаточно.",
+            "h.architecture": "Архитектура: сначала компоненты",
+            "body.arch1": "Лучшее в React — то, как естественно ты разбиваешь проект на части. Моя структура была очевидна с первого дня:",
+            "body.arch2": "У каждого компонента <strong>одна задача</strong>. StatCard показывает число с дельтой. RevenueChart рисует график. CryptoPanel получает и показывает топ-5 монет. Если нужно поменять цвет или лейаут — открываю один файл, а не пять.",
+            "h3.hook": "Хук useApi",
+            "body.hook1": "И CryptoPanel, и CurrencyConverter должны получать данные из удалённых API. Вместо дублирования логики loading/error/success я написал её один раз как кастомный хук:",
+            "body.hook2": "Теперь обе панели используют один и тот же код:",
+            "body.hook3": "Три строки. Никакого повторяющегося танца с useState, никакого дублирования обработки ошибок. Вот что имеют в виду, когда говорят «React помогает масштабировать код, а не только UI».",
+            "h.charts": "Графики, которые не мешают",
+            "body.charts1": "Я попробовал три библиотеки графиков, прежде чем остановился на Recharts. Проблема большинства из них — они сделаны для дашбордов: тяжёлые, навязчивые и сложные в кастомизации.",
+            "body.charts2": "Recharts другой. Он действительно <strong>состоит из React-компонентов до самого низа</strong>:",
+            "body.charts3": "Это читается как JSX, потому что это JSX. Любой цвет, любой градиент, любая толщина — всё через пропсы. Подгонка графика под мою тёмную палитру заняла минут десять.",
+            "h.rateLimit": "Когда упираешься в лимит API",
+            "body.rate1": "На середине тестирования панель Crypto начала показывать ошибки: Failed to fetch. Проблема была не в моём коде — это был rate limit CoinGecko.",
+            "body.rate2": "Бесплатный тариф CoinGecko разрешает всего около <strong>10–30 запросов в минуту с одного IP</strong>. У меня авто-обновление было раз в 60 секунд, но во время разработки я обновлял страницу постоянно. Тот же IP, тот же лимит — и каждое обновление сжигало ещё один запрос.",
+            "body.rate3": "Вот что я сделал:",
+            "li.rate1": "<strong>Увеличил интервал обновления</strong> с 60 секунд до 3 минут. Цены крипты всё равно не меняются драматически за 3 минуты.",
+            "li.rate2": "<strong>Тихий fallback при ошибке</strong> — если данные уже есть, продолжаем показывать старые. Устаревшая цена бесконечно лучше красного баннера ошибки.",
+            "li.rate3": "<strong>Авто-ретрай через 30 секунд</strong> — если запрос упал и данных нет, пробуем снова автоматически.",
+            "li.rate4": "<strong>Кнопка ручного обновления</strong> — для тех, кто хочет форсировать сейчас.",
+            "body.rate4": "Вывод: <strong>любой внешний API рано или поздно упадёт</strong>. Проектируй с учётом ошибок, а не только happy path.",
+            "callout.rate": "💡 <strong>Production-совет:</strong> Настоящие приложения не обращаются к публичным API напрямую. Они проксируют через бэкенд, который кэширует ответ, поэтому API вызывается раз в минуту независимо от количества пользователей на сайте.",
+            "h.theme": "Тёмная тема, та же палитра",
+            "body.theme1": "Я хотел, чтобы FinBoard ощущался частью одной семьи с портфолио, Hot Wheels Market и ZERNARIA. Это значит: тот же акцент #7b61ff, тот же тёмный фон #06060a и та же типографика — Syne для заголовков, Space Grotesk для текста.",
+            "body.theme2": "Tailwind сделал это тривиальным. Вместо стандартных цветов Tailwind я определил кастомные токены в tailwind.config.js:",
+            "body.theme3": "Теперь везде в коде я пишу bg-accent или text-accent-light — Tailwind подставляет мои брендовые цвета. Меняю одну строку в конфиге — обновляется всё приложение.",
+            "h.deploy": "Деплой без бэкенда",
+            "body.deploy1": "Вот часть, которая до сих пор удивляет людей: <strong>у FinBoard нет ни строчки серверного кода.</strong> Ни Node.js-бэкенда, ни базы данных, ни Docker. Это статический сайт.",
+            "body.deploy2": "Вот как работает деплой:",
+            "li.deploy1": "Пишу React-код в src/.",
+            "li.deploy2": "Запускаю npm run build — Vite компилирует всё в папку dist/ с HTML, CSS и JS файлами.",
+            "li.deploy3": "Загружаю dist/ на GitHub Pages.",
+            "li.deploy4": "Готово. Сайт живёт на 61simon.github.io/finboard/.",
+            "body.deploy3": "Браузер делает все вызовы API, держит всё состояние, рендерит всё. Сервер просто отдаёт файлы.",
+            "body.deploy4": "Это стоит <strong>$0/месяц</strong>, масштабируется бесконечно (потому что это просто статика на CDN) и требует ноль поддержки. Для дашборда малого бизнеса этого более чем достаточно.",
+            "h.lessons": "Что бы я сделал иначе",
+            "body.lessons1": "Каждый проект учит чему-то неожиданному. Если бы я начинал FinBoard заново сегодня:",
+            "li.lessons1": "<strong>Перенёс бы демо-данные в форму.</strong> Сейчас demoData.js захардкожен. В настоящем продукте пользователи вводили бы свои числа, и они бы сохранялись в localStorage или базе данных.",
+            "li.lessons2": "<strong>Использовал бы состояние в URL для табов.</strong> Сейчас если обновить страницу, ты возвращаешься на Overview. Лучше: синхронизировать активный таб с хэшем URL, чтобы ссылки были шарабельными.",
+            "li.lessons3": "<strong>Добавил бы графики истории валют.</strong> Конвертер показывает только текущий курс. Линейный график за 30 дней был бы куда полезнее.",
+            "li.lessons4": "<strong>Взял бы TanStack Query вместо кастомного useApi.</strong> Мой хук работает, но TanStack Query (бывший React Query) из коробки делает кэширование, ретраи, фоновый refetch и дедупликацию. В реальном приложении это очевидный выбор.",
+            "li.lessons5": "<strong>Написал бы хотя бы один тест.</strong> Даже один тест для математики AdCalculator поймал бы баг, где я перепутал две формулы.",
+            "h.final": "Итоговые мысли",
+            "body.final1": "FinBoard научил меня большему о React, чем любой туториал. Потому что я не следовал пошаговому гайду — каждое решение было моим. И каждая ошибка тоже.",
+            "body.final2": "Главный урок: <strong>фреймворки не делают проекты проще. Они делают их масштабируемыми.</strong> React не «быстрее в разработке», чем чистый JS — он «легче в продолжении». Как только в UI появляются состояние, компоненты и асинхронные данные — чистый JS превращается в клубок. React держит это организованным.",
+            "body.final3": "Если делаете что-то похожее: начните с черновой версии. Заставьте её работать. Потом рефакторите. Потом делайте красиво. Дашборд, который вы видите, прошёл три полных переписывания, прежде чем стал таким.",
+            "body.final4": "<a href=\"https://61simon.github.io/finboard/\" target=\"_blank\" rel=\"noopener\">Живой FinBoard здесь</a> — поиграйте и скажите, что думаете.",
+            "footer.text": "Автор: Simon · Веб-дизайнер и разработчик",
+            "footer.cta": "Начать проект"
+        },
+        ua: {
+            "page.title": "Як я зробив FinBoard — React-дашборд | Блог Саймона",
+            "nav.back": "Назад до блогу",
+            "meta.tag": "Кейс",
+            "meta.date": "Жовтень 2026",
+            "article.title": "Як я зробив FinBoard — React-дашборд для малого бізнесу",
+            "article.subtitle": "Створення дашборду для малого бізнесу на React, Vite, Recharts та живих API. Архітектура, ліміти API та деплой без бекенду.",
+            "body.intro1": "У кожного власника малого бізнесу, з яким я говорив, одна й та сама проблема: цифри живуть у десяти різних місцях. Виручка — у таблиці, крипта — у гаманці, іноземні рахунки — в нотатках, а витрати на рекламу — в кабінеті Meta. Ніхто не бачить загальної картини.",
+            "body.intro2": "FinBoard починався як особистий проєкт — <strong>чи зможу я зробити один дашборд, який відповідає на питання: «Чи заробляю я цього місяця і звідки приходять гроші?»</strong> Він перетворився на мій перший справжній React-додаток і перший проєкт у портфоліо, що використовує живі сторонні API.",
+            "body.intro3": "Ось уся історія: чому я вибрав React, як структурував проєкт, що ламалося по дорозі і що б я зробив інакше.",
+            "h.whyReact": "Чому React (і чому зараз)",
+            "body.why1": "Мої попередні проєкти — Hot Wheels Market, ZERNARIA — були зроблені на чистому JavaScript. Це було навмисно: без фреймворків я вивчив, як DOM влаштований насправді. Але в якийсь момент обмеження стають очевидними.",
+            "body.why2": "Дашборд — це <strong>інтерфейс, повний станів</strong>. Таби перемикаються, графіки перемальовуються, відповіді API приходять асинхронно, весь інтерфейс реагує на дії користувача. Робити це на чистому JS означає вручну керувати DOM-вузлами та слухачами подій усюди. Тут React заслуговує своє місце.",
+            "callout.rule": "💡 <strong>Правило:</strong> Чистий JS хороший, коли сторінка переважно статична. React хороший, коли сторінка — це переважно стан. FinBoard на 90% складається зі станів — тому React тут правильний інструмент.",
+            "body.why3": "Ще я хотів закрити прогалину в портфоліо. У мене в навичках був вказаний «React», але не було проєкту, який це доводив. Це був момент це виправити.",
+            "h.stack": "Стек",
+            "body.stack1": "Перш ніж написати хоч рядок, я вибрав інструменти. Ось що увійшло і чому:",
+            "li.stack1": "<strong>React 18</strong> — компоненти, хуки, без класів.",
+            "li.stack2": "<strong>Vite</strong> — миттєвий dev-сервер, швидка збірка, нуль конфігурації.",
+            "li.stack3": "<strong>Tailwind CSS 3</strong> — утилітарні класи, темна тема, без окремих CSS-файлів на кожен компонент.",
+            "li.stack4": "<strong>Recharts</strong> — декларативна бібліотека графіків, зроблена під React.",
+            "li.stack5": "<strong>Два публічних API</strong> — CoinGecko для крипти, open.er-api.com для курсів валют.",
+            "li.stack6": "<strong>Без бекенду</strong> — усе працює на клієнті. Хостинг — GitHub Pages.",
+            "body.stack2": "Без Redux, без React Query, без модних менеджерів станів. Для проєкту такого розміру це було б over-engineering. Звичайних useState і useMemo достатньо.",
+            "h.architecture": "Архітектура: спочатку компоненти",
+            "body.arch1": "Найкраще в React — те, як природно ти розбиваєш проєкт на частини. Моя структура була очевидна з першого дня:",
+            "body.arch2": "У кожного компонента <strong>одна задача</strong>. StatCard показує число з дельтою. RevenueChart малює графік. CryptoPanel отримує і показує топ-5 монет. Якщо потрібно змінити колір чи лейаут — відкриваю один файл, а не п'ять.",
+            "h3.hook": "Хук useApi",
+            "body.hook1": "І CryptoPanel, і CurrencyConverter мають отримувати дані з віддалених API. Замість дублювання логіки loading/error/success я написав її один раз як кастомний хук:",
+            "body.hook2": "Тепер обидві панелі використовують один і той самий код:",
+            "body.hook3": "Три рядки. Жодного повторюваного танцю з useState, жодного дублювання обробки помилок. Ось що мають на увазі, коли кажуть «React допомагає масштабувати код, а не лише UI».",
+            "h.charts": "Графіки, які не заважають",
+            "body.charts1": "Я спробував три бібліотеки графіків, перш ніж зупинився на Recharts. Проблема більшості з них — вони зроблені для дашбордів: важкі, нав'язливі й складні в кастомізації.",
+            "body.charts2": "Recharts інший. Він дійсно <strong>складається з React-компонентів до самого низу</strong>:",
+            "body.charts3": "Це читається як JSX, бо це JSX. Будь-який колір, будь-який градієнт, будь-яка товщина — усе через пропси. Підгонка графіка під мою темну палітру зайняла хвилин десять.",
+            "h.rateLimit": "Коли впираєшся в ліміт API",
+            "body.rate1": "На середині тестування панель Crypto почала показувати помилки: Failed to fetch. Проблема була не в моєму коді — це був rate limit CoinGecko.",
+            "body.rate2": "Безкоштовний тариф CoinGecko дозволяє лише близько <strong>10–30 запитів на хвилину з одного IP</strong>. У мене авто-оновлення було раз на 60 секунд, але під час розробки я оновлював сторінку постійно. Той самий IP, той самий ліміт — і кожне оновлення спалювало ще один запит.",
+            "body.rate3": "Ось що я зробив:",
+            "li.rate1": "<strong>Збільшив інтервал оновлення</strong> з 60 секунд до 3 хвилин. Ціни крипти все одно не змінюються драматично за 3 хвилини.",
+            "li.rate2": "<strong>Тихий fallback при помилці</strong> — якщо дані вже є, продовжуємо показувати старі. Застаріла ціна нескінченно краща за червоний банер помилки.",
+            "li.rate3": "<strong>Авто-ретрай через 30 секунд</strong> — якщо запит упав і даних немає, пробуємо знову автоматично.",
+            "li.rate4": "<strong>Кнопка ручного оновлення</strong> — для тих, хто хоче форсувати зараз.",
+            "body.rate4": "Висновок: <strong>будь-який зовнішній API рано чи пізно впаде</strong>. Проєктуй з урахуванням помилок, а не лише happy path.",
+            "callout.rate": "💡 <strong>Production-порада:</strong> Справжні додатки не звертаються до публічних API напряму. Вони проксують через бекенд, який кешує відповідь, тому API викликається раз на хвилину незалежно від кількості користувачів на сайті.",
+            "h.theme": "Темна тема, та сама палітра",
+            "body.theme1": "Я хотів, щоб FinBoard відчувався частиною однієї сім'ї з портфоліо, Hot Wheels Market та ZERNARIA. Це означає: той самий акцент #7b61ff, той самий темний фон #06060a і та сама типографіка — Syne для заголовків, Space Grotesk для тексту.",
+            "body.theme2": "Tailwind зробив це тривіальним. Замість стандартних кольорів Tailwind я визначив кастомні токени в tailwind.config.js:",
+            "body.theme3": "Тепер усюди в коді я пишу bg-accent або text-accent-light — Tailwind підставляє мої брендові кольори. Змінюю один рядок у конфігу — оновлюється весь додаток.",
+            "h.deploy": "Деплой без бекенду",
+            "body.deploy1": "Ось частина, яка досі дивує людей: <strong>у FinBoard немає жодного рядка серверного коду.</strong> Ні Node.js-бекенду, ні бази даних, ні Docker. Це статичний сайт.",
+            "body.deploy2": "Ось як працює деплой:",
+            "li.deploy1": "Пишу React-код у src/.",
+            "li.deploy2": "Запускаю npm run build — Vite компілює все в папку dist/ з HTML, CSS і JS файлами.",
+            "li.deploy3": "Завантажую dist/ на GitHub Pages.",
+            "li.deploy4": "Готово. Сайт живе на 61simon.github.io/finboard/.",
+            "body.deploy3": "Браузер робить усі виклики API, тримає весь стан, рендерить усе. Сервер просто віддає файли.",
+            "body.deploy4": "Це коштує <strong>$0/місяць</strong>, масштабується нескінченно (бо це просто статика на CDN) і вимагає нуль підтримки. Для дашборду малого бізнесу цього більш ніж достатньо.",
+            "h.lessons": "Що б я зробив інакше",
+            "body.lessons1": "Кожен проєкт вчить чомусь несподіваному. Якби я починав FinBoard заново сьогодні:",
+            "li.lessons1": "<strong>Переніс би демо-дані у форму.</strong> Зараз demoData.js захардкоджений. У справжньому продукті користувачі вводили б свої числа, і вони б зберігалися в localStorage чи базі даних.",
+            "li.lessons2": "<strong>Використав би стан у URL для табів.</strong> Зараз якщо оновити сторінку, ти повертаєшся на Overview. Краще: синхронізувати активний таб з хешем URL, щоб посилання були шарабельними.",
+            "li.lessons3": "<strong>Додав би графіки історії валют.</strong> Конвертер показує лише поточний курс. Лінійний графік за 30 днів був би значно кориснішим.",
+            "li.lessons4": "<strong>Взяв би TanStack Query замість кастомного useApi.</strong> Мій хук працює, але TanStack Query (колишній React Query) з коробки робить кешування, ретраї, фоновий refetch та дедуплікацію. У реальному додатку це очевидний вибір.",
+            "li.lessons5": "<strong>Написав би хоча б один тест.</strong> Навіть один тест для математики AdCalculator зловив би баг, де я переплутав дві формули.",
+            "h.final": "Підсумкові думки",
+            "body.final1": "FinBoard навчив мене більшому про React, ніж будь-який туторіал. Бо я не слідував покроковому гайду — кожне рішення було моїм. І кожна помилка теж.",
+            "body.final2": "Головний урок: <strong>фреймворки не роблять проєкти простішими. Вони роблять їх масштабованими.</strong> React не «швидший у розробці», ніж чистий JS — він «легший у продовженні». Як тільки в UI з'являються стан, компоненти й асинхронні дані — чистий JS перетворюється на клубок. React тримає це організованим.",
+            "body.final3": "Якщо робите щось схоже: почніть із чорнової версії. Змусіть її працювати. Потім рефакторте. Потім робіть красиво. Дашборд, який ви бачите, пройшов три повних переписування, перш ніж став таким.",
+            "body.final4": "<a href=\"https://61simon.github.io/finboard/\" target=\"_blank\" rel=\"noopener\">Живий FinBoard тут</a> — пограйте і скажіть, що думаєте.",
+            "footer.text": "Автор: Simon · Веб-дизайнер і розробник",
+            "footer.cta": "Почати проєкт"
+        }
+    };
+
+    const langBtns = document.querySelectorAll('.lang-btn');
+
+    function applyLanguage(lang) {
+        const dict = translations[lang];
+        if (!dict) return;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key] === undefined) return;
+            if (dict[key].includes('<')) {
+                el.innerHTML = dict[key];
+            } else {
+                el.textContent = dict[key];
+            }
+        });
+        if (dict['page.title']) document.title = dict['page.title'];
+        document.documentElement.lang = lang;
+        localStorage.setItem('lang', lang);
+    }
+
+    const savedLang = localStorage.getItem('lang') || 'en';
+    langBtns.forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[data-lang="${savedLang}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+    applyLanguage(savedLang);
+
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            langBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyLanguage(btn.dataset.lang);
+        });
+    });
+</script>
+
+</body>
+</html>
