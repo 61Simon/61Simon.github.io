@@ -11,20 +11,20 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://61simon.github.io/" />
     <meta property="og:title" content="Simon | Web Designer & Developer" />
-    <meta property="og:description" content="High-performing websites, custom design, and prices 2.3–2.5× lower than the market." />
+    <meta property="og:description" content="High-performing websites, custom design, and transparent pricing." />
     <meta property="og:image" content="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?auto=format&fit=crop&w=1200&q=80" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Simon | Web Designer & Developer" />
-    <meta name="twitter:description" content="High-performing websites, custom design, and prices 2.3–2.5× lower than the market." />
+    <meta name="twitter:description" content="High-performing websites, custom design, and transparent pricing." />
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?auto=format&fit=crop&w=1200&q=80" />
 
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #0a0a0a;
@@ -44,7 +44,7 @@
             --primary: #ffffff;
             --secondary: #f5f5f7;
             --text: #0a0a0a;
-            --text-secondary: #4a4a4a;
+            --text-secondary: #3d3d3d;
             --card-bg: #ffffff;
             --card-border: rgba(0, 0, 0, 0.08);
         }
@@ -102,17 +102,19 @@
             padding: 16px 32px; border-radius: 50px;
             font-weight: 600; font-size: 16px;
             transition: var(--transition);
-            position: relative; overflow: hidden;
+            position: relative;
             border: none; cursor: pointer;
             font-family: 'Space Grotesk', sans-serif;
+            color: inherit;
         }
 
         .btn-primary {
-            background: var(--accent); color: white;
+            background: var(--accent); color: #ffffff;
             box-shadow: 0 4px 20px rgba(123, 97, 255, 0.3);
         }
         .btn-primary:hover {
             background: var(--accent-light);
+            color: #ffffff;
             box-shadow: 0 8px 30px rgba(123, 97, 255, 0.4);
             transform: translateY(-3px);
         }
@@ -122,7 +124,7 @@
             color: var(--accent);
         }
         .btn-outline:hover {
-            background: var(--accent); color: white;
+            background: var(--accent); color: #ffffff;
             transform: translateY(-3px);
         }
 
@@ -631,7 +633,7 @@
         }
         .price-save {
             display: inline-block; margin: 10px 0 25px;
-            font-size: 14px; font-weight: 600; color: #4ade80;
+            font-size: 14px; font-weight: 600; color: var(--accent-light);
         }
         .pricing-features { list-style: none; margin-bottom: 30px; flex-grow: 1; }
         .pricing-features li {
@@ -801,7 +803,7 @@
 
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
             margin-bottom: 45px;
         }
@@ -860,19 +862,35 @@
             line-height: 1.6;
         }
 
+        .portfolio-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
         .portfolio-featured .portfolio-link {
             display: inline-flex;
             align-items: center;
             gap: 10px;
             color: white;
             font-weight: 600;
-            font-size: 15px;
-            padding: 12px 24px;
+            font-size: 14px;
+            padding: 11px 22px;
             background: var(--accent);
             border-radius: 50px;
             transition: var(--transition);
-            align-self: flex-start;
             box-shadow: 0 4px 20px rgba(123, 97, 255, 0.4);
+            cursor: pointer;
+            border: none;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .portfolio-featured .portfolio-link.secondary {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: none;
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         .portfolio-featured .portfolio-link i {
@@ -883,6 +901,10 @@
             background: var(--accent-light);
             transform: translateY(-3px);
             box-shadow: 0 8px 30px rgba(123, 97, 255, 0.5);
+        }
+
+        .portfolio-featured .portfolio-link.secondary:hover {
+            background: rgba(255, 255, 255, 0.22);
         }
 
         .portfolio-featured .portfolio-link:hover i {
@@ -983,29 +1005,237 @@
         .stack-item:hover .stack-icon { transform: rotate(-8deg) scale(1.1); }
         .stack-name { font-size: 14px; font-weight: 600; }
 
-        .testimonials .section-title { margin-bottom: 50px; }
-        .testimonial-card {
-            background: var(--card-bg); border-radius: 20px;
-            padding: 40px; margin: 0 15px;
+        .blog { background: var(--secondary); }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .blog-card {
+            background: var(--card-bg);
             border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 35px 32px;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
-        .testimonial-text {
-            font-size: 18px; font-style: italic;
-            margin-bottom: 30px; position: relative;
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .testimonial-text::before {
-            content: '"'; position: absolute; top: -20px; left: -15px;
-            font-size: 60px; color: var(--accent);
-            opacity: 0.3; font-family: serif;
+
+        .blog-card:hover::before { transform: scaleX(1); }
+
+        .blog-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(123, 97, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
         }
-        .testimonial-author { display: flex; align-items: center; }
-        .author-img {
-            width: 60px; height: 60px; border-radius: 50%;
-            overflow: hidden; margin-right: 20px;
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
-        .author-img img { width: 100%; height: 100%; object-fit: cover; }
-        .author-info h4 { font-size: 18px; margin-bottom: 5px; }
-        .author-info p { color: var(--text-secondary); font-size: 14px; }
+
+        .blog-tag {
+            color: var(--accent);
+        }
+
+        .blog-date {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .blog-title {
+            font-size: 22px;
+            margin-bottom: 14px;
+            line-height: 1.35;
+        }
+
+        .blog-excerpt {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+
+        .blog-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 15px;
+            transition: var(--transition);
+            align-self: flex-start;
+        }
+
+        .blog-link i { transition: transform 0.3s ease; }
+        .blog-link:hover { color: var(--accent-light); }
+        .blog-link:hover i { transform: translateX(5px); }
+
+        .case-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+
+        .case-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .case-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .case-modal-content {
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 820px;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 50px 45px;
+            z-index: 1;
+            transform: translateY(20px) scale(0.98);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .case-modal.active .case-modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .case-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(127, 127, 127, 0.1);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 2;
+        }
+
+        .case-modal-close:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .case-modal-header {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .case-modal-category {
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .case-modal-title {
+            font-size: 34px;
+            font-family: 'Syne', sans-serif;
+            line-height: 1.2;
+        }
+
+        .case-modal-image {
+            width: 100%;
+            border-radius: 16px;
+            margin-bottom: 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .case-modal-section {
+            margin-bottom: 30px;
+        }
+
+        .case-modal-section h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .case-modal-section p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .case-stack-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .case-stack-tag {
+            padding: 6px 14px;
+            background: rgba(123, 97, 255, 0.1);
+            border: 1px solid rgba(123, 97, 255, 0.25);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent-light);
+        }
+
+        .case-modal-footer {
+            padding-top: 20px;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
 
         .faq { background: var(--secondary); }
         .faq-list { max-width: 900px; margin: 0 auto; }
@@ -1211,35 +1441,6 @@
             100% { transform: scale(1.5); opacity: 0; }
         }
 
-        .live-notification {
-            position: fixed; bottom: 105px; left: 30px;
-            background: var(--card-bg);
-            border: 1px solid rgba(123, 97, 255, 0.3);
-            border-radius: 16px;
-            padding: 14px 18px;
-            display: flex; align-items: center; gap: 14px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
-            max-width: 330px; z-index: 997;
-            opacity: 0; transform: translateY(20px);
-            pointer-events: none;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-        .live-notification.show { opacity: 1; transform: translateY(0); }
-
-        .live-avatar {
-            width: 42px; height: 42px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: 700; font-size: 16px;
-            flex-shrink: 0; font-family: 'Syne', sans-serif;
-        }
-        .live-text { font-size: 13px; line-height: 1.5; }
-        .live-text strong { color: var(--accent-light); font-weight: 600; }
-        .live-text small {
-            color: var(--text-secondary);
-            display: block; margin-top: 2px; font-size: 11px;
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -1295,7 +1496,6 @@
             .footer-container { flex-direction: column; text-align: center; }
             .footer-links { justify-content: center; }
             .lang-btn { width: 32px; height: 26px; font-size: 10px; }
-            .live-notification { max-width: calc(100% - 100px); bottom: 100px; left: 20px; }
             .float-telegram { bottom: 25px; left: 20px; width: 52px; height: 52px; font-size: 22px; }
             .back-to-top { bottom: 25px; right: 20px; width: 46px; height: 46px; }
             .comparison-table thead th,
@@ -1309,6 +1509,10 @@
             .portfolio-cta { padding: 50px 25px; }
             .portfolio-cta h3 { font-size: 24px; }
             .portfolio-cta p { font-size: 15px; }
+
+            .case-modal-content { padding: 40px 28px; }
+            .case-modal-title { font-size: 26px; }
+            .case-modal-image { margin-bottom: 25px; }
         }
         @media (max-width: 576px) {
             .container { padding: 0 20px; }
@@ -1317,7 +1521,7 @@
             .hero-subtitle { font-size: 15px; padding-left: 40px; }
             .hero-subtitle::before { width: 30px; }
             .section-title { font-size: 30px; }
-            .service-card, .testimonial-card { padding: 28px; }
+            .service-card { padding: 28px; }
             .pricing-card { padding: 30px 25px; }
             .price-new { font-size: 38px; }
             .contact-form { padding: 24px; }
@@ -1333,16 +1537,24 @@
             .mobile-menu-btn { width: 34px; height: 34px; font-size: 20px; }
             .guarantee-card { padding: 28px 24px; }
 
-            .portfolio-featured { height: 340px; }
+            .portfolio-featured { height: 400px; }
             .portfolio-featured .portfolio-overlay { padding: 22px; }
             .portfolio-featured .portfolio-title { font-size: 20px; }
             .portfolio-featured .portfolio-desc { font-size: 12px; margin-bottom: 16px; }
-            .portfolio-featured .portfolio-link { padding: 10px 20px; font-size: 13px; }
+            .portfolio-featured .portfolio-link { padding: 10px 18px; font-size: 12px; }
 
             .portfolio-cta { padding: 40px 22px; }
             .portfolio-cta-icon { width: 65px; height: 65px; font-size: 26px; }
             .portfolio-cta h3 { font-size: 22px; }
             .portfolio-cta .btn { width: 100%; }
+
+            .blog-card { padding: 28px 24px; }
+            .blog-title { font-size: 19px; }
+
+            .case-modal { padding: 20px 12px; }
+            .case-modal-content { padding: 35px 22px; }
+            .case-modal-title { font-size: 22px; }
+            .case-modal-close { top: 12px; right: 12px; width: 36px; height: 36px; }
         }
     </style>
 </head>
@@ -1362,6 +1574,7 @@
                 <a href="#process" class="nav-link" data-i18n="nav.process">Process</a>
                 <a href="#pricing" class="nav-link" data-i18n="nav.pricing">Pricing</a>
                 <a href="#portfolio" class="nav-link" data-i18n="nav.portfolio">Portfolio</a>
+                <a href="#blog" class="nav-link" data-i18n="nav.blog">Blog</a>
                 <a href="#faq" class="nav-link" data-i18n="nav.faq">FAQ</a>
                 <a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a>
             </nav>
@@ -1467,7 +1680,7 @@
                 </h2>
                 <h3 class="about-title fade-in" data-i18n="about.subtitle">Professional Web Designer & Developer</h3>
                 <p class="about-description fade-in" data-i18n="about.p1">
-                    I'm a passionate web designer and developer based in Ukraine with over 3 years of professional experience creating modern, responsive, and user-friendly websites. I specialize in converting ideas into beautiful, functional digital experiences.
+                    I'm a passionate web designer and developer based in Ukraine with over 4 years of professional experience creating modern, responsive, and user-friendly websites. I specialize in converting ideas into beautiful, functional digital experiences.
                 </p>
                 <p class="about-description fade-in" data-i18n="about.p2">
                     My approach combines aesthetic design with technical excellence to deliver websites that not only look amazing but also perform exceptionally well across all devices.
@@ -1514,10 +1727,10 @@
                     I got into web development back in 2021 — not through courses or a bootcamp, but by curiosity. I wanted to make my own website, opened a code editor, and never looked back. What started as a hobby quickly turned into a craft.
                 </p>
                 <p class="story-paragraph fade-in" data-i18n="story.p2">
-                    Since then, I've built over 50 websites — from landing pages for local businesses to full e-commerce stores. Every project taught me something new, and every client taught me to listen better. <span class="story-highlight">I don't just write code — I help people grow their business.</span>
+                    Since then, I've built over 50 websites — from landing pages for local businesses to full e-commerce stores. Every project taught me something new, and every client taught me to listen better. I don't just write code — I help people grow their business.
                 </p>
                 <p class="story-paragraph fade-in" data-i18n="story.p3">
-                    Today I work as an independent web designer and developer. I keep my prices low while I build my portfolio and reputation, because I believe great websites shouldn't cost a fortune. If you're reading this — I'd love to hear about your project.
+                    Today I work as an independent web designer and developer. I focus on delivering high-quality work at fair, transparent prices — because great websites shouldn't be a luxury. If you're reading this — I'd love to hear about your project.
                 </p>
             </div>
         </div>
@@ -1533,25 +1746,25 @@
                     <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
                     <h3 class="service-title" data-i18n="services.webdesign">Web Design</h3>
                     <p class="service-description" data-i18n="services.webdesign.desc">Custom website designs that are visually stunning, user-friendly, and optimized for conversions.</p>
-                    <a href="#portfolio" class="service-link" data-i18n="services.view">View My Work</a>
+                    <a href="#portfolio" class="service-link"><span data-i18n="services.view">View My Work</span></a>
                 </div>
                 <div class="service-card fade-in">
                     <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
                     <h3 class="service-title" data-i18n="services.webdev">Web Development</h3>
                     <p class="service-description" data-i18n="services.webdev.desc">Clean, efficient code that brings designs to life with perfect functionality across all devices.</p>
-                    <a href="#portfolio" class="service-link" data-i18n="services.view">View My Work</a>
+                    <a href="#portfolio" class="service-link"><span data-i18n="services.view">View My Work</span></a>
                 </div>
                 <div class="service-card fade-in">
                     <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
                     <h3 class="service-title" data-i18n="services.responsive">Responsive Design</h3>
                     <p class="service-description" data-i18n="services.responsive.desc">Websites that look and work perfectly on any device, from desktop to mobile.</p>
-                    <a href="#portfolio" class="service-link" data-i18n="services.view">View My Work</a>
+                    <a href="#portfolio" class="service-link"><span data-i18n="services.view">View My Work</span></a>
                 </div>
                 <div class="service-card fade-in">
                     <div class="service-icon"><i class="fas fa-search"></i></div>
                     <h3 class="service-title" data-i18n="services.uiux">UI/UX Design</h3>
                     <p class="service-description" data-i18n="services.uiux.desc">Intuitive interfaces and seamless user experiences that keep visitors engaged.</p>
-                    <a href="#portfolio" class="service-link" data-i18n="services.view">View My Work</a>
+                    <a href="#portfolio" class="service-link"><span data-i18n="services.view">View My Work</span></a>
                 </div>
             </div>
         </div>
@@ -1596,9 +1809,9 @@
             <div class="pricing-banner fade-in">
                 <div class="pricing-banner-icon"><i class="fas fa-tags"></i></div>
                 <div class="pricing-banner-text">
-                    <h3 data-i18n="pricing.bannerTitle">Prices 2.3–2.5× Lower Than the Market</h3>
+                    <h3 data-i18n="pricing.bannerTitle">Transparent Pricing, Premium Quality</h3>
                     <p data-i18n="pricing.bannerDesc">
-                        I'm building my portfolio and reputation right now, so my rates are 2.3–2.5 times lower than the average market price — with no compromise on quality, speed or support.
+                        Fair rates with no hidden fees. You pay for quality work — not agency overhead or middlemen.
                     </p>
                 </div>
             </div>
@@ -1608,10 +1821,10 @@
                     <h3 class="pricing-name" data-i18n="pricing.landing.name">Landing Page</h3>
                     <p class="pricing-desc" data-i18n="pricing.landing.desc">One-page website to present a product, service or personal brand.</p>
                     <div class="price-row">
-                        <span class="price-new">$120</span>
-                        <span class="price-old">$300</span>
+                        <span class="price-new">$300</span>
+                        <span class="price-old">$500</span>
                     </div>
-                    <span class="price-save"><i class="fas fa-arrow-down"></i> <span data-i18n="pricing.landing.save">2.5× cheaper than the market</span></span>
+                    <span class="price-save"><i class="fas fa-arrow-down"></i> <span data-i18n="pricing.landing.save">Below market average</span></span>
                     <ul class="pricing-features">
                         <li><i class="fas fa-check"></i><span data-i18n="pricing.landing.f1">1 page, up to 6 sections</span></li>
                         <li><i class="fas fa-check"></i><span data-i18n="pricing.landing.f2">Custom design — no ready-made templates</span></li>
@@ -1629,10 +1842,10 @@
                     <h3 class="pricing-name" data-i18n="pricing.business.name">Business Website</h3>
                     <p class="pricing-desc" data-i18n="pricing.business.desc">Multi-page website for a company, studio or online service.</p>
                     <div class="price-row">
-                        <span class="price-new">$300</span>
-                        <span class="price-old">$750</span>
+                        <span class="price-new">$700</span>
+                        <span class="price-old">$1,400</span>
                     </div>
-                    <span class="price-save"><i class="fas fa-arrow-down"></i> <span data-i18n="pricing.business.save">2.5× cheaper than the market</span></span>
+                    <span class="price-save"><i class="fas fa-arrow-down"></i> <span data-i18n="pricing.business.save">Below market average</span></span>
                     <ul class="pricing-features">
                         <li><i class="fas fa-check"></i><span data-i18n="pricing.business.f1">Up to 5 unique pages</span></li>
                         <li><i class="fas fa-check"></i><span data-i18n="pricing.business.f2">Individual UI/UX design</span></li>
@@ -1650,10 +1863,10 @@
                     <h3 class="pricing-name" data-i18n="pricing.store.name">Online Store</h3>
                     <p class="pricing-desc" data-i18n="pricing.store.desc">E-commerce website with a product catalog and online payments.</p>
                     <div class="price-row">
-                        <span class="price-new">$600</span>
-                        <span class="price-old">$1500</span>
+                        <span class="price-new">$1,400</span>
+                        <span class="price-old">$2,800</span>
                     </div>
-                    <span class="price-save"><i class="fas fa-arrow-down"></i> <span data-i18n="pricing.store.save">2.5× cheaper than the market</span></span>
+                    <span class="price-save"><i class="fas fa-arrow-down"></i> <span data-i18n="pricing.store.save">Below market average</span></span>
                     <ul class="pricing-features">
                         <li><i class="fas fa-check"></i><span data-i18n="pricing.store.f1">Product catalog with filters & search</span></li>
                         <li><i class="fas fa-check"></i><span data-i18n="pricing.store.f2">Shopping cart & checkout flow</span></li>
@@ -1723,7 +1936,7 @@
                     <tbody>
                         <tr>
                             <td data-i18n="comparison.r1.feature">Price</td>
-                            <td class="col-simon"><span class="cmp-check"><i class="fas fa-check-circle"></i> <span data-i18n="comparison.r1.simon">2.3–2.5× lower</span></span></td>
+                            <td class="col-simon"><span class="cmp-check"><i class="fas fa-check-circle"></i> <span data-i18n="comparison.r1.simon">Below market</span></span></td>
                             <td>$$$</td>
                             <td>$$</td>
                         </tr>
@@ -1776,21 +1989,47 @@
                         <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
                         <h3 class="portfolio-title">Hot Wheels Market</h3>
                         <p class="portfolio-desc" data-i18n="portfolio.featured.desc">A full e-commerce catalog for Hot Wheels collectors — with product filtering, search, category pages and a modern dark UI. Built from scratch with HTML, CSS and JavaScript.</p>
-                        <a href="https://61simon.github.io/Hot-Wheels-Market/" class="portfolio-link" target="_blank" rel="noopener">
-                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
-                        </a>
+                        <div class="portfolio-actions">
+                            <a href="https://61simon.github.io/Hot-Wheels-Market/" class="portfolio-link" target="_blank" rel="noopener">
+                                <span data-i18n="portfolio.view">View Live</span> <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            <button class="portfolio-link secondary" data-case="hot-wheels">
+                                <span data-i18n="portfolio.case">Read Case Study</span> <i class="fas fa-book-open"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="portfolio-featured fade-in" style="animation-delay: 0.15s;">
-                    <img src="https://i.ibb.co/LdRgSbK7/image.png" alt="Project 2" class="portfolio-img">
+                    <img src="https://i.ibb.co/LdRgSbK7/image.png" alt="ZERNARIA Coffee Shop" class="portfolio-img">
                     <div class="portfolio-overlay">
                         <span class="portfolio-category" data-i18n="portfolio.cat.web">Web Design</span>
                         <h3 class="portfolio-title">ZERNARIA Coffee Shop</h3>
                         <p class="portfolio-desc" data-i18n="portfolio.featured2.desc">A modern, responsive website with clean design, smooth animations and optimized performance. Built with a focus on user experience and conversions.</p>
-                        <a href="https://61simon.github.io/ZERNARIA/" class="portfolio-link" target="_blank" rel="noopener">
-                            <span data-i18n="portfolio.view">View Project</span> <i class="fas fa-arrow-right"></i>
-                        </a>
+                        <div class="portfolio-actions">
+                            <a href="https://61simon.github.io/ZERNARIA/" class="portfolio-link" target="_blank" rel="noopener">
+                                <span data-i18n="portfolio.view">View Live</span> <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            <button class="portfolio-link secondary" data-case="zernaria">
+                                <span data-i18n="portfolio.case">Read Case Study</span> <i class="fas fa-book-open"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                                <div class="portfolio-featured fade-in" style="animation-delay: 0.3s;">
+                    <img src="https://i.ibb.co/2Yh2Cgxg/image.png" alt="FinBoard Dashboard" class="portfolio-img">
+                    <div class="portfolio-overlay">
+                        <span class="portfolio-category" data-i18n="portfolio.cat.app">React App</span>
+                        <h3 class="portfolio-title">FinBoard</h3>
+                        <p class="portfolio-desc" data-i18n="portfolio.featured3.desc">A financial dashboard for small businesses — live crypto tracking, currency conversion, revenue charts and ad ROI calculator. Built with React, Vite, Recharts and Tailwind CSS.</p>
+                        <div class="portfolio-actions">
+                            <a href="https://61simon.github.io/finboard/" class="portfolio-link" target="_blank" rel="noopener">
+                                <span data-i18n="portfolio.view">View Live</span> <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            <button class="portfolio-link secondary" data-case="finboard">
+                                <span data-i18n="portfolio.case">Read Case Study</span> <i class="fas fa-book-open"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1799,9 +2038,9 @@
                 <div class="portfolio-cta-icon">
                     <i class="fas fa-hammer"></i>
                 </div>
-                <h3 data-i18n="portfolio.cta.title">Portfolio in Progress</h3>
+                <h3 data-i18n="portfolio.cta.title">More Projects Coming Soon</h3>
                 <p data-i18n="portfolio.cta.desc">
-                    I'm actively taking on my first commercial projects right now. Your work could take this spot within two weeks — with a case study, screenshots, and a full breakdown.
+                    I'm actively working on new projects — including an interactive browser game. Your project could be featured here next, with a full case study, screenshots, and breakdown.
                 </p>
                 <a href="#contact" class="btn btn-primary" data-i18n="portfolio.cta.btn">Start Your Project</a>
             </div>
@@ -1826,33 +2065,41 @@
         </div>
     </section>
 
-    <section class="testimonials">
+    <section class="blog" id="blog">
         <div class="container">
             <h2 class="section-title fade-in">
-                <span data-i18n="testimonials.title1">Client</span> <span data-i18n="testimonials.title2">Testimonials</span>
+                <span data-i18n="blog.title1">From</span> <span data-i18n="blog.title2">The Blog</span>
             </h2>
-            <div class="testimonials-slider fade-in">
-                <div class="testimonial-card">
-                    <p class="testimonial-text" data-i18n="testimonials.t1.text">Simon delivered an exceptional website that perfectly captured our brand identity. His attention to detail and creative approach resulted in a site that has significantly increased our online conversions.</p>
-                    <div class="testimonial-author">
-                        <div class="author-img"><img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sarah Johnson"></div>
-                        <div class="author-info"><h4>Sarah Johnson</h4><p data-i18n="testimonials.t1.role">CEO, Creative Agency</p></div>
+            <div class="blog-grid">
+                <article class="blog-card fade-in">
+                    <div class="blog-meta">
+                        <span class="blog-tag" data-i18n="blog.t1.tag">Case Study</span>
+                        <span class="blog-date" data-i18n="blog.t1.date">October 2026</span>
                     </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text" data-i18n="testimonials.t2.text">Working with Simon was a pleasure. He understood our requirements perfectly and delivered a stunning e-commerce solution ahead of schedule. The site performs flawlessly on all devices.</p>
-                    <div class="testimonial-author">
-                        <div class="author-img"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen"></div>
-                        <div class="author-info"><h4>Michael Chen</h4><p data-i18n="testimonials.t2.role">Founder, Fashion Brand</p></div>
+                    <h3 class="blog-title" data-i18n="blog.t1.title">How I Built the Hot Wheels Market</h3>
+                    <p class="blog-excerpt" data-i18n="blog.t1.desc">Lessons from building a full e-commerce catalog with vanilla JavaScript — filtering, search, performance, and design decisions behind the dark UI.</p>
+                    <a href="blog/blog1.html" class="blog-link"><span data-i18n="blog.readMore">Read article</span> <i class="fas fa-arrow-right"></i></a>
+                </article>
+
+                <article class="blog-card fade-in" style="animation-delay: 0.1s;">
+                    <div class="blog-meta">
+                        <span class="blog-tag" data-i18n="blog.t2.tag">Tutorial</span>
+                        <span class="blog-date" data-i18n="blog.t2.date">October 2026</span>
                     </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text" data-i18n="testimonials.t3.text">Simon's UI/UX design skills transformed our mobile app. The intuitive interface he created has received overwhelmingly positive feedback from our users and significantly improved engagement metrics.</p>
-                    <div class="testimonial-author">
-                        <div class="author-img"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma Rodriguez"></div>
-                        <div class="author-info"><h4>Emma Rodriguez</h4><p data-i18n="testimonials.t3.role">Product Manager, Tech Startup</p></div>
+                    <h3 class="blog-title" data-i18n="blog.t2.title">CSS Animations That Don't Kill Performance</h3>
+                    <p class="blog-excerpt" data-i18n="blog.t2.desc">A practical guide to smooth scroll animations, will-change, transform-based motion, and where most developers go wrong.</p>
+                    <a href="blog/blog2.html" class="blog-link"><span data-i18n="blog.readMore">Read article</span> <i class="fas fa-arrow-right"></i></a>
+                </article>
+
+                <article class="blog-card fade-in" style="animation-delay: 0.2s;">
+                    <div class="blog-meta">
+                        <span class="blog-tag" data-i18n="blog.t3.tag">Opinion</span>
+                        <span class="blog-date" data-i18n="blog.t3.date">October 2026</span>
                     </div>
-                </div>
+                    <h3 class="blog-title" data-i18n="blog.t3.title">Why Cheap Websites Cost You More</h3>
+                    <p class="blog-excerpt" data-i18n="blog.t3.desc">The hidden cost of template-based sites — and why custom design, clean code, and SEO actually save money long-term.</p>
+                    <a href="blog/blog3.html" class="blog-link"><span data-i18n="blog.readMore">Read article</span> <i class="fas fa-arrow-right"></i></a>
+                </article>
             </div>
         </div>
     </section>
@@ -1900,10 +2147,10 @@
                 </div>
                 <div class="faq-item fade-in">
                     <div class="faq-question">
-                        <span data-i18n="faq.q6">Why are your prices so much lower than the market?</span>
+                        <span data-i18n="faq.q6">How do your prices compare to the market?</span>
                         <i class="fas fa-plus"></i>
                     </div>
-                    <div class="faq-answer" data-i18n="faq.a6">I'm actively building my portfolio and client base, so I offer premium quality at 2.3–2.5× lower prices than the average market. Same quality, faster delivery, and personal attention — just a lower price tag while I grow.</div>
+                    <div class="faq-answer" data-i18n="faq.a6">My rates are below the market average — mostly because I work independently without agency overhead. Same quality, faster delivery, and personal attention, at a fair price.</div>
                 </div>
             </div>
         </div>
@@ -1970,10 +2217,10 @@
                     <div class="form-group">
                         <label class="form-label" data-i18n="form.budget">Approximate Budget</label>
                         <div class="form-checkbox-group">
-                            <label class="form-checkbox"><input type="radio" name="budget" value="Under $200"><span data-i18n="form.budget.b1">Under $200</span></label>
-                            <label class="form-checkbox"><input type="radio" name="budget" value="$200-$500"><span data-i18n="form.budget.b2">$200–$500</span></label>
-                            <label class="form-checkbox"><input type="radio" name="budget" value="$500-$1000"><span data-i18n="form.budget.b3">$500–$1000</span></label>
-                            <label class="form-checkbox"><input type="radio" name="budget" value="$1000+"><span data-i18n="form.budget.b4">$1000+</span></label>
+                            <label class="form-checkbox"><input type="radio" name="budget" value="Under $500"><span data-i18n="form.budget.b1">Under $500</span></label>
+                            <label class="form-checkbox"><input type="radio" name="budget" value="$500-$1000"><span data-i18n="form.budget.b2">$500–$1000</span></label>
+                            <label class="form-checkbox"><input type="radio" name="budget" value="$1000-$2000"><span data-i18n="form.budget.b3">$1000–$2000</span></label>
+                            <label class="form-checkbox"><input type="radio" name="budget" value="$2000+"><span data-i18n="form.budget.b4">$2000+</span></label>
                         </div>
                     </div>
 
@@ -1999,6 +2246,7 @@
                     <a href="#services" class="footer-link" data-i18n="nav.services">Services</a>
                     <a href="#pricing" class="footer-link" data-i18n="nav.pricing">Pricing</a>
                     <a href="#portfolio" class="footer-link" data-i18n="nav.portfolio">Portfolio</a>
+                    <a href="#blog" class="footer-link" data-i18n="nav.blog">Blog</a>
                     <a href="#faq" class="footer-link" data-i18n="nav.faq">FAQ</a>
                     <a href="#contact" class="footer-link" data-i18n="nav.contact">Contact</a>
                 </div>
@@ -2023,15 +2271,18 @@
         <i class="fab fa-telegram"></i>
     </a>
 
-    <div class="live-notification" id="liveNotif" aria-live="polite">
-        <div class="live-avatar" id="liveAvatar">M</div>
-        <div class="live-text">
-            <span id="liveText"><strong>Michael</strong> from Kyiv just ordered a Landing Page</span>
-            <small id="liveTime">5 hours ago</small>
+    <div class="case-modal" id="caseModal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="case-modal-backdrop" data-close-case></div>
+        <div class="case-modal-content">
+            <button class="case-modal-close" data-close-case aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="caseModalBody"></div>
         </div>
     </div>
 
     <script>
+        // --- Theme ---
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = themeToggle.querySelector('i');
         const htmlEl = document.documentElement;
@@ -2052,11 +2303,12 @@
             themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
 
+        // --- Translations ---
         const translations = {
             en: {
                 "nav.home": "Home", "nav.about": "About", "nav.story": "Story", "nav.services": "Services",
                 "nav.process": "Process", "nav.pricing": "Pricing", "nav.portfolio": "Portfolio",
-                "nav.faq": "FAQ", "nav.contact": "Contact",
+                "nav.blog": "Blog", "nav.faq": "FAQ", "nav.contact": "Contact",
                 "hero.subtitle": "Web Designer & Developer", "hero.title": "Hi, I'm",
                 "hero.desc": "I create stunning, high-performing websites that help businesses grow. With 4 years of experience in web design and development, I deliver exceptional digital experiences.",
                 "hero.viewWork": "View My Work", "hero.hire": "Hire Me",
@@ -2064,15 +2316,14 @@
                 "stats.clients": "Happy Clients", "stats.satisfaction": "Satisfaction Rate",
                 "about.title1": "About", "about.title2": "Me",
                 "about.subtitle": "Professional Web Designer & Developer",
-                "about.p1": "I'm a passionate web designer and developer based in Ukraine with over 3 years of professional experience creating modern, responsive, and user-friendly websites. I specialize in converting ideas into beautiful, functional digital experiences.",
+                "about.p1": "I'm a passionate web designer and developer based in Ukraine with over 4 years of professional experience creating modern, responsive, and user-friendly websites. I specialize in converting ideas into beautiful, functional digital experiences.",
                 "about.p2": "My approach combines aesthetic design with technical excellence to deliver websites that not only look amazing but also perform exceptionally well across all devices.",
                 "skills.tags.frontend": "Frontend", "skills.tags.styling": "Styling & Design", "skills.tags.tools": "Tools",
                 "story.title1": "My", "story.title2": "Story",
                 "story.p1": "I got into web development back in 2021 — not through courses or a bootcamp, but by curiosity. I wanted to make my own website, opened a code editor, and never looked back. What started as a hobby quickly turned into a craft.",
                 "story.p2": "Since then, I've built over 50 websites — from landing pages for local businesses to full e-commerce stores. Every project taught me something new, and every client taught me to listen better. I don't just write code — I help people grow their business.",
-                "story.p3": "Today I work as an independent web designer and developer. I keep my prices low while I build my portfolio and reputation, because I believe great websites shouldn't cost a fortune. If you're reading this — I'd love to hear about your project.",
-                "services.title1": "My", "services.title2": "Services",
-                "services.view": "View My Work",
+                "story.p3": "Today I work as an independent web designer and developer. I focus on delivering high-quality work at fair, transparent prices — because great websites shouldn't be a luxury. If you're reading this — I'd love to hear about your project.",
+                "services.title1": "My", "services.title2": "Services", "services.view": "View My Work",
                 "services.webdesign": "Web Design", "services.webdev": "Web Development",
                 "services.responsive": "Responsive Design", "services.uiux": "UI/UX Design",
                 "services.webdesign.desc": "Custom website designs that are visually stunning, user-friendly, and optimized for conversions.",
@@ -2085,10 +2336,10 @@
                 "process.step3.title": "Development", "process.step3.desc": "I code your website with clean, efficient code — responsive, fast and SEO-ready.",
                 "process.step4.title": "Launch & Support", "process.step4.desc": "We deploy, test everything, and I provide ongoing support after launch.",
                 "pricing.title1": "My", "pricing.title2": "Pricing",
-                "pricing.bannerTitle": "Prices 2.3–2.5× Lower Than the Market",
-                "pricing.bannerDesc": "I'm building my portfolio and reputation right now, so my rates are 2.3–2.5 times lower than the average market price — with no compromise on quality, speed or support.",
+                "pricing.bannerTitle": "Transparent Pricing, Premium Quality",
+                "pricing.bannerDesc": "Fair rates with no hidden fees. You pay for quality work — not agency overhead or middlemen.",
                 "pricing.landing.name": "Landing Page", "pricing.landing.desc": "One-page website to present a product, service or personal brand.",
-                "pricing.landing.save": "2.5× cheaper than the market",
+                "pricing.landing.save": "Below market average",
                 "pricing.landing.f1": "1 page, up to 6 sections",
                 "pricing.landing.f2": "Custom design — no ready-made templates",
                 "pricing.landing.f3": "Fully responsive on all devices",
@@ -2097,7 +2348,7 @@
                 "pricing.landing.f6": "Delivery in 3–5 days",
                 "pricing.landing.f7": "2 rounds of revisions",
                 "pricing.business.name": "Business Website", "pricing.business.desc": "Multi-page website for a company, studio or online service.",
-                "pricing.business.save": "2.5× cheaper than the market",
+                "pricing.business.save": "Below market average",
                 "pricing.business.f1": "Up to 5 unique pages",
                 "pricing.business.f2": "Individual UI/UX design",
                 "pricing.business.f3": "Animations & interactive elements",
@@ -2107,7 +2358,7 @@
                 "pricing.business.f7": "3 rounds of revisions",
                 "pricing.business.f8": "30 days of free support",
                 "pricing.store.name": "Online Store", "pricing.store.desc": "E-commerce website with a product catalog and online payments.",
-                "pricing.store.save": "2.5× cheaper than the market",
+                "pricing.store.save": "Below market average",
                 "pricing.store.f1": "Product catalog with filters & search",
                 "pricing.store.f2": "Shopping cart & checkout flow",
                 "pricing.store.f3": "Payment & delivery integration",
@@ -2125,28 +2376,33 @@
                 "guarantees.g4.title": "Code & Sources Are Yours", "guarantees.g4.desc": "When the project is done, you own everything — source code, design files, hosting, domain. No lock-in, ever.",
                 "comparison.title1": "Simon vs", "comparison.title2": "The Market",
                 "comparison.feature": "Feature", "comparison.agency": "Agency", "comparison.freelancer": "Freelancer",
-                "comparison.r1.feature": "Price", "comparison.r1.simon": "2.3–2.5× lower",
+                "comparison.r1.feature": "Price", "comparison.r1.simon": "Below market",
                 "comparison.r2.feature": "Delivery time", "comparison.r2.simon": "3–14 days", "comparison.r2.agency": "4–8 weeks", "comparison.r2.freelancer": "Variable",
                 "comparison.r3.feature": "Communication", "comparison.r3.simon": "Direct with me", "comparison.r3.agency": "Through manager", "comparison.r3.freelancer": "Direct",
                 "comparison.r4.feature": "Revisions", "comparison.r4.simon": "Included (2–3)", "comparison.r4.agency": "Paid extra", "comparison.r4.freelancer": "Limited",
                 "comparison.r5.feature": "Post-launch support", "comparison.r5.simon": "30–60 days free", "comparison.r5.agency": "Hourly rate", "comparison.r5.freelancer": "Rarely",
                 "comparison.r6.feature": "Ownership", "comparison.r6.simon": "100% yours", "comparison.r6.agency": "Yours", "comparison.r6.freelancer": "Yours",
                 "portfolio.title1": "My", "portfolio.title2": "Portfolio",
-                "portfolio.filter.all": "All", "portfolio.filter.web": "Web Design", "portfolio.filter.app": "App UI",
-                "portfolio.cat.web": "Web Design", "portfolio.view": "View Project",
+                "portfolio.cat.web": "Web Design", "portfolio.view": "View Live", "portfolio.case": "Read Case Study",
                 "portfolio.featured.desc": "A full e-commerce catalog for Hot Wheels collectors — with product filtering, search, category pages and a modern dark UI. Built from scratch with HTML, CSS and JavaScript.",
                 "portfolio.featured2.desc": "A modern, responsive website with clean design, smooth animations and optimized performance. Built with a focus on user experience and conversions.",
-                "portfolio.cta.title": "Portfolio in Progress",
-                "portfolio.cta.desc": "I'm actively taking on my first commercial projects right now. Your work could take this spot within two weeks — with a case study, screenshots, and a full breakdown.",
+                "portfolio.cat.app": "React App",
+                "portfolio.featured3.desc": "A financial dashboard for small businesses — live crypto tracking, currency conversion, revenue charts and ad ROI calculator. Built with React, Vite, Recharts and Tailwind CSS.",
+                "portfolio.cta.title": "Your Project Could Be Next",
+                "portfolio.cta.desc": "These are three of my favourites — a vanilla JS e-commerce catalog, a brand landing page and a React data dashboard. Your project could be featured here next, with a full case study, screenshots and a breakdown of the process.",
                 "portfolio.cta.btn": "Start Your Project",
                 "stack.title1": "My", "stack.title2": "Stack",
-                "testimonials.title1": "Client", "testimonials.title2": "Testimonials",
-                "testimonials.t1.text": "Simon delivered an exceptional website that perfectly captured our brand identity. His attention to detail and creative approach resulted in a site that has significantly increased our online conversions.",
-                "testimonials.t1.role": "CEO, Creative Agency",
-                "testimonials.t2.text": "Working with Simon was a pleasure. He understood our requirements perfectly and delivered a stunning e-commerce solution ahead of schedule. The site performs flawlessly on all devices.",
-                "testimonials.t2.role": "Founder, Fashion Brand",
-                "testimonials.t3.text": "Simon's UI/UX design skills transformed our mobile app. The intuitive interface he created has received overwhelmingly positive feedback from our users and significantly improved engagement metrics.",
-                "testimonials.t3.role": "Product Manager, Tech Startup",
+                "blog.title1": "From", "blog.title2": "The Blog",
+                "blog.readMore": "Read article",
+                "blog.t1.tag": "Case Study", "blog.t1.date": "October 2026",
+                "blog.t1.title": "How I Built the Hot Wheels Market",
+                "blog.t1.desc": "Lessons from building a full e-commerce catalog with vanilla JavaScript — filtering, search, performance, and design decisions behind the dark UI.",
+                "blog.t2.tag": "Tutorial", "blog.t2.date": "October 2026",
+                "blog.t2.title": "CSS Animations That Don't Kill Performance",
+                "blog.t2.desc": "A practical guide to smooth scroll animations, will-change, transform-based motion, and where most developers go wrong.",
+                "blog.t3.tag": "Opinion", "blog.t3.date": "October 2026",
+                "blog.t3.title": "Why Cheap Websites Cost You More",
+                "blog.t3.desc": "The hidden cost of template-based sites — and why custom design, clean code, and SEO actually save money long-term.",
                 "faq.title1": "Frequently Asked", "faq.title2": "Questions",
                 "faq.q1": "How long does it take to build a website?",
                 "faq.a1": "A landing page usually takes 3–5 days, a business website 7–14 days, and an online store 2–3 weeks. The exact timeline depends on the project scope and how quickly you provide content.",
@@ -2158,8 +2414,8 @@
                 "faq.a4": "Every plan includes 2–3 rounds of revisions during the design and development stage. After launch, I also provide free support for 30–60 days depending on your plan.",
                 "faq.q5": "What about hosting, domain and SEO?",
                 "faq.a5": "I'll help you set up hosting and a domain — you own them, no lock-in. Basic SEO (meta tags, sitemap, fast loading, mobile optimization) is included with every project.",
-                "faq.q6": "Why are your prices so much lower than the market?",
-                "faq.a6": "I'm actively building my portfolio and client base, so I offer premium quality at 2.3–2.5× lower prices than the average market. Same quality, faster delivery, and personal attention — just a lower price tag while I grow.",
+                "faq.q6": "How do your prices compare to the market?",
+                "faq.a6": "My rates are below the market average — mostly because I work independently without agency overhead. Same quality, faster delivery, and personal attention, at a fair price.",
                 "contact.title1": "Get In", "contact.title2": "Touch", "contact.send": "Send Brief",
                 "contact.desc": "Have a project in mind or want to discuss potential opportunities? Fill out the brief below or reach out directly — I'll get back to you within 24 hours.",
                 "contact.location": "Location", "contact.email": "Email", "contact.phone": "Phone",
@@ -2170,13 +2426,35 @@
                 "form.message.placeholder": "Goals, deadline, references, anything that helps…",
                 "form.opt.landing": "Landing Page", "form.opt.business": "Business Website",
                 "form.opt.store": "Online Store", "form.opt.redesign": "Redesign", "form.opt.custom": "Something Custom",
-                "form.budget.b1": "Under $200", "form.budget.b2": "$200–$500",
-                "form.budget.b3": "$500–$1000", "form.budget.b4": "$1000+"
+                "form.budget.b1": "Under $500", "form.budget.b2": "$500–$1000",
+                "form.budget.b3": "$1000–$2000", "form.budget.b4": "$2000+",
+                // Case study modal
+                "case.challenge": "Challenge",
+                "case.solution": "Solution",
+                "case.stack": "Stack",
+                "case.result": "Result",
+                "case.visit": "Visit Live Site",
+                "case.similar": "Start Similar Project",
+                "case.hw.category": "Web Design · E-commerce",
+                "case.hw.title": "Hot Wheels Market",
+                "case.hw.challenge": "A collector community needed a way to browse hundreds of Hot Wheels models without a clunky, outdated interface. Existing solutions were slow, hard to filter, and weren't built with collectors in mind.",
+                "case.hw.solution": "I designed and built a full catalog from scratch — with instant search, multi-criteria filtering by category and year, and a modern dark UI that puts the product photos front and center. Everything runs on vanilla JavaScript, so it loads fast and works everywhere.",
+                "case.hw.result": "A fast, fully responsive catalog with instant search and filtering. No frameworks, no dependencies — a lightweight site that any collector can use on any device.",
+                "case.zr.category": "Web Design · Coffee Brand",
+                "case.zr.title": "ZERNARIA Coffee Shop",
+                "case.zr.challenge": "A specialty coffee brand needed a website that felt as warm and crafted as their product — not another generic template. It had to work beautifully on mobile, where most of their traffic comes from.",
+                "case.zr.solution": "I built a clean, modern site with smooth scroll-based animations, an editorial layout, and a mobile-first approach. The design leans on warm tones and generous whitespace to reflect the brand's craft.",
+                "case.zr.result": "A premium-feeling brand site with smooth animations and flawless mobile performance. Designed to convert visitors into customers with a clear, focused experience.",
+                "case.fb.category": "React · Data App",
+                "case.fb.title": "FinBoard",
+                "case.fb.challenge": "Small business owners juggle revenue spreadsheets, crypto wallets, foreign clients and paid ads — all in different tools. Existing accounting suites are overkill, and spreadsheets don't show live data. They needed one focused dashboard that answers: 'Am I making money this month, and where is it coming from?'",
+                "case.fb.solution": "I built a single-page React dashboard with five focused tabs — overview, revenue, crypto, currency and ad ROI. It pulls live data from two public APIs (CoinGecko for crypto prices, open.er-api.com for currency rates) and combines it with local business metrics. Custom Recharts area and pie charts, skeleton loading states, silent error fallback and a clean dark UI in the same palette as the rest of my portfolio.",
+                "case.fb.result": "A production-ready SPA with real API integration, graceful loading and error states, and honest data — no fake numbers. Deployed on GitHub Pages with zero backend: everything runs client-side, so anyone can fork it and have a personal dashboard running in 5 minutes."
             },
             ru: {
                 "nav.home": "Главная", "nav.about": "Обо мне", "nav.story": "История", "nav.services": "Услуги",
                 "nav.process": "Процесс", "nav.pricing": "Цены", "nav.portfolio": "Портфолио",
-                "nav.faq": "FAQ", "nav.contact": "Контакты",
+                "nav.blog": "Блог", "nav.faq": "FAQ", "nav.contact": "Контакты",
                 "hero.subtitle": "Веб-дизайнер и разработчик", "hero.title": "Привет, я",
                 "hero.desc": "Я создаю впечатляющие, высокопроизводительные сайты, которые помогают бизнесу расти. 4 года опыта в веб-дизайне и разработке.",
                 "hero.viewWork": "Мои работы", "hero.hire": "Нанять меня",
@@ -2184,15 +2462,14 @@
                 "stats.clients": "Довольных клиентов", "stats.satisfaction": "Уровень довольства",
                 "about.title1": "Обо", "about.title2": "мне",
                 "about.subtitle": "Профессиональный веб-дизайнер и разработчик",
-                "about.p1": "Я страстный веб-дизайнер и разработчик из Украины с более чем 3-летним профессиональным опытом создания современных, адаптивных и удобных сайтов. Специализируюсь на превращении идей в красивые и функциональные цифровые продукты.",
+                "about.p1": "Я страстный веб-дизайнер и разработчик из Украины с более чем 4-летним профессиональным опытом создания современных, адаптивных и удобных сайтов. Специализируюсь на превращении идей в красивые и функциональные цифровые продукты.",
                 "about.p2": "Мой подход сочетает эстетичный дизайн с техническим совершенством, чтобы сайты не только впечатляли внешне, но и отлично работали на всех устройствах.",
                 "skills.tags.frontend": "Фронтенд", "skills.tags.styling": "Стили и дизайн", "skills.tags.tools": "Инструменты",
                 "story.title1": "Моя", "story.title2": "история",
                 "story.p1": "Я начал заниматься веб-разработкой в 2021 году — не на курсах и не в буткемпе, а из любопытства. Хотел сделать свой сайт, открыл редактор кода и уже не оглядывался назад. Хобби быстро превратилось в ремесло.",
                 "story.p2": "С тех пор я сделал более 50 сайтов — от лендингов для локального бизнеса до полноценных интернет-магазинов. Каждый проект научил меня чему-то новому, каждый клиент — лучше слушать. Я не просто пишу код — я помогаю людям развивать их бизнес.",
-                "story.p3": "Сегодня я работаю как независимый веб-дизайнер и разработчик. Держу цены низкими, пока набираю портфолио и репутацию, потому что верю: хороший сайт не должен стоить целое состояние. Если ты это читаешь — расскажи о своём проекте, буду рад помочь.",
-                "services.title1": "Мои", "services.title2": "услуги",
-                "services.view": "Мои работы",
+                "story.p3": "Сегодня я работаю как независимый веб-дизайнер и разработчик. Делаю качественные проекты по честным, прозрачным ценам — потому что хороший сайт не должен быть роскошью. Если ты это читаешь — расскажи о своём проекте, буду рад помочь.",
+                "services.title1": "Мои", "services.title2": "услуги", "services.view": "Мои работы",
                 "services.webdesign": "Веб-дизайн", "services.webdev": "Веб-разработка",
                 "services.responsive": "Адаптивный дизайн", "services.uiux": "UI/UX дизайн",
                 "services.webdesign.desc": "Индивидуальный дизайн сайтов — визуально впечатляющий, удобный и оптимизированный под конверсию.",
@@ -2205,10 +2482,10 @@
                 "process.step3.title": "Разработка", "process.step3.desc": "Пишу чистый, эффективный код — адаптивный, быстрый и SEO-готовый.",
                 "process.step4.title": "Запуск и поддержка", "process.step4.desc": "Разворачиваем, тестируем и я обеспечиваю поддержку после запуска.",
                 "pricing.title1": "Мои", "pricing.title2": "цены",
-                "pricing.bannerTitle": "Цены в 2.3–2.5× ниже рынка",
-                "pricing.bannerDesc": "Сейчас я набираю портфолио и репутацию, поэтому мои цены в 2.3–2.5 раза ниже среднерыночных — без потери качества, скорости и поддержки.",
+                "pricing.bannerTitle": "Прозрачные цены, премиум-качество",
+                "pricing.bannerDesc": "Честные ставки без скрытых платежей. Вы платите за качественную работу — без наценок агентств и посредников.",
                 "pricing.landing.name": "Лендинг", "pricing.landing.desc": "Одностраничный сайт для продукта, услуги или личного бренда.",
-                "pricing.landing.save": "в 2.5× дешевле рынка",
+                "pricing.landing.save": "Ниже средней цены рынка",
                 "pricing.landing.f1": "1 страница, до 6 секций",
                 "pricing.landing.f2": "Индивидуальный дизайн — без готовых шаблонов",
                 "pricing.landing.f3": "Полная адаптивность под все устройства",
@@ -2217,7 +2494,7 @@
                 "pricing.landing.f6": "Срок сдачи 3–5 дней",
                 "pricing.landing.f7": "2 раунда правок",
                 "pricing.business.name": "Бизнес-сайт", "pricing.business.desc": "Многостраничный сайт для компании, студии или сервиса.",
-                "pricing.business.save": "в 2.5× дешевле рынка",
+                "pricing.business.save": "Ниже средней цены рынка",
                 "pricing.business.f1": "До 5 уникальных страниц",
                 "pricing.business.f2": "Индивидуальный UI/UX дизайн",
                 "pricing.business.f3": "Анимации и интерактивные элементы",
@@ -2227,7 +2504,7 @@
                 "pricing.business.f7": "3 раунда правок",
                 "pricing.business.f8": "30 дней бесплатной поддержки",
                 "pricing.store.name": "Интернет-магазин", "pricing.store.desc": "E-commerce сайт с каталогом товаров и онлайн-оплатой.",
-                "pricing.store.save": "в 2.5× дешевле рынка",
+                "pricing.store.save": "Ниже средней цены рынка",
                 "pricing.store.f1": "Каталог товаров с фильтрами и поиском",
                 "pricing.store.f2": "Корзина и оформление заказа",
                 "pricing.store.f3": "Интеграция оплаты и доставки",
@@ -2245,28 +2522,33 @@
                 "guarantees.g4.title": "Код и исходники — ваши", "guarantees.g4.desc": "После завершения проекта вам принадлежит всё — исходный код, файлы дизайна, хостинг, домен. Без привязки, навсегда.",
                 "comparison.title1": "Simon vs", "comparison.title2": "рынок",
                 "comparison.feature": "Критерий", "comparison.agency": "Агентство", "comparison.freelancer": "Фрилансер",
-                "comparison.r1.feature": "Цена", "comparison.r1.simon": "в 2.3–2.5× ниже",
+                "comparison.r1.feature": "Цена", "comparison.r1.simon": "Ниже рынка",
                 "comparison.r2.feature": "Срок сдачи", "comparison.r2.simon": "3–14 дней", "comparison.r2.agency": "4–8 недель", "comparison.r2.freelancer": "Непредсказуемо",
                 "comparison.r3.feature": "Общение", "comparison.r3.simon": "Напрямую со мной", "comparison.r3.agency": "Через менеджера", "comparison.r3.freelancer": "Напрямую",
                 "comparison.r4.feature": "Правки", "comparison.r4.simon": "Включены (2–3)", "comparison.r4.agency": "Отдельная оплата", "comparison.r4.freelancer": "Ограниченно",
                 "comparison.r5.feature": "Поддержка после запуска", "comparison.r5.simon": "30–60 дней бесплатно", "comparison.r5.agency": "По часам", "comparison.r5.freelancer": "Редко",
                 "comparison.r6.feature": "Права", "comparison.r6.simon": "100% ваши", "comparison.r6.agency": "Ваши", "comparison.r6.freelancer": "Ваши",
                 "portfolio.title1": "Моё", "portfolio.title2": "портфолио",
-                "portfolio.filter.all": "Все", "portfolio.filter.web": "Веб-дизайн", "portfolio.filter.app": "App UI",
-                "portfolio.cat.web": "Веб-дизайн", "portfolio.view": "Смотреть проект",
+                "portfolio.cat.web": "Веб-дизайн", "portfolio.view": "Открыть сайт", "portfolio.case": "Читать кейс",
                 "portfolio.featured.desc": "Полноценный e-commerce каталог для коллекционеров Hot Wheels — с фильтрацией товаров, поиском, категориями и современным тёмным интерфейсом. Сделан с нуля на HTML, CSS и JavaScript.",
                 "portfolio.featured2.desc": "Современный адаптивный сайт с чистым дизайном, плавными анимациями и оптимизированной производительностью. Сделан с фокусом на удобство и конверсию.",
-                "portfolio.cta.title": "Портфолио в разработке",
-                "portfolio.cta.desc": "Сейчас я активно беру первые коммерческие проекты. Ваша работа может занять это место уже через две недели — с подробным разбором кейса, скриншотами и описанием процесса.",
+                "portfolio.cat.app": "React-приложение",
+                "portfolio.featured3.desc": "Финансовый дашборд для малого бизнеса — отслеживание криптовалют в реальном времени, конвертер валют, графики выручки и калькулятор окупаемости рекламы. Построен на React, Vite, Recharts и Tailwind CSS.",
+                "portfolio.cta.title": "Ваш проект может быть следующим",
+                "portfolio.cta.desc": "Это три моих любимых проекта — e-commerce каталог на чистом JS, лендинг бренда и React-дашборд. Ваш проект может занять это место — с подробным кейсом, скриншотами и разбором процесса.",
                 "portfolio.cta.btn": "Начать проект",
                 "stack.title1": "Мой", "stack.title2": "стек",
-                "testimonials.title1": "Отзывы", "testimonials.title2": "клиентов",
-                "testimonials.t1.text": "Саймон сделал исключительный сайт, который идеально передал наш фирменный стиль. Внимание к деталям и креативный подход привели к значительному росту онлайн-конверсий.",
-                "testimonials.t1.role": "CEO, креативное агентство",
-                "testimonials.t2.text": "Работать с Саймоном — одно удовольствие. Он идеально понял наши требования и сдал впечатляющее e-commerce решение раньше срока. Сайт безупречно работает на всех устройствах.",
-                "testimonials.t2.role": "Основатель, fashion-бренд",
-                "testimonials.t3.text": "Навыки UI/UX дизайна Саймона преобразили наше мобильное приложение. Интуитивный интерфейс получил массу положительных отзывов и значительно повысил вовлечённость.",
-                "testimonials.t3.role": "Продакт-менеджер, tech-стартап",
+                "blog.title1": "Из", "blog.title2": "блога",
+                "blog.readMore": "Читать статью",
+                "blog.t1.tag": "Кейс", "blog.t1.date": "Октябрь 2026",
+                "blog.t1.title": "Как я сделал Hot Wheels Market",
+                "blog.t1.desc": "Уроки создания полноценного e-commerce каталога на чистом JavaScript — фильтрация, поиск, производительность и решения по дизайну тёмного интерфейса.",
+                "blog.t2.tag": "Туториал", "blog.t2.date": "Октябрь 2026",
+                "blog.t2.title": "CSS-анимации, которые не убивают производительность",
+                "blog.t2.desc": "Практический гайд по плавным scroll-анимациям, will-change, transform-движению и типичным ошибкам разработчиков.",
+                "blog.t3.tag": "Мнение", "blog.t3.date": "Октябрь 2026",
+                "blog.t3.title": "Почему дешёвые сайты обходятся дороже",
+                "blog.t3.desc": "Скрытая стоимость сайтов на шаблонах — и почему кастомный дизайн, чистый код и SEO реально экономят деньги в долгосрочной перспективе.",
                 "faq.title1": "Частые", "faq.title2": "вопросы",
                 "faq.q1": "Сколько времени занимает разработка сайта?",
                 "faq.a1": "Лендинг обычно занимает 3–5 дней, бизнес-сайт — 7–14 дней, интернет-магазин — 2–3 недели. Точные сроки зависят от объёма проекта и того, как быстро вы предоставите контент.",
@@ -2278,8 +2560,8 @@
                 "faq.a4": "Каждый тариф включает 2–3 раунда правок на этапе дизайна и разработки. После запуска я также даю бесплатную поддержку 30–60 дней в зависимости от тарифа.",
                 "faq.q5": "А как насчёт хостинга, домена и SEO?",
                 "faq.a5": "Помогу настроить хостинг и домен — они принадлежат вам, без привязки. Базовое SEO (мета-теги, sitemap, быстрая загрузка, мобильная оптимизация) включено в каждый проект.",
-                "faq.q6": "Почему ваши цены намного ниже рынка?",
-                "faq.a6": "Я активно набираю портфолио и базу клиентов, поэтому предлагаю премиум-качество по цене в 2.3–2.5 раза ниже среднерыночной. То же качество, быстрее сдача и персональное внимание — просто ниже цена, пока я расту.",
+                "faq.q6": "Как ваши цены соотносятся с рынком?",
+                "faq.a6": "Мои ставки ниже среднерыночных — в основном потому, что я работаю независимо, без накладных расходов агентств. То же качество, быстрее сдача и персональное внимание — по честной цене.",
                 "contact.title1": "Связаться", "contact.title2": "со мной", "contact.send": "Отправить бриф",
                 "contact.desc": "Есть идея проекта или хотите обсудить возможности? Заполните бриф ниже или свяжитесь напрямую — отвечу в течение 24 часов.",
                 "contact.location": "Локация", "contact.email": "Email", "contact.phone": "Телефон",
@@ -2290,13 +2572,34 @@
                 "form.message.placeholder": "Цели, сроки, референсы — всё, что поможет…",
                 "form.opt.landing": "Лендинг", "form.opt.business": "Бизнес-сайт",
                 "form.opt.store": "Интернет-магазин", "form.opt.redesign": "Редизайн", "form.opt.custom": "Что-то своё",
-                "form.budget.b1": "До $200", "form.budget.b2": "$200–$500",
-                "form.budget.b3": "$500–$1000", "form.budget.b4": "$1000+"
+                "form.budget.b1": "До $500", "form.budget.b2": "$500–$1000",
+                "form.budget.b3": "$1000–$2000", "form.budget.b4": "$2000+",
+                "case.challenge": "Задача",
+                "case.solution": "Решение",
+                "case.stack": "Стек",
+                "case.result": "Результат",
+                "case.visit": "Открыть сайт",
+                "case.similar": "Заказать похожий проект",
+                "case.hw.category": "Веб-дизайн · E-commerce",
+                "case.hw.title": "Hot Wheels Market",
+                "case.hw.challenge": "Сообществу коллекционеров нужен был способ просматривать сотни моделей Hot Wheels без устаревшего и неудобного интерфейса. Существующие решения были медленными, плохо фильтровались и не были сделаны с учётом потребностей коллекционеров.",
+                "case.hw.solution": "Я спроектировал и сделал полноценный каталог с нуля — с моментальным поиском, мульти-критериальной фильтрацией по категории и году, и современным тёмным интерфейсом, который выводит фотографии товаров на первый план. Всё работает на чистом JavaScript — быстро грузится и работает везде.",
+                "case.hw.result": "Быстрый, полностью адаптивный каталог с моментальным поиском и фильтрацией. Без фреймворков, без зависимостей — лёгкий сайт, которым может пользоваться любой коллекционер на любом устройстве.",
+                "case.zr.category": "Веб-дизайн · Кофейный бренд",
+                "case.zr.title": "ZERNARIA Coffee Shop",
+                "case.zr.challenge": "Специализированному кофейному бренду нужен был сайт, который ощущался бы таким же тёплым и ремесленным, как их продукт — а не ещё один шаблон. Он должен был отлично работать на мобильных, откуда приходит большая часть трафика.",
+                "case.zr.solution": "Я сделал чистый современный сайт с плавными scroll-анимациями, редакционной вёрсткой и mobile-first подходом. Дизайн опирается на тёплые оттенки и щедрое пространство, чтобы отразить ремесленный характер бренда.",
+                "case.zr.result": "Премиальный брендовый сайт с плавными анимациями и безупречной работой на мобильных. Спроектирован, чтобы превращать посетителей в клиентов с помощью чёткого и сфокусированного опыта.",
+                "case.fb.category": "React · Data-приложение",
+                "case.fb.title": "FinBoard",
+                "case.fb.challenge": "Владельцы малого бизнеса ведут выручку в таблицах, крипту в кошельках, иностранных клиентов — в переписках, а рекламу — в рекламных кабинетах. Всё в разных местах. Полноценные бухгалтерские системы — избыточны, а таблицы не показывают живые данные. Нужен был один дашборд, отвечающий на вопрос: «Зарабатываю ли я в этом месяце и откуда приходят деньги?»",
+                "case.fb.solution": "Я сделал одностраничное React-приложение с пятью вкладками — обзор, выручка, крипта, валюта и окупаемость рекламы. Оно тянет живые данные из двух публичных API (CoinGecko для крипты, open.er-api.com для валютных курсов) и комбинирует их с локальными метриками бизнеса. Кастомные графики Recharts, skeleton-загрузка, тихий fallback при ошибках и тёмный интерфейс в палитре остального портфолио.",
+                "case.fb.result": "Production-ready SPA с реальной интеграцией API, аккуратной обработкой loading/error-состояний и честными данными. Задеплоен на GitHub Pages без бэкенда — всё работает на стороне клиента, так что любой может форкнуть и получить свой личный дашборд за 5 минут."
             },
             ua: {
                 "nav.home": "Головна", "nav.about": "Про мене", "nav.story": "Історія", "nav.services": "Послуги",
                 "nav.process": "Процес", "nav.pricing": "Ціни", "nav.portfolio": "Портфоліо",
-                "nav.faq": "FAQ", "nav.contact": "Контакти",
+                "nav.blog": "Блог", "nav.faq": "FAQ", "nav.contact": "Контакти",
                 "hero.subtitle": "Веб-дизайнер і розробник", "hero.title": "Привіт, я",
                 "hero.desc": "Я створюю вражаючі, високопродуктивні сайти, які допомагають бізнесу зростати. 4 роки досвіду у веб-дизайні та розробці.",
                 "hero.viewWork": "Мої роботи", "hero.hire": "Найняти мене",
@@ -2304,15 +2607,14 @@
                 "stats.clients": "Задоволених клієнтів", "stats.satisfaction": "Рівень задоволення",
                 "about.title1": "Про", "about.title2": "мене",
                 "about.subtitle": "Професійний веб-дизайнер і розробник",
-                "about.p1": "Я пристрасний веб-дизайнер і розробник з України з понад 3-річним професійним досвідом створення сучасних, адаптивних і зручних сайтів. Спеціалізуюся на перетворенні ідей у красиві та функціональні цифрові продукти.",
+                "about.p1": "Я пристрасний веб-дизайнер і розробник з України з понад 4-річним професійним досвідом створення сучасних, адаптивних і зручних сайтів. Спеціалізуюся на перетворенні ідей у красиві та функціональні цифрові продукти.",
                 "about.p2": "Мій підхід поєднує естетичний дизайн з технічною досконалістю, щоб сайти не лише вражали зовні, а й чудово працювали на всіх пристроях.",
                 "skills.tags.frontend": "Фронтенд", "skills.tags.styling": "Стилі та дизайн", "skills.tags.tools": "Інструменти",
                 "story.title1": "Моя", "story.title2": "історія",
                 "story.p1": "Я почав займатися веб-розробкою у 2021 році — не на курсах і не в буткемпі, а з цікавості. Хотів зробити свій сайт, відкрив редактор коду і вже не озирався назад. Хобі швидко перетворилося на ремесло.",
                 "story.p2": "З того часу я зробив понад 50 сайтів — від лендінгів для локального бізнесу до повноцінних інтернет-магазинів. Кожен проєкт навчив мене чомусь новому, кожен клієнт — краще слухати. Я не просто пишу код — я допомагаю людям розвивати їхній бізнес.",
-                "story.p3": "Сьогодні я працюю як незалежний веб-дизайнер і розробник. Тримаю ціни низькими, поки набираю портфоліо та репутацію, бо вірю: хороший сайт не повинен коштувати цілий статок. Якщо ти це читаєш — розкажи про свій проєкт, буду радий допомогти.",
-                "services.title1": "Мої", "services.title2": "послуги",
-                "services.view": "Мої роботи",
+                "story.p3": "Сьогодні я працюю як незалежний веб-дизайнер і розробник. Роблю якісні проєкти за чесними, прозорими цінами — бо хороший сайт не повинен бути розкішшю. Якщо ти це читаєш — розкажи про свій проєкт, буду радий допомогти.",
+                "services.title1": "Мої", "services.title2": "послуги", "services.view": "Мої роботи",
                 "services.webdesign": "Веб-дизайн", "services.webdev": "Веб-розробка",
                 "services.responsive": "Адаптивний дизайн", "services.uiux": "UI/UX дизайн",
                 "services.webdesign.desc": "Індивідуальний дизайн сайтів — візуально вражаючий, зручний та оптимізований під конверсію.",
@@ -2325,10 +2627,10 @@
                 "process.step3.title": "Розробка", "process.step3.desc": "Пишу чистий, ефективний код — адаптивний, швидкий та SEO-готовий.",
                 "process.step4.title": "Запуск і підтримка", "process.step4.desc": "Розгортаємо, тестуємо, і я забезпечую підтримку після запуску.",
                 "pricing.title1": "Мої", "pricing.title2": "ціни",
-                "pricing.bannerTitle": "Ціни в 2.3–2.5× нижчі за ринок",
-                "pricing.bannerDesc": "Зараз я набираю портфоліо та репутацію, тому мої ціни в 2.3–2.5 раза нижчі за середньоринкові — без втрати якості, швидкості та підтримки.",
+                "pricing.bannerTitle": "Прозорі ціни, преміум-якість",
+                "pricing.bannerDesc": "Чесні ставки без прихованих платежів. Ви платите за якісну роботу — без націнок агенцій і посередників.",
                 "pricing.landing.name": "Лендінг", "pricing.landing.desc": "Односторінковий сайт для продукту, послуги чи особистого бренду.",
-                "pricing.landing.save": "у 2.5× дешевше за ринок",
+                "pricing.landing.save": "Нижче середньої ціни ринку",
                 "pricing.landing.f1": "1 сторінка, до 6 секцій",
                 "pricing.landing.f2": "Індивідуальний дизайн — без готових шаблонів",
                 "pricing.landing.f3": "Повна адаптивність під усі пристрої",
@@ -2337,7 +2639,7 @@
                 "pricing.landing.f6": "Термін здачі 3–5 днів",
                 "pricing.landing.f7": "2 раунди правок",
                 "pricing.business.name": "Бізнес-сайт", "pricing.business.desc": "Багатосторінковий сайт для компанії, студії чи сервісу.",
-                "pricing.business.save": "у 2.5× дешевше за ринок",
+                "pricing.business.save": "Нижче середньої ціни ринку",
                 "pricing.business.f1": "До 5 унікальних сторінок",
                 "pricing.business.f2": "Індивідуальний UI/UX дизайн",
                 "pricing.business.f3": "Анімації та інтерактивні елементи",
@@ -2347,7 +2649,7 @@
                 "pricing.business.f7": "3 раунди правок",
                 "pricing.business.f8": "30 днів безкоштовної підтримки",
                 "pricing.store.name": "Інтернет-магазин", "pricing.store.desc": "E-commerce сайт з каталогом товарів та онлайн-оплатою.",
-                "pricing.store.save": "у 2.5× дешевше за ринок",
+                "pricing.store.save": "Нижче середньої ціни ринку",
                 "pricing.store.f1": "Каталог товарів з фільтрами та пошуком",
                 "pricing.store.f2": "Кошик та оформлення замовлення",
                 "pricing.store.f3": "Інтеграція оплати й доставки",
@@ -2365,28 +2667,33 @@
                 "guarantees.g4.title": "Код і вихідники — ваші", "guarantees.g4.desc": "Після завершення проєкту вам належить усе — вихідний код, файли дизайну, хостинг, домен. Без прив'язки, назавжди.",
                 "comparison.title1": "Simon vs", "comparison.title2": "ринок",
                 "comparison.feature": "Критерій", "comparison.agency": "Агенція", "comparison.freelancer": "Фрилансер",
-                "comparison.r1.feature": "Ціна", "comparison.r1.simon": "у 2.3–2.5× нижче",
+                "comparison.r1.feature": "Ціна", "comparison.r1.simon": "Нижче ринку",
                 "comparison.r2.feature": "Термін здачі", "comparison.r2.simon": "3–14 днів", "comparison.r2.agency": "4–8 тижнів", "comparison.r2.freelancer": "Непередбачувано",
                 "comparison.r3.feature": "Спілкування", "comparison.r3.simon": "Напряму зі мною", "comparison.r3.agency": "Через менеджера", "comparison.r3.freelancer": "Напряму",
                 "comparison.r4.feature": "Правки", "comparison.r4.simon": "Включено (2–3)", "comparison.r4.agency": "Окрема оплата", "comparison.r4.freelancer": "Обмежено",
                 "comparison.r5.feature": "Підтримка після запуску", "comparison.r5.simon": "30–60 днів безкоштовно", "comparison.r5.agency": "Погодинно", "comparison.r5.freelancer": "Рідко",
                 "comparison.r6.feature": "Права", "comparison.r6.simon": "100% ваші", "comparison.r6.agency": "Ваші", "comparison.r6.freelancer": "Ваші",
                 "portfolio.title1": "Моє", "portfolio.title2": "портфоліо",
-                "portfolio.filter.all": "Усі", "portfolio.filter.web": "Веб-дизайн", "portfolio.filter.app": "App UI",
-                "portfolio.cat.web": "Веб-дизайн", "portfolio.view": "Дивитися проєкт",
+                "portfolio.cat.web": "Веб-дизайн", "portfolio.view": "Відкрити сайт", "portfolio.case": "Читати кейс",
                 "portfolio.featured.desc": "Повноцінний e-commerce каталог для колекціонерів Hot Wheels — з фільтрацією товарів, пошуком, категоріями та сучасним темним інтерфейсом. Зроблений з нуля на HTML, CSS та JavaScript.",
                 "portfolio.featured2.desc": "Сучасний адаптивний сайт з чистим дизайном, плавними анімаціями та оптимізованою продуктивністю. Зроблений з фокусом на зручність та конверсію.",
-                "portfolio.cta.title": "Портфоліо в розробці",
-                "portfolio.cta.desc": "Зараз я активно беру перші комерційні проєкти. Ваша робота може зайняти це місце вже за два тижні — з детальним розбором кейсу, скриншотами та описом процесу.",
+                "portfolio.cat.app": "React-додаток",
+                "portfolio.featured3.desc": "Фінансовий дашборд для малого бізнесу — відстеження криптовалют у реальному часі, конвертер валют, графіки виручки та калькулятор окупності реклами. Побудований на React, Vite, Recharts та Tailwind CSS.",
+                "portfolio.cta.title": "Ваш проєкт може бути наступним",
+                "portfolio.cta.desc": "Це три мої улюблені проєкти — e-commerce каталог на чистому JS, лендінг бренду та React-дашборд. Ваш проєкт може зайняти це місце — з детальним кейсом, скріншотами та розбором процесу.",
                 "portfolio.cta.btn": "Почати проєкт",
                 "stack.title1": "Мій", "stack.title2": "стек",
-                "testimonials.title1": "Відгуки", "testimonials.title2": "клієнтів",
-                "testimonials.t1.text": "Саймон створив винятковий сайт, який ідеально передав наш фірмовий стиль. Увага до деталей і креативний підхід призвели до значного зростання онлайн-конверсій.",
-                "testimonials.t1.role": "CEO, креативна агенція",
-                "testimonials.t2.text": "Працювати з Саймоном — одне задоволення. Він ідеально зрозумів наші вимоги та здав вражаюче e-commerce рішення раніше терміну. Сайт бездоганно працює на всіх пристроях.",
-                "testimonials.t2.role": "Засновник, fashion-бренд",
-                "testimonials.t3.text": "Навички UI/UX дизайну Саймона перетворили наш мобільний застосунок. Інтуїтивний інтерфейс отримав безліч позитивних відгуків і суттєво підвищив залученість.",
-                "testimonials.t3.role": "Продакт-менеджер, tech-стартап",
+                "blog.title1": "З", "blog.title2": "блогу",
+                "blog.readMore": "Читати статтю",
+                "blog.t1.tag": "Кейс", "blog.t1.date": "Жовтень 2026",
+                "blog.t1.title": "Як я зробив Hot Wheels Market",
+                "blog.t1.desc": "Уроки створення повноцінного e-commerce каталогу на чистому JavaScript — фільтрація, пошук, продуктивність та рішення щодо дизайну темного інтерфейсу.",
+                "blog.t2.tag": "Туторіал", "blog.t2.date": "Жовтень 2026",
+                "blog.t2.title": "CSS-анімації, які не вбивають продуктивність",
+                "blog.t2.desc": "Практичний гайд з плавних scroll-анімацій, will-change, transform-руху та типових помилок розробників.",
+                "blog.t3.tag": "Думка", "blog.t3.date": "Жовтень 2026",
+                "blog.t3.title": "Чому дешеві сайти коштують дорожче",
+                "blog.t3.desc": "Прихована вартість сайтів на шаблонах — і чому кастомний дизайн, чистий код та SEO реально економлять гроші в довгостроковій перспективі.",
                 "faq.title1": "Часті", "faq.title2": "питання",
                 "faq.q1": "Скільки часу займає розробка сайту?",
                 "faq.a1": "Лендінг зазвичай займає 3–5 днів, бізнес-сайт — 7–14 днів, інтернет-магазин — 2–3 тижні. Точні терміни залежать від обсягу проєкту та того, як швидко ви надасте контент.",
@@ -2398,8 +2705,8 @@
                 "faq.a4": "Кожен тариф включає 2–3 раунди правок на етапі дизайну та розробки. Після запуску я також надаю безкоштовну підтримку 30–60 днів залежно від тарифу.",
                 "faq.q5": "А як щодо хостингу, домену та SEO?",
                 "faq.a5": "Допоможу налаштувати хостинг і домен — вони належать вам, без прив'язки. Базове SEO (мета-теги, sitemap, швидке завантаження, мобільна оптимізація) включено в кожен проєкт.",
-                "faq.q6": "Чому ваші ціни набагато нижчі за ринок?",
-                "faq.a6": "Я активно набираю портфоліо та базу клієнтів, тому пропоную преміум-якість за ціною в 2.3–2.5 раза нижчою за середньоринкову. Та ж якість, швидша здача та персональна увага — просто нижча ціна, поки я зростаю.",
+                "faq.q6": "Як ваші ціни співвідносяться з ринком?",
+                "faq.a6": "Мої ставки нижчі за середньоринкові — переважно тому, що я працюю незалежно, без накладних витрат агенцій. Та ж якість, швидша здача та персональна увага — за чесною ціною.",
                 "contact.title1": "Зв'язатися", "contact.title2": "зі мною", "contact.send": "Надіслати бриф",
                 "contact.desc": "Є ідея проєкту чи хочете обговорити можливості? Заповніть бриф нижче або зв'яжіться напряму — відповім протягом 24 годин.",
                 "contact.location": "Локація", "contact.email": "Email", "contact.phone": "Телефон",
@@ -2410,32 +2717,65 @@
                 "form.message.placeholder": "Цілі, терміни, референси — усе, що допоможе…",
                 "form.opt.landing": "Лендінг", "form.opt.business": "Бізнес-сайт",
                 "form.opt.store": "Інтернет-магазин", "form.opt.redesign": "Редизайн", "form.opt.custom": "Щось своє",
-                "form.budget.b1": "До $200", "form.budget.b2": "$200–$500",
-                "form.budget.b3": "$500–$1000", "form.budget.b4": "$1000+"
+                "form.budget.b1": "До $500", "form.budget.b2": "$500–$1000",
+                "form.budget.b3": "$1000–$2000", "form.budget.b4": "$2000+",
+                "case.challenge": "Завдання",
+                "case.solution": "Рішення",
+                "case.stack": "Стек",
+                "case.result": "Результат",
+                "case.visit": "Відкрити сайт",
+                "case.similar": "Замовити схожий проєкт",
+                "case.hw.category": "Веб-дизайн · E-commerce",
+                "case.hw.title": "Hot Wheels Market",
+                "case.hw.challenge": "Спільноті колекціонерів потрібен був спосіб переглядати сотні моделей Hot Wheels без застарілого і незручного інтерфейсу. Існуючі рішення були повільними, погано фільтрувалися і не були зроблені з урахуванням потреб колекціонерів.",
+                "case.hw.solution": "Я спроєктував і зробив повноцінний каталог з нуля — з миттєвим пошуком, мульти-критеріальною фільтрацією за категорією та роком, і сучасним темним інтерфейсом, який виводить фотографії товарів на перший план. Усе працює на чистому JavaScript — швидко завантажується та працює всюди.",
+                "case.hw.result": "Швидкий, повністю адаптивний каталог з миттєвим пошуком і фільтрацією. Без фреймворків, без залежностей — легкий сайт, яким може користуватися будь-який колекціонер на будь-якому пристрої.",
+                "case.zr.category": "Веб-дизайн · Кавовий бренд",
+                "case.zr.title": "ZERNARIA Coffee Shop",
+                "case.zr.challenge": "Спеціалізованому кавовому бренду потрібен був сайт, який відчувався б таким же теплим і ремісничим, як їхній продукт — а не ще один шаблон. Він мав чудово працювати на мобільних, звідки надходить більшість трафіку.",
+                "case.zr.solution": "Я зробив чистий сучасний сайт з плавними scroll-анімаціями, редакційною версткою та mobile-first підходом. Дизайн спирається на теплі відтінки та щедрий простір, щоб відобразити ремісничий характер бренду.",
+                "case.zr.result": "Преміальний брендовий сайт з плавними анімаціями та бездоганною роботою на мобільних. Спроєктований, щоб перетворювати відвідувачів на клієнтів за допомогою чіткого та сфокусованого досвіду.",
+                "case.fb.category": "React · Data-додаток",
+                "case.fb.title": "FinBoard",
+                "case.fb.challenge": "Власники малого бізнесу ведуть виручку в таблицях, крипту в гаманцях, іноземних клієнтів — у листуваннях, а рекламу — в рекламних кабінетах. Усе в різних місцях. Повноцінні бухгалтерські системи — надлишкові, а таблиці не показують живі дані. Потрібен був один дашборд, який відповідає на питання: «Чи заробляю я цього місяця і звідки приходять гроші?»",
+                "case.fb.solution": "Я зробив односторінковий React-додаток із п'ятьма вкладками — огляд, виручка, крипта, валюта й окупність реклами. Він тягне живі дані з двох публічних API (CoinGecko для крипти, open.er-api.com для валютних курсів) і комбінує їх з локальними метриками бізнесу. Кастомні графіки Recharts, skeleton-завантаження, тихий fallback при помилках і темний інтерфейс у палітрі решти портфоліо.",
+                "case.fb.result": "Production-ready SPA з реальною інтеграцією API, акуратною обробкою loading/error-станів та чесними даними. Задеплоєно на GitHub Pages без бекенду — усе працює на стороні клієнта, тож будь-хто може форкнути й отримати свій особистий дашборд за 5 хвилин."
             }
         };
 
         const langBtns = document.querySelectorAll('.lang-btn');
+        let currentLang = localStorage.getItem('lang') || 'en';
+        let currentOpenCase = null;
 
         function applyLanguage(lang) {
             const dict = translations[lang];
             if (!dict) return;
 
+            currentLang = lang;
+
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (dict[key] === undefined) return;
 
-                const icon = el.querySelector('i');
-                if (icon && el.children.length > 0 && !el.matches('.faq-answer, .service-description, .testimonial-text, .pricing-desc, .stack-name, .story-paragraph, .guarantee-desc, .cmp-check')) {
-                    let replaced = false;
+                // For elements that contain child <i> icons or nested spans with data-i18n
+                const hasNestedI18n = el.querySelector('[data-i18n]');
+                if (hasNestedI18n) {
+                    // Just skip parent - children will handle their own text
+                    return;
+                }
+
+                const hasIconChild = el.querySelector(':scope > i');
+                if (hasIconChild) {
+                    const icon = el.querySelector(':scope > i');
+                    let textNodeFound = false;
                     [...el.childNodes].forEach(node => {
                         if (node.nodeType === 3 && node.textContent.trim()) {
-                            node.textContent = dict[key] + ' ';
-                            replaced = true;
+                            node.textContent = ' ' + dict[key] + ' ';
+                            textNodeFound = true;
                         }
                     });
-                    if (!replaced && !el.querySelector('span')) {
-                        el.insertBefore(document.createTextNode(dict[key] + ' '), el.firstChild);
+                    if (!textNodeFound && icon) {
+                        el.insertBefore(document.createTextNode(dict[key] + ' '), icon);
                     }
                 } else {
                     el.textContent = dict[key];
@@ -2449,6 +2789,11 @@
 
             document.documentElement.lang = lang;
             localStorage.setItem('lang', lang);
+
+            // Refresh case study modal if open
+            if (currentOpenCase && caseModal.classList.contains('active')) {
+                openCaseModal(currentOpenCase, true);
+            }
         }
 
         langBtns.forEach(btn => {
@@ -2459,14 +2804,14 @@
             });
         });
 
-        const savedLang = localStorage.getItem('lang') || 'en';
-        const activeLangBtn = document.querySelector(`.lang-btn[data-lang="${savedLang}"]`);
+        const activeLangBtn = document.querySelector(`.lang-btn[data-lang="${currentLang}"]`);
         if (activeLangBtn) {
             langBtns.forEach(b => b.classList.remove('active'));
             activeLangBtn.classList.add('active');
-            applyLanguage(savedLang);
+            applyLanguage(currentLang);
         }
 
+        // --- Mobile menu ---
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
 
@@ -2484,11 +2829,13 @@
             });
         });
 
+        // --- Header on scroll ---
         const header = document.getElementById('header');
         window.addEventListener('scroll', () => {
             header.classList.toggle('scrolled', window.scrollY > 100);
         });
 
+        // --- Reading progress ---
         const readingProgress = document.getElementById('readingProgress');
         window.addEventListener('scroll', () => {
             const scrollTop = window.scrollY;
@@ -2497,6 +2844,7 @@
             readingProgress.style.width = pct + '%';
         });
 
+        // --- Smooth scroll ---
         document.querySelectorAll('a[href^="#"]').forEach(link => {
             link.addEventListener('click', function (e) {
                 const targetId = this.getAttribute('href');
@@ -2509,20 +2857,7 @@
             });
         });
 
-        let currentTestimonial = 0;
-        const testimonials = document.querySelectorAll('.testimonial-card');
-
-        function showTestimonial(index) {
-            testimonials.forEach((t, i) => {
-                t.style.display = i === index ? 'block' : 'none';
-            });
-        }
-        showTestimonial(0);
-        setInterval(() => {
-            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-            showTestimonial(currentTestimonial);
-        }, 5500);
-
+        // --- Back to top ---
         const backToTopBtn = document.querySelector('.back-to-top');
         window.addEventListener('scroll', () => {
             backToTopBtn.classList.toggle('active', window.pageYOffset > 300);
@@ -2531,6 +2866,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
+        // --- Fade in on scroll ---
         const animateOnScroll = () => {
             const elements = document.querySelectorAll('.fade-in');
             const windowHeight = window.innerHeight;
@@ -2551,6 +2887,7 @@
         window.addEventListener('load', animateOnScroll);
         window.addEventListener('scroll', animateOnScroll);
 
+        // --- Counters ---
         const counters = document.querySelectorAll('.stat-number');
         let countersStarted = false;
 
@@ -2583,6 +2920,7 @@
         const statsSection = document.querySelector('.stats');
         if (statsSection) statsObserver.observe(statsSection);
 
+        // --- FAQ ---
         document.querySelectorAll('.faq-item').forEach(item => {
             item.querySelector('.faq-question').addEventListener('click', () => {
                 const isOpen = item.classList.contains('open');
@@ -2591,6 +2929,7 @@
             });
         });
 
+        // --- Form checkboxes ---
         document.querySelectorAll('.form-checkbox').forEach(label => {
             const input = label.querySelector('input');
             if (!input) return;
@@ -2606,6 +2945,7 @@
             });
         });
 
+        // --- Hero parallax ---
         const heroImg = document.getElementById('heroParallax');
         let parallaxTicking = false;
         window.addEventListener('scroll', () => {
@@ -2621,6 +2961,7 @@
             }
         });
 
+        // --- Title parallax ---
         let titleTicking = false;
         window.addEventListener('scroll', () => {
             if (!titleTicking) {
@@ -2638,36 +2979,104 @@
             }
         });
 
-        const notifData = [
-            { name: 'Michael', city: 'Kyiv', item: 'a Landing Page', time: '5 hours ago', initial: 'M' },
-            { name: 'Anna', city: 'Lviv', item: 'a Business Website', time: '2 hours ago', initial: 'A' },
-            { name: 'Dmytro', city: 'Odesa', item: 'an Online Store', time: '3 hours ago', initial: 'D' },
-            { name: 'Sophie', city: 'Berlin', item: 'a Landing Page', time: '6 hours ago', initial: 'S' },
-            { name: 'Oliver', city: 'Warsaw', item: 'a Business Website', time: '8 hours ago', initial: 'O' },
-            { name: 'Kateryna', city: 'Kharkiv', item: 'a Portfolio Website', time: '11 hours ago', initial: 'K' },
-            { name: 'James', city: 'London', item: 'an Online Store', time: '1 day ago', initial: 'J' }
-        ];
+        // --- Case Study Modal ---
+        const caseStudies = {
+            'hot-wheels': {
+                key: 'hw',
+                image: 'https://i.ibb.co/BHjsPVpK/image.png',
+                link: 'https://61simon.github.io/Hot-Wheels-Market/',
+                stack: ['HTML5', 'CSS3', 'JavaScript', 'Responsive Design']
+            },
+            'zernaria': {
+                key: 'zr',
+                image: 'https://i.ibb.co/LdRgSbK7/image.png',
+                link: 'https://61simon.github.io/Zernaria/',
+                stack: ['HTML5', 'CSS3', 'JavaScript', 'CSS Animations', 'Responsive Design']
+            },
+            'finboard': {
+                key: 'fb',
+                image: 'https://i.ibb.co/2Yh2Cgxg/image.png',
+                link: 'https://61simon.github.io/finboard/',
+                stack: ['React', 'Vite', 'Recharts', 'Tailwind CSS', 'REST API', 'GitHub Pages']
+    }
+        };
 
-        const notifEl = document.getElementById('liveNotif');
-        const liveAvatar = document.getElementById('liveAvatar');
-        const liveText = document.getElementById('liveText');
-        const liveTime = document.getElementById('liveTime');
-        let notifIndex = 0;
+        const caseModal = document.getElementById('caseModal');
+        const caseModalBody = document.getElementById('caseModalBody');
 
-        function showNotification() {
-            const data = notifData[notifIndex % notifData.length];
-            liveAvatar.textContent = data.initial;
-            liveText.innerHTML = `<strong>${data.name}</strong> from ${data.city} just ordered ${data.item}`;
-            liveTime.textContent = data.time;
-            notifEl.classList.add('show');
-            setTimeout(() => notifEl.classList.remove('show'), 5500);
-            notifIndex++;
+        function openCaseModal(key, silent) {
+            const data = caseStudies[key];
+            if (!data) return;
+
+            currentOpenCase = key;
+
+            const dict = translations[currentLang];
+            const k = data.key;
+
+            const stackTags = data.stack.map(s => `<span class="case-stack-tag">${s}</span>`).join('');
+
+            caseModalBody.innerHTML = `
+                <div class="case-modal-header">
+                    <span class="case-modal-category">${dict['case.' + k + '.category']}</span>
+                    <h2 class="case-modal-title">${dict['case.' + k + '.title']}</h2>
+                </div>
+                <img src="${data.image}" alt="${dict['case.' + k + '.title']}" class="case-modal-image">
+                <div class="case-modal-section">
+                    <h4>${dict['case.challenge']}</h4>
+                    <p>${dict['case.' + k + '.challenge']}</p>
+                </div>
+                <div class="case-modal-section">
+                    <h4>${dict['case.solution']}</h4>
+                    <p>${dict['case.' + k + '.solution']}</p>
+                </div>
+                <div class="case-modal-section">
+                    <h4>${dict['case.stack']}</h4>
+                    <div class="case-stack-tags">${stackTags}</div>
+                </div>
+                <div class="case-modal-section">
+                    <h4>${dict['case.result']}</h4>
+                    <p>${dict['case.' + k + '.result']}</p>
+                </div>
+                <div class="case-modal-footer">
+                    <a href="${data.link}" target="_blank" rel="noopener" class="btn btn-primary">
+                        ${dict['case.visit']} <i class="fas fa-external-link-alt" style="margin-left: 8px;"></i>
+                    </a>
+                    <a href="#contact" class="btn btn-outline" data-close-case>${dict['case.similar']}</a>
+                </div>
+            `;
+
+            // Re-bind close buttons inside modal
+            caseModalBody.querySelectorAll('[data-close-case]').forEach(el => {
+                el.addEventListener('click', closeCaseModal);
+            });
+
+            if (!silent) {
+                caseModal.classList.add('active');
+                caseModal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
         }
 
-        setTimeout(() => {
-            showNotification();
-            setInterval(showNotification, 32000);
-        }, 12000);
+        function closeCaseModal() {
+            caseModal.classList.remove('active');
+            caseModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            currentOpenCase = null;
+        }
+
+        document.querySelectorAll('[data-case]').forEach(btn => {
+            btn.addEventListener('click', () => openCaseModal(btn.dataset.case));
+        });
+
+        document.querySelectorAll('[data-close-case]').forEach(el => {
+            el.addEventListener('click', closeCaseModal);
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && caseModal.classList.contains('active')) {
+                closeCaseModal();
+            }
+        });
     </script>
 </body>
 </html>
