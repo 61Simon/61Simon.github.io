@@ -1013,6 +1013,12 @@
             gap: 30px;
         }
 
+        @media (min-width: 1100px) {
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         .blog-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -1452,6 +1458,9 @@
             .section-title { font-size: 40px; }
             .nav-links { gap: 16px; }
             .nav-link { font-size: 12px; }
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         @media (max-width: 992px) {
             .container { padding: 0 30px; }
@@ -2016,7 +2025,8 @@
                         </div>
                     </div>
                 </div>
-                                <div class="portfolio-featured fade-in" style="animation-delay: 0.3s;">
+
+                <div class="portfolio-featured fade-in" style="animation-delay: 0.3s;">
                     <img src="https://i.ibb.co/2Yh2Cgxg/image.png" alt="FinBoard Dashboard" class="portfolio-img">
                     <div class="portfolio-overlay">
                         <span class="portfolio-category" data-i18n="portfolio.cat.app">React App</span>
@@ -2099,6 +2109,16 @@
                     <h3 class="blog-title" data-i18n="blog.t3.title">Why Cheap Websites Cost You More</h3>
                     <p class="blog-excerpt" data-i18n="blog.t3.desc">The hidden cost of template-based sites — and why custom design, clean code, and SEO actually save money long-term.</p>
                     <a href="blog/blog3.html" class="blog-link"><span data-i18n="blog.readMore">Read article</span> <i class="fas fa-arrow-right"></i></a>
+                </article>
+
+                <article class="blog-card fade-in" style="animation-delay: 0.3s;">
+                    <div class="blog-meta">
+                        <span class="blog-tag" data-i18n="blog.t4.tag">Case Study</span>
+                        <span class="blog-date" data-i18n="blog.t4.date">October 2026</span>
+                    </div>
+                    <h3 class="blog-title" data-i18n="blog.t4.title">How I Built FinBoard — A React Dashboard</h3>
+                    <p class="blog-excerpt" data-i18n="blog.t4.desc">Building a small business dashboard with React, Vite, Recharts and live APIs. Architecture, API rate limits, and deployment without a backend.</p>
+                    <a href="blog/blog4.html" class="blog-link"><span data-i18n="blog.readMore">Read article</span> <i class="fas fa-arrow-right"></i></a>
                 </article>
             </div>
         </div>
@@ -2403,6 +2423,9 @@
                 "blog.t3.tag": "Opinion", "blog.t3.date": "October 2026",
                 "blog.t3.title": "Why Cheap Websites Cost You More",
                 "blog.t3.desc": "The hidden cost of template-based sites — and why custom design, clean code, and SEO actually save money long-term.",
+                "blog.t4.tag": "Case Study", "blog.t4.date": "October 2026",
+                "blog.t4.title": "How I Built FinBoard — A React Dashboard",
+                "blog.t4.desc": "Building a small business dashboard with React, Vite, Recharts and live APIs. Architecture, API rate limits, and deployment without a backend.",
                 "faq.title1": "Frequently Asked", "faq.title2": "Questions",
                 "faq.q1": "How long does it take to build a website?",
                 "faq.a1": "A landing page usually takes 3–5 days, a business website 7–14 days, and an online store 2–3 weeks. The exact timeline depends on the project scope and how quickly you provide content.",
@@ -2428,7 +2451,6 @@
                 "form.opt.store": "Online Store", "form.opt.redesign": "Redesign", "form.opt.custom": "Something Custom",
                 "form.budget.b1": "Under $500", "form.budget.b2": "$500–$1000",
                 "form.budget.b3": "$1000–$2000", "form.budget.b4": "$2000+",
-                // Case study modal
                 "case.challenge": "Challenge",
                 "case.solution": "Solution",
                 "case.stack": "Stack",
@@ -2549,6 +2571,9 @@
                 "blog.t3.tag": "Мнение", "blog.t3.date": "Октябрь 2026",
                 "blog.t3.title": "Почему дешёвые сайты обходятся дороже",
                 "blog.t3.desc": "Скрытая стоимость сайтов на шаблонах — и почему кастомный дизайн, чистый код и SEO реально экономят деньги в долгосрочной перспективе.",
+                "blog.t4.tag": "Кейс", "blog.t4.date": "Октябрь 2026",
+                "blog.t4.title": "Как я сделал FinBoard — React-дашборд",
+                "blog.t4.desc": "Создание дашборда для малого бизнеса на React, Vite, Recharts и живых API. Архитектура, лимиты API и деплой без бэкенда.",
                 "faq.title1": "Частые", "faq.title2": "вопросы",
                 "faq.q1": "Сколько времени занимает разработка сайта?",
                 "faq.a1": "Лендинг обычно занимает 3–5 дней, бизнес-сайт — 7–14 дней, интернет-магазин — 2–3 недели. Точные сроки зависят от объёма проекта и того, как быстро вы предоставите контент.",
@@ -2694,6 +2719,9 @@
                 "blog.t3.tag": "Думка", "blog.t3.date": "Жовтень 2026",
                 "blog.t3.title": "Чому дешеві сайти коштують дорожче",
                 "blog.t3.desc": "Прихована вартість сайтів на шаблонах — і чому кастомний дизайн, чистий код та SEO реально економлять гроші в довгостроковій перспективі.",
+                "blog.t4.tag": "Кейс", "blog.t4.date": "Жовтень 2026",
+                "blog.t4.title": "Як я зробив FinBoard — React-дашборд",
+                "blog.t4.desc": "Створення дашборду для малого бізнесу на React, Vite, Recharts та живих API. Архітектура, ліміти API та деплой без бекенду.",
                 "faq.title1": "Часті", "faq.title2": "питання",
                 "faq.q1": "Скільки часу займає розробка сайту?",
                 "faq.a1": "Лендінг зазвичай займає 3–5 днів, бізнес-сайт — 7–14 днів, інтернет-магазин — 2–3 тижні. Точні терміни залежать від обсягу проєкту та того, як швидко ви надасте контент.",
@@ -2757,10 +2785,8 @@
                 const key = el.getAttribute('data-i18n');
                 if (dict[key] === undefined) return;
 
-                // For elements that contain child <i> icons or nested spans with data-i18n
                 const hasNestedI18n = el.querySelector('[data-i18n]');
                 if (hasNestedI18n) {
-                    // Just skip parent - children will handle their own text
                     return;
                 }
 
@@ -2790,7 +2816,6 @@
             document.documentElement.lang = lang;
             localStorage.setItem('lang', lang);
 
-            // Refresh case study modal if open
             if (currentOpenCase && caseModal.classList.contains('active')) {
                 openCaseModal(currentOpenCase, true);
             }
@@ -2998,7 +3023,7 @@
                 image: 'https://i.ibb.co/2Yh2Cgxg/image.png',
                 link: 'https://61simon.github.io/finboard/',
                 stack: ['React', 'Vite', 'Recharts', 'Tailwind CSS', 'REST API', 'GitHub Pages']
-    }
+            }
         };
 
         const caseModal = document.getElementById('caseModal');
@@ -3045,7 +3070,6 @@
                 </div>
             `;
 
-            // Re-bind close buttons inside modal
             caseModalBody.querySelectorAll('[data-close-case]').forEach(el => {
                 el.addEventListener('click', closeCaseModal);
             });
