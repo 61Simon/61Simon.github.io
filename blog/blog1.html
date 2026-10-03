@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">How I Built the Hot Wheels Market | Simon's Blog</title>
+    <meta name="description" content="Lessons from building a full e-commerce catalog with vanilla JavaScript — filtering, search, performance, and design decisions behind the dark UI.">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #131313;
+            --accent: #7b61ff;
+            --accent-light: #9d8aff;
+            --text: #f5f5f5;
+            --text-secondary: #b3b3b3;
+            --card-bg: #1a1a1a;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        html[data-theme="light"] {
+            --primary: #ffffff;
+            --secondary: #f5f5f7;
+            --text: #0a0a0a;
+            --text-secondary: #3d3d3d;
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--primary);
+            color: var(--text);
+            line-height: 1.8;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        h1, h2, h3 { font-family: 'Syne', sans-serif; font-weight: 700; line-height: 1.2; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { color: var(--accent-light); }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+        header {
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--card-border);
+        }
+        html[data-theme="light"] header { background: rgba(255, 255, 255, 0.85); }
+
+        .header-inner {
+            display: flex; justify-content: space-between; align-items: center; gap: 14px;
+        }
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px; font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 14px; font-weight: 500; color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        .back-link:hover { color: var(--accent); }
+        .back-link i { transition: transform 0.3s ease; }
+        .back-link:hover i { transform: translateX(-4px); }
+
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+
+        .lang-switcher {
+            display: flex; gap: 2px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px; padding: 4px;
+        }
+        .lang-btn {
+            width: 34px; height: 26px; border-radius: 50px;
+            border: none; background: transparent;
+            color: var(--text-secondary);
+            font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+            cursor: pointer; transition: var(--transition);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .lang-btn.active { background: var(--accent); color: white; }
+        .lang-btn:hover:not(.active) { color: var(--text); }
+
+        .theme-toggle {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; cursor: pointer;
+            transition: var(--transition);
+        }
+        .theme-toggle:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+        article { padding: 60px 0 100px; }
+
+        .article-meta {
+            display: flex; align-items: center; gap: 14px;
+            margin-bottom: 24px;
+            font-size: 13px; text-transform: uppercase;
+            letter-spacing: 1.5px; font-weight: 600;
+        }
+        .article-tag { color: var(--accent); }
+        .article-date { color: var(--text-secondary); opacity: 0.7; }
+
+        .article-title {
+            font-size: 52px;
+            line-height: 1.15;
+            margin-bottom: 24px;
+        }
+
+        .article-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .article-hero {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .article-body h2 {
+            font-size: 32px;
+            margin: 60px 0 22px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--card-border);
+        }
+
+        .article-body h3 {
+            font-size: 22px;
+            margin: 40px 0 16px;
+            color: var(--accent-light);
+        }
+
+        .article-body p {
+            color: var(--text-secondary);
+            margin-bottom: 22px;
+            font-size: 17px;
+        }
+
+        .article-body ul, .article-body ol {
+            color: var(--text-secondary);
+            margin-bottom: 22px;
+            padding-left: 24px;
+            font-size: 17px;
+        }
+
+        .article-body li { margin-bottom: 10px; }
+
+        .article-body strong { color: var(--text); }
+
+        .article-body code {
+            background: rgba(123, 97, 255, 0.1);
+            border: 1px solid rgba(123, 97, 255, 0.2);
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 15px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-light);
+        }
+
+        .article-body pre {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 24px 28px;
+            overflow-x: auto;
+            margin-bottom: 28px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .article-body pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--text);
+        }
+
+        .callout {
+            background: rgba(123, 97, 255, 0.08);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 12px 12px 0;
+            padding: 24px 28px;
+            margin: 32px 0;
+        }
+
+        .callout p {
+            margin-bottom: 0;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .article-footer {
+            margin-top: 70px;
+            padding-top: 40px;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .article-footer-text { color: var(--text-secondary); font-size: 15px; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border-radius: 50px;
+            font-weight: 600; font-size: 15px;
+            transition: var(--transition);
+            border: none; cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            color: inherit;
+        }
+        .btn-primary {
+            background: var(--accent); color: #ffffff;
+            box-shadow: 0 4px 20px rgba(123, 97, 255, 0.3);
+        }
+        .btn-primary:hover {
+            background: var(--accent-light);
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(123, 97, 255, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .article-title { font-size: 36px; }
+            .article-subtitle { font-size: 17px; }
+            .article-body h2 { font-size: 26px; }
+            .article-body pre { padding: 18px 20px; font-size: 13px; }
+            .back-link span { display: none; }
+        }
+        @media (max-width: 576px) {
+            .article-title { font-size: 28px; }
+            .article-body p, .article-body ul, .article-body ol { font-size: 16px; }
+            .lang-btn { width: 30px; height: 24px; font-size: 9px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container header-inner">
+        <a href="../index.html" class="logo">Simon</a>
+        <a href="../index.html#blog" class="back-link">
+            <i class="fas fa-arrow-left"></i> <span data-i18n="nav.back">Back to Blog</span>
+        </a>
+        <div class="header-actions">
+            <div class="lang-switcher" role="group" aria-label="Language">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="ua">UA</button>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class="fas fa-sun"></i></button>
+        </div>
+    </div>
+</header>
+
+<article>
+    <div class="container">
+        <div class="article-meta">
+            <span class="article-tag" data-i18n="meta.tag">Case Study</span>
+            <span class="article-date" data-i18n="meta.date">October 2026</span>
+        </div>
+
+        <h1 class="article-title" data-i18n="article.title">How I Built the Hot Wheels Market</h1>
+        <p class="article-subtitle" data-i18n="article.subtitle">Lessons from building a full e-commerce catalog with vanilla JavaScript — filtering, search, performance, and design decisions behind the dark UI.</p>
+
+        <img src="https://i.ibb.co/BHjsPVpK/image.png" alt="Hot Wheels Market" class="article-hero">
+
+        <div class="article-body">
+            <p data-i18n="body.intro1">When I started building the <a href="https://61simon.github.io/Hot-Wheels-Market/" target="_blank" rel="noopener">Hot Wheels Market</a>, I had one rule: <strong>no frameworks</strong>. No React, no Vue, no jQuery. Just HTML, CSS, and vanilla JavaScript.</p>
+
+            <p data-i18n="body.intro2">Was it a smart decision? Honestly, it depends. But it taught me more about JavaScript than any framework ever could. Here's how I built it, what I learned, and where I'd do things differently.</p>
+
+            <h2 data-i18n="h.challenge">The Challenge</h2>
+
+            <p data-i18n="body.challenge1">Hot Wheels collectors need to browse hundreds of models. Existing collector sites are either outdated forums or clunky mobile apps. The goal was simple: build a fast, modern catalog that works perfectly on any device — and can be deployed anywhere with zero backend.</p>
+
+            <p data-i18n="body.challenge2">The requirements were clear:</p>
+
+            <ul>
+                <li data-i18n="li.req1">Instant search across product names and series</li>
+                <li data-i18n="li.req2">Multi-criteria filtering (by series, rarity, price range)</li>
+                <li data-i18n="li.req3">Shopping cart with localStorage persistence</li>
+                <li data-i18n="li.req4">Dark UI that makes the car photos pop</li>
+                <li data-i18n="li.req5">No build step, no dependencies — just static files</li>
+            </ul>
+
+            <h2 data-i18n="h.whyVanilla">Why Vanilla JavaScript?</h2>
+
+            <p data-i18n="body.why1">Let me be honest: React would have been faster to build. But vanilla JS forced me to solve problems at the foundation level — and that's where the real learning happens.</p>
+
+            <p data-i18n="body.why2">The biggest win was <strong>performance</strong>. No framework overhead, no virtual DOM, no hydration. The entire site loads in under a second, even on slow connections. That matters when your audience is browsing from a phone at a collector convention.</p>
+
+            <div class="callout">
+                <p data-i18n="callout.lesson">💡 <strong>Lesson learned:</strong> Frameworks solve problems you don't have yet. For a catalog with a few hundred items, vanilla JS is not just viable — it's optimal.</p>
+            </div>
+
+            <h2 data-i18n="h.filters">Building the Filter System</h2>
+
+            <p data-i18n="body.filters1">The filter system is the heart of the catalog. Here's the core logic:</p>
+
+<pre><code>function filterProducts() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const activeSeries = [...document.querySelectorAll('.series-filter:checked')]
+        .map(cb =&gt; cb.value);
+    const minPrice = parseFloat(minInput.value) || 0;
+    const maxPrice = parseFloat(maxInput.value) || Infinity;
+
+    return products.filter(product =&gt; {
+        const matchesSearch = product.name.toLowerCase().includes(searchTerm)
+            || product.series.toLowerCase().includes(searchTerm);
+
+        const matchesSeries = activeSeries.length === 0
+            || activeSeries.includes(product.series);
+
+        const matchesPrice = product.price &gt;= minPrice
+            &amp;&amp; product.price &lt;= maxPrice;
+
+        return matchesSearch &amp;&amp; matchesSeries &amp;&amp; matchesPrice;
+    });
+}</code></pre>
+
+            <p data-i18n="body.filters2">The key insight: <strong>filtering should never touch the DOM directly</strong>. First compute the filtered array, then render. This keeps logic and presentation separate — and makes debugging 10× easier.</p>
+
+            <h3 data-i18n="h3.render">The render function</h3>
+
+            <p data-i18n="body.render1">Rendering is where most vanilla JS projects get messy. My approach: build HTML as a string, then inject once.</p>
+
+<pre><code>function renderProducts(products) {
+    if (products.length === 0) {
+        grid.innerHTML = '&lt;div class="empty"&gt;No cars found&lt;/div&gt;';
+        return;
+    }
+
+    grid.innerHTML = products.map(product =&gt; `
+        &lt;article class="product-card" data-id="${product.id}"&gt;
+            &lt;img src="${product.image}" alt="${product.name}" loading="lazy"&gt;
+            &lt;h3&gt;${product.name}&lt;/h3&gt;
+            &lt;span class="series"&gt;${product.series}&lt;/span&gt;
+            &lt;span class="price"&gt;${formatPrice(product.price)}&lt;/span&gt;
+        &lt;/article&gt;
+    `).join('');
+}</code></pre>
+
+            <p data-i18n="body.render2">Why innerHTML instead of createElement? For this use case, it's faster and more readable. When you have hundreds of items, string concatenation wins. Just be careful with user-generated content — always sanitize.</p>
+
+            <h2 data-i18n="h.darkUI">The Dark UI Decision</h2>
+
+            <p data-i18n="body.dark1">The dark theme wasn't just aesthetic. Hot Wheels cars are colorful, glossy, and often photographed on white backgrounds. A dark UI makes those colors <strong>pop</strong> — it's the same principle museums use when displaying jewelry.</p>
+
+            <p data-i18n="body.dark2">I used CSS custom properties for the entire color system:</p>
+
+<pre><code>:root {
+    --bg: #0a0a0a;
+    --card: #1a1a1a;
+    --text: #f5f5f5;
+    --accent: #7b61ff;
+    --border: rgba(255, 255, 255, 0.05);
+}</code></pre>
+
+            <p data-i18n="body.dark3">This made theme switching trivial — just swap the variables. No duplicated CSS, no complex class toggling.</p>
+
+            <h2 data-i18n="h.searchPerf">Search Performance</h2>
+
+            <p data-i18n="body.search1">Typing in a search field shouldn't re-render 500 items on every keystroke. I debounced the input:</p>
+
+<pre><code>let debounceTimer;
+searchInput.addEventListener('input', () =&gt; {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() =&gt; {
+        renderProducts(filterProducts());
+    }, 150);
+});</code></pre>
+
+            <p data-i18n="body.search2">150ms feels instant to the user but prevents unnecessary renders. This one line made the search feel dramatically smoother.</p>
+
+            <h2 data-i18n="h.cart">Cart with localStorage</h2>
+
+            <p data-i18n="body.cart1">The shopping cart persists across page reloads using localStorage. The pattern is simple:</p>
+
+<pre><code>function saveCart() {
+    localStorage.setItem('hw-cart', JSON.stringify(cart));
+}
+
+function loadCart() {
+    try {
+        return JSON.parse(localStorage.getItem('hw-cart')) || [];
+    } catch {
+        return [];
+    }
+}</code></pre>
+
+            <p data-i18n="body.cart2">No backend, no login, no database. For a collector catalog, that's all you need. The cart lives in the browser — and it survives refreshes, tab closes, and even browser restarts.</p>
+
+            <h2 data-i18n="h.different">What I'd Do Differently</h2>
+
+            <p data-i18n="body.diff1">Hindsight is 20/20. If I started over:</p>
+
+            <ol>
+                <li data-i18n="li.diff1"><strong>Use a data file.</strong> Products are currently hardcoded in JS. A separate <code>products.json</code> would make updates easier.</li>
+                <li data-i18n="li.diff2"><strong>Add URL state.</strong> Filters should sync to the URL so users can share filtered views.</li>
+                <li data-i18n="li.diff3"><strong>Lazy load images from day one.</strong> I added <code>loading="lazy"</code> later — should have been there from the start.</li>
+                <li data-i18n="li.diff4"><strong>Write tests.</strong> Even a few unit tests for the filter logic would have saved debugging time.</li>
+            </ol>
+
+            <h2 data-i18n="h.final">Final Thoughts</h2>
+
+            <p data-i18n="body.final1">Building a full catalog with vanilla JavaScript is absolutely doable. It's not always the right choice — but it's a fantastic learning exercise. You'll understand the DOM, event handling, and state management at a level that frameworks abstract away.</p>
+
+            <p data-i18n="body.final2">If you're building something similar: start simple, optimize later, and don't reach for a framework until you actually need one.</p>
+
+            <p data-i18n="body.final3">The <a href="https://61simon.github.io/Hot-Wheels-Market/" target="_blank" rel="noopener">Hot Wheels Market</a> is live — check it out and let me know what you think.</p>
+        </div>
+
+        <div class="article-footer">
+            <span class="article-footer-text" data-i18n="footer.text">Written by Simon · Web Designer & Developer</span>
+            <a href="../index.html#contact" class="btn btn-primary">
+                <span data-i18n="footer.cta">Start Your Project</span> <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</article>
+
+<script>
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+    themeToggle.addEventListener('click', () => {
+        const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        htmlEl.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        themeIcon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    });
+
+    const translations = {
+        en: {
+            "page.title": "How I Built the Hot Wheels Market | Simon's Blog",
+            "nav.back": "Back to Blog",
+            "meta.tag": "Case Study",
+            "meta.date": "October 2026",
+            "article.title": "How I Built the Hot Wheels Market",
+            "article.subtitle": "Lessons from building a full e-commerce catalog with vanilla JavaScript — filtering, search, performance, and design decisions behind the dark UI.",
+            "body.intro1": "When I started building the <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a>, I had one rule: <strong>no frameworks</strong>. No React, no Vue, no jQuery. Just HTML, CSS, and vanilla JavaScript.",
+            "body.intro2": "Was it a smart decision? Honestly, it depends. But it taught me more about JavaScript than any framework ever could. Here's how I built it, what I learned, and where I'd do things differently.",
+            "h.challenge": "The Challenge",
+            "body.challenge1": "Hot Wheels collectors need to browse hundreds of models. Existing collector sites are either outdated forums or clunky mobile apps. The goal was simple: build a fast, modern catalog that works perfectly on any device — and can be deployed anywhere with zero backend.",
+            "body.challenge2": "The requirements were clear:",
+            "li.req1": "Instant search across product names and series",
+            "li.req2": "Multi-criteria filtering (by series, rarity, price range)",
+            "li.req3": "Shopping cart with localStorage persistence",
+            "li.req4": "Dark UI that makes the car photos pop",
+            "li.req5": "No build step, no dependencies — just static files",
+            "h.whyVanilla": "Why Vanilla JavaScript?",
+            "body.why1": "Let me be honest: React would have been faster to build. But vanilla JS forced me to solve problems at the foundation level — and that's where the real learning happens.",
+            "body.why2": "The biggest win was <strong>performance</strong>. No framework overhead, no virtual DOM, no hydration. The entire site loads in under a second, even on slow connections. That matters when your audience is browsing from a phone at a collector convention.",
+            "callout.lesson": "💡 <strong>Lesson learned:</strong> Frameworks solve problems you don't have yet. For a catalog with a few hundred items, vanilla JS is not just viable — it's optimal.",
+            "h.filters": "Building the Filter System",
+            "body.filters1": "The filter system is the heart of the catalog. Here's the core logic:",
+            "body.filters2": "The key insight: <strong>filtering should never touch the DOM directly</strong>. First compute the filtered array, then render. This keeps logic and presentation separate — and makes debugging 10× easier.",
+            "h3.render": "The render function",
+            "body.render1": "Rendering is where most vanilla JS projects get messy. My approach: build HTML as a string, then inject once.",
+            "body.render2": "Why innerHTML instead of createElement? For this use case, it's faster and more readable. When you have hundreds of items, string concatenation wins. Just be careful with user-generated content — always sanitize.",
+            "h.darkUI": "The Dark UI Decision",
+            "body.dark1": "The dark theme wasn't just aesthetic. Hot Wheels cars are colorful, glossy, and often photographed on white backgrounds. A dark UI makes those colors <strong>pop</strong> — it's the same principle museums use when displaying jewelry.",
+            "body.dark2": "I used CSS custom properties for the entire color system:",
+            "body.dark3": "This made theme switching trivial — just swap the variables. No duplicated CSS, no complex class toggling.",
+            "h.searchPerf": "Search Performance",
+            "body.search1": "Typing in a search field shouldn't re-render 500 items on every keystroke. I debounced the input:",
+            "body.search2": "150ms feels instant to the user but prevents unnecessary renders. This one line made the search feel dramatically smoother.",
+            "h.cart": "Cart with localStorage",
+            "body.cart1": "The shopping cart persists across page reloads using localStorage. The pattern is simple:",
+            "body.cart2": "No backend, no login, no database. For a collector catalog, that's all you need. The cart lives in the browser — and it survives refreshes, tab closes, and even browser restarts.",
+            "h.different": "What I'd Do Differently",
+            "body.diff1": "Hindsight is 20/20. If I started over:",
+            "li.diff1": "<strong>Use a data file.</strong> Products are currently hardcoded in JS. A separate products.json would make updates easier.",
+            "li.diff2": "<strong>Add URL state.</strong> Filters should sync to the URL so users can share filtered views.",
+            "li.diff3": "<strong>Lazy load images from day one.</strong> I added loading=\"lazy\" later — should have been there from the start.",
+            "li.diff4": "<strong>Write tests.</strong> Even a few unit tests for the filter logic would have saved debugging time.",
+            "h.final": "Final Thoughts",
+            "body.final1": "Building a full catalog with vanilla JavaScript is absolutely doable. It's not always the right choice — but it's a fantastic learning exercise. You'll understand the DOM, event handling, and state management at a level that frameworks abstract away.",
+            "body.final2": "If you're building something similar: start simple, optimize later, and don't reach for a framework until you actually need one.",
+            "body.final3": "The <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a> is live — check it out and let me know what you think.",
+            "footer.text": "Written by Simon · Web Designer & Developer",
+            "footer.cta": "Start Your Project"
+        },
+        ru: {
+            "page.title": "Как я сделал Hot Wheels Market | Блог Саймона",
+            "nav.back": "Назад в блог",
+            "meta.tag": "Кейс",
+            "meta.date": "Октябрь 2026",
+            "article.title": "Как я сделал Hot Wheels Market",
+            "article.subtitle": "Уроки создания полноценного e-commerce каталога на чистом JavaScript — фильтрация, поиск, производительность и решения по дизайну тёмного интерфейса.",
+            "body.intro1": "Когда я начинал делать <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a>, у меня было одно правило: <strong>никаких фреймворков</strong>. Никакого React, Vue или jQuery. Только HTML, CSS и чистый JavaScript.",
+            "body.intro2": "Было ли это умным решением? Честно — зависит от ситуации. Но это научило меня JavaScript глубже, чем любой фреймворк. Расскажу, как я это сделал, что узнал и что бы сделал иначе.",
+            "h.challenge": "Задача",
+            "body.challenge1": "Коллекционерам Hot Wheels нужно просматривать сотни моделей. Существующие сайты — либо устаревшие форумы, либо неудобные мобильные приложения. Цель была простой: быстрый современный каталог, работающий идеально на любом устройстве — и разворачиваемый где угодно без бэкенда.",
+            "body.challenge2": "Требования были чёткими:",
+            "li.req1": "Мгновенный поиск по названиям и сериям товаров",
+            "li.req2": "Мульти-фильтрация (по серии, редкости, цене)",
+            "li.req3": "Корзина с сохранением в localStorage",
+            "li.req4": "Тёмный интерфейс, на котором фотографии машинок выглядят ярко",
+            "li.req5": "Без сборки, без зависимостей — только статические файлы",
+            "h.whyVanilla": "Почему Vanilla JavaScript?",
+            "body.why1": "Честно: на React было бы быстрее. Но чистый JS заставил меня решать задачи на уровне фундамента — и именно там происходит настоящее обучение.",
+            "body.why2": "Главный плюс — <strong>производительность</strong>. Нет накладных расходов фреймворка, нет виртуального DOM, нет гидратации. Весь сайт загружается меньше секунды даже на медленном соединении. Это важно, когда посетители листают каталог с телефона на конвенции коллекционеров.",
+            "callout.lesson": "💡 <strong>Вывод:</strong> Фреймворки решают проблемы, которых у вас ещё нет. Для каталога на несколько сотен товаров чистый JS — не просто рабочий вариант, а оптимальный.",
+            "h.filters": "Создание системы фильтров",
+            "body.filters1": "Система фильтров — сердце каталога. Вот основная логика:",
+            "body.filters2": "Ключевой момент: <strong>фильтрация никогда не должна работать с DOM напрямую</strong>. Сначала вычисляем отфильтрованный массив, потом рендерим. Это разделяет логику и представление — и упрощает отладку в 10 раз.",
+            "h3.render": "Функция рендера",
+            "body.render1": "Рендеринг — самое беспорядочное место в большинстве проектов на чистом JS. Мой подход: собираю HTML строкой и вставляю один раз.",
+            "body.render2": "Почему innerHTML, а не createElement? Для этого случая — быстрее и читабельнее. Когда у вас сотни элементов, конкатенация строк побеждает. Только будьте аккуратны с пользовательским контентом — всегда санируйте.",
+            "h.darkUI": "Решение о тёмном интерфейсе",
+            "body.dark1": "Тёмная тема — это не только эстетика. Машинки Hot Wheels яркие, глянцевые и часто фотографируются на белом фоне. Тёмный UI заставляет эти цвета <strong>светиться</strong> — тот же принцип используют музеи, выставляя ювелирные украшения.",
+            "body.dark2": "Я использовал CSS-переменные для всей цветовой системы:",
+            "body.dark3": "Это сделало переключение темы тривиальным — просто меняем переменные. Никакого дублирования CSS, никакого сложного переключения классов.",
+            "h.searchPerf": "Производительность поиска",
+            "body.search1": "Ввод в поле поиска не должен перерисовывать 500 элементов на каждый символ. Я использовал debounce:",
+            "body.search2": "150 мс кажутся пользователю мгновенными, но предотвращают лишние рендеры. Одна эта строка сделала поиск значительно плавнее.",
+            "h.cart": "Корзина с localStorage",
+            "body.cart1": "Корзина сохраняется между перезагрузками через localStorage. Паттерн простой:",
+            "body.cart2": "Без бэкенда, без логина, без базы данных. Для каталога коллекционеров этого достаточно. Корзина живёт в браузере — и переживает обновления, закрытия вкладок и даже перезапуск браузера.",
+            "h.different": "Что бы я сделал иначе",
+            "body.diff1": "Задним умом все крепки. Если бы начинал заново:",
+            "li.diff1": "<strong>Использовать data-файл.</strong> Сейчас товары захардкожены в JS. Отдельный products.json упростил бы обновления.",
+            "li.diff2": "<strong>Добавить состояние в URL.</strong> Фильтры должны синхронизироваться с URL, чтобы пользователи могли делиться отфильтрованными видами.",
+            "li.diff3": "<strong>Ленивая загрузка изображений с первого дня.</strong> Я добавил loading=\"lazy\" позже — стоило сделать сразу.",
+            "li.diff4": "<strong>Писать тесты.</strong> Даже несколько юнит-тестов для логики фильтра сэкономили бы время на отладке.",
+            "h.final": "Итоговые мысли",
+            "body.final1": "Сделать полноценный каталог на чистом JavaScript абсолютно реально. Это не всегда правильный выбор — но отличное упражнение для обучения. Вы поймёте DOM, работу с событиями и управление состоянием на уровне, который фреймворки скрывают.",
+            "body.final2": "Если делаете что-то похожее: начните просто, оптимизируйте потом, и не хватайтесь за фреймворк, пока он действительно не понадобится.",
+            "body.final3": "<a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a> уже работает — загляните и скажите, что думаете.",
+            "footer.text": "Автор: Simon · Веб-дизайнер и разработчик",
+            "footer.cta": "Начать проект"
+        },
+        ua: {
+            "page.title": "Як я зробив Hot Wheels Market | Блог Саймона",
+            "nav.back": "Назад до блогу",
+            "meta.tag": "Кейс",
+            "meta.date": "Жовтень 2026",
+            "article.title": "Як я зробив Hot Wheels Market",
+            "article.subtitle": "Уроки створення повноцінного e-commerce каталогу на чистому JavaScript — фільтрація, пошук, продуктивність та рішення щодо дизайну темного інтерфейсу.",
+            "body.intro1": "Коли я починав робити <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a>, у мене було одне правило: <strong>жодних фреймворків</strong>. Ніякого React, Vue чи jQuery. Тільки HTML, CSS та чистий JavaScript.",
+            "body.intro2": "Чи було це розумним рішенням? Чесно — залежить від ситуації. Але це навчило мене JavaScript глибше, ніж будь-який фреймворк. Розповім, як я це зробив, що дізнався і що б зробив інакше.",
+            "h.challenge": "Завдання",
+            "body.challenge1": "Колекціонерам Hot Wheels потрібно переглядати сотні моделей. Існуючі сайти — або застарілі форуми, або незручні мобільні застосунки. Мета була простою: швидкий сучасний каталог, що ідеально працює на будь-якому пристрої — і розгортається будь-де без бекенду.",
+            "body.challenge2": "Вимоги були чіткими:",
+            "li.req1": "Миттєвий пошук за назвами та серіями товарів",
+            "li.req2": "Мульти-фільтрація (за серією, рідкістю, ціною)",
+            "li.req3": "Кошик зі збереженням у localStorage",
+            "li.req4": "Темний інтерфейс, на якому фотографії машинок виглядають яскраво",
+            "li.req5": "Без збірки, без залежностей — лише статичні файли",
+            "h.whyVanilla": "Чому Vanilla JavaScript?",
+            "body.why1": "Чесно: на React було б швидше. Але чистий JS змусив мене вирішувати задачі на рівні фундаменту — і саме там відбувається справжнє навчання.",
+            "body.why2": "Головний плюс — <strong>продуктивність</strong>. Немає накладних витрат фреймворку, немає віртуального DOM, немає гідратації. Весь сайт завантажується менш ніж за секунду навіть на повільному з'єднанні. Це важливо, коли відвідувачі гортають каталог з телефона на конвенції колекціонерів.",
+            "callout.lesson": "💡 <strong>Висновок:</strong> Фреймворки вирішують проблеми, яких у вас ще немає. Для каталогу на кілька сотень товарів чистий JS — не просто робочий варіант, а оптимальний.",
+            "h.filters": "Створення системи фільтрів",
+            "body.filters1": "Система фільтрів — серце каталогу. Ось основна логіка:",
+            "body.filters2": "Ключовий момент: <strong>фільтрація ніколи не повинна працювати з DOM напряму</strong>. Спершу обчислюємо відфільтрований масив, потім рендеримо. Це розділяє логіку та представлення — і спрощує відлагодження в 10 разів.",
+            "h3.render": "Функція рендеру",
+            "body.render1": "Рендеринг — найбезладніше місце в більшості проєктів на чистому JS. Мій підхід: збираю HTML рядком і вставляю один раз.",
+            "body.render2": "Чому innerHTML, а не createElement? Для цього випадку — швидше й читабельніше. Коли у вас сотні елементів, конкатенація рядків перемагає. Тільки будьте обережні з користувацьким контентом — завжди саніруйте.",
+            "h.darkUI": "Рішення про темний інтерфейс",
+            "body.dark1": "Темна тема — це не лише естетика. Машинки Hot Wheels яскраві, глянцеві й часто фотографуються на білому фоні. Темний UI змушує ці кольори <strong>сяяти</strong> — той самий принцип використовують музеї, виставляючи ювелірні прикраси.",
+            "body.dark2": "Я використав CSS-змінні для всієї колірної системи:",
+            "body.dark3": "Це зробило перемикання теми тривіальним — просто змінюємо змінні. Жодного дублювання CSS, жодного складного перемикання класів.",
+            "h.searchPerf": "Продуктивність пошуку",
+            "body.search1": "Введення в поле пошуку не повинно перемальовувати 500 елементів на кожен символ. Я використав debounce:",
+            "body.search2": "150 мс здаються користувачу миттєвими, але запобігають зайвим рендерам. Один цей рядок зробив пошук значно плавнішим.",
+            "h.cart": "Кошик з localStorage",
+            "body.cart1": "Кошик зберігається між перезавантаженнями через localStorage. Патерн простий:",
+            "body.cart2": "Без бекенду, без логіну, без бази даних. Для каталогу колекціонерів цього достатньо. Кошик живе в браузері — і переживає оновлення, закриття вкладок і навіть перезапуск браузера.",
+            "h.different": "Що б я зробив інакше",
+            "body.diff1": "Заднім умом усі міцні. Якби починав заново:",
+            "li.diff1": "<strong>Використати data-файл.</strong> Зараз товари захардкоджені в JS. Окремий products.json спростив би оновлення.",
+            "li.diff2": "<strong>Додати стан у URL.</strong> Фільтри мають синхронізуватися з URL, щоб користувачі могли ділитися відфільтрованими видами.",
+            "li.diff3": "<strong>Ліниве завантаження зображень з першого дня.</strong> Я додав loading=\"lazy\" пізніше — варто було зробити відразу.",
+            "li.diff4": "<strong>Писати тести.</strong> Навіть кілька юніт-тестів для логіки фільтра зекономили б час на відлагодженні.",
+            "h.final": "Підсумкові думки",
+            "body.final1": "Зробити повноцінний каталог на чистому JavaScript абсолютно реально. Це не завжди правильний вибір — але чудова вправа для навчання. Ви зрозумієте DOM, роботу з подіями та керування станом на рівні, який фреймворки приховують.",
+            "body.final2": "Якщо робите щось схоже: почніть просто, оптимізуйте потім, і не хапайтеся за фреймворк, поки він справді не знадобиться.",
+            "body.final3": "<a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a> вже працює — зазирніть і скажіть, що думаєте.",
+            "footer.text": "Автор: Simon · Веб-дизайнер і розробник",
+            "footer.cta": "Почати проєкт"
+        }
+    };
+
+    const langBtns = document.querySelectorAll('.lang-btn');
+
+    function applyLanguage(lang) {
+        const dict = translations[lang];
+        if (!dict) return;
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key] === undefined) return;
+            if (dict[key].includes('<')) {
+                el.innerHTML = dict[key];
+            } else {
+                el.textContent = dict[key];
+            }
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
+        });
+
+        if (dict['page.title']) document.title = dict['page.title'];
+
+        document.documentElement.lang = lang;
+        localStorage.setItem('lang', lang);
+    }
+
+    const savedLang = localStorage.getItem('lang') || 'en';
+    langBtns.forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[data-lang="${savedLang}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+    applyLanguage(savedLang);
+
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            langBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyLanguage(btn.dataset.lang);
+        });
+    });
+</script>
+
+</body>
+</html>

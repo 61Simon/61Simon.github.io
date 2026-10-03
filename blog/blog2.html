@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">CSS Animations That Don't Kill Performance | Simon's Blog</title>
+    <meta name="description" content="A practical guide to smooth scroll animations, will-change, transform-based motion, and where most developers go wrong.">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #131313;
+            --accent: #7b61ff;
+            --accent-light: #9d8aff;
+            --text: #f5f5f5;
+            --text-secondary: #b3b3b3;
+            --card-bg: #1a1a1a;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        html[data-theme="light"] {
+            --primary: #ffffff;
+            --secondary: #f5f5f7;
+            --text: #0a0a0a;
+            --text-secondary: #3d3d3d;
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--primary);
+            color: var(--text);
+            line-height: 1.8;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        h1, h2, h3 { font-family: 'Syne', sans-serif; font-weight: 700; line-height: 1.2; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { color: var(--accent-light); }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+        header {
+            padding: 20px 0; position: sticky; top: 0;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            z-index: 100; border-bottom: 1px solid var(--card-border);
+        }
+        html[data-theme="light"] header { background: rgba(255, 255, 255, 0.85); }
+        .header-inner { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+        .logo {
+            font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 14px; font-weight: 500; color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        .back-link:hover { color: var(--accent); }
+        .back-link i { transition: transform 0.3s ease; }
+        .back-link:hover i { transform: translateX(-4px); }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .lang-switcher {
+            display: flex; gap: 2px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px; padding: 4px;
+        }
+        .lang-btn {
+            width: 34px; height: 26px; border-radius: 50px;
+            border: none; background: transparent;
+            color: var(--text-secondary);
+            font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+            cursor: pointer; transition: var(--transition);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .lang-btn.active { background: var(--accent); color: white; }
+        .lang-btn:hover:not(.active) { color: var(--text); }
+        .theme-toggle {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            color: var(--text); display: flex; align-items: center; justify-content: center;
+            font-size: 14px; cursor: pointer; transition: var(--transition);
+        }
+        .theme-toggle:hover { background: var(--accent); color: white; border-color: var(--accent); }
+        article { padding: 60px 0 100px; }
+        .article-meta {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+            font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;
+        }
+        .article-tag { color: var(--accent); }
+        .article-date { color: var(--text-secondary); opacity: 0.7; }
+        .article-title { font-size: 52px; line-height: 1.15; margin-bottom: 24px; }
+        .article-subtitle { font-size: 20px; color: var(--text-secondary); margin-bottom: 40px; line-height: 1.6; }
+        .article-hero {
+            width: 100%; border-radius: 20px; margin-bottom: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        .article-body h2 {
+            font-size: 32px; margin: 60px 0 22px; padding-bottom: 12px;
+            border-bottom: 2px solid var(--card-border);
+        }
+        .article-body h3 { font-size: 22px; margin: 40px 0 16px; color: var(--accent-light); }
+        .article-body p { color: var(--text-secondary); margin-bottom: 22px; font-size: 17px; }
+        .article-body ul, .article-body ol {
+            color: var(--text-secondary); margin-bottom: 22px; padding-left: 24px; font-size: 17px;
+        }
+        .article-body li { margin-bottom: 10px; }
+        .article-body strong { color: var(--text); }
+        .article-body code {
+            background: rgba(123, 97, 255, 0.1); border: 1px solid rgba(123, 97, 255, 0.2);
+            border-radius: 6px; padding: 2px 8px; font-size: 15px;
+            font-family: 'Courier New', monospace; color: var(--accent-light);
+        }
+        .article-body pre {
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 14px; padding: 24px 28px; overflow-x: auto;
+            margin-bottom: 28px; font-size: 14px; line-height: 1.7;
+        }
+        .article-body pre code { background: none; border: none; padding: 0; color: var(--text); }
+        .callout {
+            background: rgba(123, 97, 255, 0.08); border-left: 4px solid var(--accent);
+            border-radius: 0 12px 12px 0; padding: 24px 28px; margin: 32px 0;
+        }
+        .callout p { margin-bottom: 0; color: var(--text); font-weight: 500; }
+        .article-footer {
+            margin-top: 70px; padding-top: 40px; border-top: 1px solid var(--card-border);
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 20px; flex-wrap: wrap;
+        }
+        .article-footer-text { color: var(--text-secondary); font-size: 15px; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border-radius: 50px;
+            font-weight: 600; font-size: 15px; transition: var(--transition);
+            border: none; cursor: pointer; font-family: 'Space Grotesk', sans-serif;
+            color: inherit;
+        }
+        .btn-primary {
+            background: var(--accent); color: #ffffff;
+            box-shadow: 0 4px 20px rgba(123, 97, 255, 0.3);
+        }
+        .btn-primary:hover {
+            background: var(--accent-light); color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(123, 97, 255, 0.4);
+        }
+        @media (max-width: 768px) {
+            .article-title { font-size: 36px; }
+            .article-subtitle { font-size: 17px; }
+            .article-body h2 { font-size: 26px; }
+            .article-body pre { padding: 18px 20px; font-size: 13px; }
+            .back-link span { display: none; }
+        }
+        @media (max-width: 576px) {
+            .article-title { font-size: 28px; }
+            .article-body p, .article-body ul, .article-body ol { font-size: 16px; }
+            .lang-btn { width: 30px; height: 24px; font-size: 9px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container header-inner">
+        <a href="../index.html" class="logo">Simon</a>
+        <a href="../index.html#blog" class="back-link">
+            <i class="fas fa-arrow-left"></i> <span data-i18n="nav.back">Back to Blog</span>
+        </a>
+        <div class="header-actions">
+            <div class="lang-switcher" role="group" aria-label="Language">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="ua">UA</button>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class="fas fa-sun"></i></button>
+        </div>
+    </div>
+</header>
+
+<article>
+    <div class="container">
+        <div class="article-meta">
+            <span class="article-tag" data-i18n="meta.tag">Tutorial</span>
+            <span class="article-date" data-i18n="meta.date">October 2026</span>
+        </div>
+
+        <h1 class="article-title" data-i18n="article.title">CSS Animations That Don't Kill Performance</h1>
+        <p class="article-subtitle" data-i18n="article.subtitle">A practical guide to smooth scroll animations, will-change, transform-based motion, and where most developers go wrong.</p>
+
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80" alt="CSS code on screen" class="article-hero">
+
+        <div class="article-body">
+            <p data-i18n="body.intro1">Every developer has seen it: a beautiful website that stutters when you scroll. The culprit is almost always the same — <strong>animating the wrong CSS properties</strong>.</p>
+
+            <p data-i18n="body.intro2">This isn't a theoretical article. These are lessons from real projects, including my <a href="https://61simon.github.io/Hot-Wheels-Market/" target="_blank" rel="noopener">Hot Wheels Market</a> catalog, where smooth animation on a dark UI made or broke the experience.</p>
+
+            <h2 data-i18n="h.golden">The Golden Rule: Only Animate <code>transform</code> and <code>opacity</code></h2>
+
+            <p data-i18n="body.golden1">When the browser renders a page, it goes through several stages: layout, paint, and composite. Some CSS properties force the browser to recalculate layout on every frame. Others can be handled entirely by the GPU.</p>
+
+            <p data-i18n="body.golden2">Only two properties can be animated without triggering layout or paint:</p>
+
+            <ul>
+                <li data-i18n="li.golden1"><code>transform</code> — moves, scales, rotates, skews</li>
+                <li data-i18n="li.golden2"><code>opacity</code> — fades elements in and out</li>
+            </ul>
+
+            <p data-i18n="body.golden3">Everything else — <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code>, <code>margin</code>, <code>box-shadow</code> — forces the browser to repaint and potentially re-layout the entire page. At 60fps, you have 16 milliseconds per frame. Layout recalculations eat that budget fast.</p>
+
+            <div class="callout">
+                <p data-i18n="callout.rule">💡 <strong>Rule of thumb:</strong> If your animation touches geometry (size, position) or visuals (color, shadow), it's probably expensive. Use <code>transform</code> instead.</p>
+            </div>
+
+            <h3 data-i18n="h3.badGood">Bad vs. Good</h3>
+
+<pre><code>/* ❌ Bad: triggers layout on every frame */
+.box {
+    transition: left 0.3s ease, width 0.3s ease;
+}
+
+/* ✅ Good: GPU-composited, no layout */
+.box {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.box:hover {
+    transform: translateX(20px) scale(1.05);
+}</code></pre>
+
+            <h2 data-i18n="h.willChange">Use <code>will-change</code> — But Don't Abuse It</h2>
+
+            <p data-i18n="body.willChange1"><code>will-change</code> tells the browser to promote an element to its own compositor layer <em>before</em> the animation starts. This eliminates the initial jank.</p>
+
+<pre><code>.card {
+    will-change: transform, opacity;
+}</code></pre>
+
+            <p data-i18n="body.willChange2">But here's the trap: <strong>every layer consumes GPU memory</strong>. If you slap <code>will-change</code> on 50 elements, you'll crash performance instead of improving it.</p>
+
+            <p data-i18n="body.willChange3">My approach: apply <code>will-change</code> only to elements that animate frequently — parallax images, hover cards, scroll-triggered sections. Remove it after the animation completes if the element is no longer moving.</p>
+
+<pre><code>/* Apply only during hover */
+.card {
+    transition: transform 0.3s ease;
+}
+.card:hover {
+    will-change: transform;
+}</code></pre>
+
+            <h2 data-i18n="h.scroll">Scroll Animations: IntersectionObserver</h2>
+
+            <p data-i18n="body.scroll1">Scroll-triggered animations are popular, but most implementations use scroll event listeners that fire dozens of times per second. That's a performance killer.</p>
+
+            <p data-i18n="body.scroll2">Use <code>IntersectionObserver</code> instead — it fires only when elements enter or leave the viewport:</p>
+
+<pre><code>const observer = new IntersectionObserver((entries) =&gt; {
+    entries.forEach(entry =&gt; {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target); // stop watching
+        }
+    });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.fade-in').forEach(el =&gt; {
+    observer.observe(el);
+});</code></pre>
+
+<pre><code>.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}</code></pre>
+
+            <p data-i18n="body.scroll3">The <code>unobserve</code> call is crucial — once an element has animated in, there's no reason to keep watching it. This frees up resources for elements still waiting.</p>
+
+            <h2 data-i18n="h.parallax">The Parallax Trap</h2>
+
+            <p data-i18n="body.parallax1">Parallax effects look great but are notoriously expensive. A naive implementation updates <code>style.transform</code> on every scroll event, causing layout thrashing.</p>
+
+            <p data-i18n="body.parallax2">The fix: batch updates with <code>requestAnimationFrame</code>:</p>
+
+<pre><code>let ticking = false;
+
+window.addEventListener('scroll', () =&gt; {
+    if (!ticking) {
+        requestAnimationFrame(() =&gt; {
+            const y = window.scrollY;
+            heroImage.style.transform = `translateY(${y * 0.15}px)`;
+            ticking = false;
+        });
+        ticking = true;
+    }
+});</code></pre>
+
+            <p data-i18n="body.parallax3">This ensures the browser only updates the transform once per frame, not once per scroll event. On mobile, this is the difference between smooth and unusable.</p>
+
+            <h2 data-i18n="h.numbers">Real Numbers</h2>
+
+            <p data-i18n="body.numbers1">On the Hot Wheels Market, after switching from scroll listeners to <code>IntersectionObserver</code> and transform-based animation:</p>
+
+            <ul>
+                <li data-i18n="li.numbers1">Frame rate during scroll: <strong>42fps → 59fps</strong></li>
+                <li data-i18n="li.numbers2">Total blocking time: <strong>180ms → 40ms</strong></li>
+                <li data-i18n="li.numbers3">CPU usage while scrolling: <strong>cut roughly in half</strong></li>
+            </ul>
+
+            <p data-i18n="body.numbers2">Same visual result. Dramatically better experience.</p>
+
+            <h2 data-i18n="h.checklist">Quick Checklist</h2>
+
+            <ol>
+                <li data-i18n="li.check1">Animate only <code>transform</code> and <code>opacity</code></li>
+                <li data-i18n="li.check2">Use <code>will-change</code> sparingly — only on elements that actually animate</li>
+                <li data-i18n="li.check3">Use <code>IntersectionObserver</code>, not scroll listeners</li>
+                <li data-i18n="li.check4">Batch scroll updates with <code>requestAnimationFrame</code></li>
+                <li data-i18n="li.check5">Unobserve elements after their animation completes</li>
+                <li data-i18n="li.check6">Test on a real mobile device, not just DevTools throttling</li>
+            </ol>
+
+            <p data-i18n="body.final">Performance isn't a feature you add later. It's a habit you build from the first line of CSS. Get these fundamentals right, and your animations will feel effortless — on every device.</p>
+        </div>
+
+        <div class="article-footer">
+            <span class="article-footer-text" data-i18n="footer.text">Written by Simon · Web Designer & Developer</span>
+            <a href="../index.html#contact" class="btn btn-primary">
+                <span data-i18n="footer.cta">Start Your Project</span> <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</article>
+
+<script>
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+    themeToggle.addEventListener('click', () => {
+        const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        htmlEl.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        themeIcon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    });
+
+    const translations = {
+        en: {
+            "page.title": "CSS Animations That Don't Kill Performance | Simon's Blog",
+            "nav.back": "Back to Blog",
+            "meta.tag": "Tutorial",
+            "meta.date": "October 2026",
+            "article.title": "CSS Animations That Don't Kill Performance",
+            "article.subtitle": "A practical guide to smooth scroll animations, will-change, transform-based motion, and where most developers go wrong.",
+            "body.intro1": "Every developer has seen it: a beautiful website that stutters when you scroll. The culprit is almost always the same — <strong>animating the wrong CSS properties</strong>.",
+            "body.intro2": "This isn't a theoretical article. These are lessons from real projects, including my <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a> catalog, where smooth animation on a dark UI made or broke the experience.",
+            "h.golden": "The Golden Rule: Only Animate <code>transform</code> and <code>opacity</code>",
+            "body.golden1": "When the browser renders a page, it goes through several stages: layout, paint, and composite. Some CSS properties force the browser to recalculate layout on every frame. Others can be handled entirely by the GPU.",
+            "body.golden2": "Only two properties can be animated without triggering layout or paint:",
+            "li.golden1": "<code>transform</code> — moves, scales, rotates, skews",
+            "li.golden2": "<code>opacity</code> — fades elements in and out",
+            "body.golden3": "Everything else — <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code>, <code>margin</code>, <code>box-shadow</code> — forces the browser to repaint and potentially re-layout the entire page. At 60fps, you have 16 milliseconds per frame. Layout recalculations eat that budget fast.",
+            "callout.rule": "💡 <strong>Rule of thumb:</strong> If your animation touches geometry (size, position) or visuals (color, shadow), it's probably expensive. Use <code>transform</code> instead.",
+            "h3.badGood": "Bad vs. Good",
+            "h.willChange": "Use <code>will-change</code> — But Don't Abuse It",
+            "body.willChange1": "<code>will-change</code> tells the browser to promote an element to its own compositor layer <em>before</em> the animation starts. This eliminates the initial jank.",
+            "body.willChange2": "But here's the trap: <strong>every layer consumes GPU memory</strong>. If you slap <code>will-change</code> on 50 elements, you'll crash performance instead of improving it.",
+            "body.willChange3": "My approach: apply <code>will-change</code> only to elements that animate frequently — parallax images, hover cards, scroll-triggered sections. Remove it after the animation completes if the element is no longer moving.",
+            "h.scroll": "Scroll Animations: IntersectionObserver",
+            "body.scroll1": "Scroll-triggered animations are popular, but most implementations use scroll event listeners that fire dozens of times per second. That's a performance killer.",
+            "body.scroll2": "Use <code>IntersectionObserver</code> instead — it fires only when elements enter or leave the viewport:",
+            "body.scroll3": "The <code>unobserve</code> call is crucial — once an element has animated in, there's no reason to keep watching it. This frees up resources for elements still waiting.",
+            "h.parallax": "The Parallax Trap",
+            "body.parallax1": "Parallax effects look great but are notoriously expensive. A naive implementation updates <code>style.transform</code> on every scroll event, causing layout thrashing.",
+            "body.parallax2": "The fix: batch updates with <code>requestAnimationFrame</code>:",
+            "body.parallax3": "This ensures the browser only updates the transform once per frame, not once per scroll event. On mobile, this is the difference between smooth and unusable.",
+            "h.numbers": "Real Numbers",
+            "body.numbers1": "On the Hot Wheels Market, after switching from scroll listeners to <code>IntersectionObserver</code> and transform-based animation:",
+            "li.numbers1": "Frame rate during scroll: <strong>42fps → 59fps</strong>",
+            "li.numbers2": "Total blocking time: <strong>180ms → 40ms</strong>",
+            "li.numbers3": "CPU usage while scrolling: <strong>cut roughly in half</strong>",
+            "body.numbers2": "Same visual result. Dramatically better experience.",
+            "h.checklist": "Quick Checklist",
+            "li.check1": "Animate only <code>transform</code> and <code>opacity</code>",
+            "li.check2": "Use <code>will-change</code> sparingly — only on elements that actually animate",
+            "li.check3": "Use <code>IntersectionObserver</code>, not scroll listeners",
+            "li.check4": "Batch scroll updates with <code>requestAnimationFrame</code>",
+            "li.check5": "Unobserve elements after their animation completes",
+            "li.check6": "Test on a real mobile device, not just DevTools throttling",
+            "body.final": "Performance isn't a feature you add later. It's a habit you build from the first line of CSS. Get these fundamentals right, and your animations will feel effortless — on every device.",
+            "footer.text": "Written by Simon · Web Designer & Developer",
+            "footer.cta": "Start Your Project"
+        },
+        ru: {
+            "page.title": "CSS-анимации, которые не убивают производительность | Блог Саймона",
+            "nav.back": "Назад в блог",
+            "meta.tag": "Туториал",
+            "meta.date": "Октябрь 2026",
+            "article.title": "CSS-анимации, которые не убивают производительность",
+            "article.subtitle": "Практический гайд по плавным scroll-анимациям, will-change, transform-движению и типичным ошибкам разработчиков.",
+            "body.intro1": "Каждый разработчик это видел: красивый сайт, который дёргается при скролле. Виновник почти всегда один и тот же — <strong>анимация не тех CSS-свойств</strong>.",
+            "body.intro2": "Это не теоретическая статья. Это уроки из реальных проектов, включая мой каталог <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a>, где плавная анимация на тёмном интерфейсе делала или ломала опыт.",
+            "h.golden": "Золотое правило: анимируйте только <code>transform</code> и <code>opacity</code>",
+            "body.golden1": "Когда браузер рендерит страницу, он проходит несколько этапов: layout, paint и composite. Некоторые CSS-свойства заставляют браузер пересчитывать layout на каждом кадре. Другие могут быть полностью обработаны GPU.",
+            "body.golden2": "Только два свойства можно анимировать без вызова layout или paint:",
+            "li.golden1": "<code>transform</code> — перемещение, масштаб, вращение, наклон",
+            "li.golden2": "<code>opacity</code> — плавное появление и исчезновение",
+            "body.golden3": "Всё остальное — <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code>, <code>margin</code>, <code>box-shadow</code> — заставляет браузер перерисовывать и потенциально пересчитывать layout всей страницы. При 60 fps у вас 16 миллисекунд на кадр. Пересчёт layout съедает этот бюджет быстро.",
+            "callout.rule": "💡 <strong>Правило:</strong> Если ваша анимация затрагивает геометрию (размер, позицию) или визуал (цвет, тень) — она, скорее всего, дорогая. Используйте <code>transform</code> вместо этого.",
+            "h3.badGood": "Плохо vs хорошо",
+            "h.willChange": "Используйте <code>will-change</code> — но не злоупотребляйте",
+            "body.willChange1": "<code>will-change</code> говорит браузеру поднять элемент в отдельный слой композитора <em>до</em> старта анимации. Это устраняет начальные рывки.",
+            "body.willChange2": "Но вот ловушка: <strong>каждый слой потребляет память GPU</strong>. Если вы налепите <code>will-change</code> на 50 элементов, вы обрушите производительность вместо того, чтобы её улучшить.",
+            "body.willChange3": "Мой подход: применяю <code>will-change</code> только к элементам, которые анимируются часто — параллакс-картинки, hover-карточки, секции с анимацией при скролле. Убираю после завершения анимации, если элемент больше не двигается.",
+            "h.scroll": "Scroll-анимации: IntersectionObserver",
+            "body.scroll1": "Анимации при скролле популярны, но большинство реализаций используют слушатели scroll-событий, которые срабатывают десятки раз в секунду. Это убийца производительности.",
+            "body.scroll2": "Используйте <code>IntersectionObserver</code> — он срабатывает только когда элементы входят в viewport или покидают его:",
+            "body.scroll3": "Вызов <code>unobserve</code> критичен — после того, как элемент анимировался, нет причин продолжать за ним следить. Это освобождает ресурсы для элементов, которые ещё ждут.",
+            "h.parallax": "Ловушка параллакса",
+            "body.parallax1": "Параллакс-эффекты выглядят здорово, но печально известны своей дороговизной. Наивная реализация обновляет <code>style.transform</code> на каждом scroll-событии, вызывая layout thrashing.",
+            "body.parallax2": "Решение: группировать обновления через <code>requestAnimationFrame</code>:",
+            "body.parallax3": "Это гарантирует, что браузер обновит transform один раз за кадр, а не один раз за scroll-событие. На мобильных это разница между плавным и непригодным.",
+            "h.numbers": "Реальные цифры",
+            "body.numbers1": "В Hot Wheels Market после перехода со scroll-слушателей на <code>IntersectionObserver</code> и transform-анимации:",
+            "li.numbers1": "FPS при скролле: <strong>42fps → 59fps</strong>",
+            "li.numbers2": "Total blocking time: <strong>180мс → 40мс</strong>",
+            "li.numbers3": "Загрузка CPU при скролле: <strong>сократилась примерно вдвое</strong>",
+            "body.numbers2": "Тот же визуальный результат. Радикально лучший опыт.",
+            "h.checklist": "Короткий чек-лист",
+            "li.check1": "Анимируйте только <code>transform</code> и <code>opacity</code>",
+            "li.check2": "Используйте <code>will-change</code> экономно — только на элементах, которые реально анимируются",
+            "li.check3": "Используйте <code>IntersectionObserver</code>, а не scroll-слушатели",
+            "li.check4": "Группируйте обновления скролла через <code>requestAnimationFrame</code>",
+            "li.check5": "Отписывайтесь от наблюдения после завершения анимации",
+            "li.check6": "Тестируйте на реальном мобильном устройстве, а не только в DevTools throttling",
+            "body.final": "Производительность — это не фича, которую добавляют потом. Это привычка, которую строят с первой строки CSS. Разберитесь с этими основами — и ваши анимации будут ощущаться лёгкими на любом устройстве.",
+            "footer.text": "Автор: Simon · Веб-дизайнер и разработчик",
+            "footer.cta": "Начать проект"
+        },
+        ua: {
+            "page.title": "CSS-анімації, які не вбивають продуктивність | Блог Саймона",
+            "nav.back": "Назад до блогу",
+            "meta.tag": "Туторіал",
+            "meta.date": "Жовтень 2026",
+            "article.title": "CSS-анімації, які не вбивають продуктивність",
+            "article.subtitle": "Практичний гайд з плавних scroll-анімацій, will-change, transform-руху та типових помилок розробників.",
+            "body.intro1": "Кожен розробник це бачив: гарний сайт, який смикається під час скролу. Винуватець майже завжди один і той самий — <strong>анімація не тих CSS-властивостей</strong>.",
+            "body.intro2": "Це не теоретична стаття. Це уроки з реальних проєктів, включно з моїм каталогом <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a>, де плавна анімація на темному інтерфейсі робила або ламала досвід.",
+            "h.golden": "Золоте правило: анімуйте лише <code>transform</code> та <code>opacity</code>",
+            "body.golden1": "Коли браузер рендерить сторінку, він проходить кілька етапів: layout, paint і composite. Деякі CSS-властивості змушують браузер перераховувати layout на кожному кадрі. Інші можуть бути повністю оброблені GPU.",
+            "body.golden2": "Лише дві властивості можна анімувати без виклику layout чи paint:",
+            "li.golden1": "<code>transform</code> — переміщення, масштаб, обертання, нахил",
+            "li.golden2": "<code>opacity</code> — плавна поява та зникнення",
+            "body.golden3": "Усе інше — <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code>, <code>margin</code>, <code>box-shadow</code> — змушує браузер перемальовувати і потенційно перераховувати layout всієї сторінки. При 60 fps у вас 16 мілісекунд на кадр. Перерахунок layout з'їдає цей бюджет швидко.",
+            "callout.rule": "💡 <strong>Правило:</strong> Якщо ваша анімація торкається геометрії (розмір, позиція) чи візуалу (колір, тінь) — вона, ймовірно, дорога. Використовуйте <code>transform</code> замість цього.",
+            "h3.badGood": "Погано vs добре",
+            "h.willChange": "Використовуйте <code>will-change</code> — але не зловживайте",
+            "body.willChange1": "<code>will-change</code> каже браузеру підняти елемент в окремий шар композитора <em>до</em> старту анімації. Це усуває початкові ривки.",
+            "body.willChange2": "Але ось пастка: <strong>кожен шар споживає пам'ять GPU</strong>. Якщо ви наліпите <code>will-change</code> на 50 елементів, ви обвалите продуктивність замість того, щоб її покращити.",
+            "body.willChange3": "Мій підхід: застосовую <code>will-change</code> лише до елементів, які анімуються часто — паралакс-картинки, hover-картки, секції з анімацією при скролі. Прибираю після завершення анімації, якщо елемент більше не рухається.",
+            "h.scroll": "Scroll-анімації: IntersectionObserver",
+            "body.scroll1": "Анімації при скролі популярні, але більшість реалізацій використовують слухачі scroll-подій, які спрацьовують десятки разів на секунду. Це вбивця продуктивності.",
+            "body.scroll2": "Використовуйте <code>IntersectionObserver</code> — він спрацьовує лише коли елементи входять у viewport або покидають його:",
+            "body.scroll3": "Виклик <code>unobserve</code> критичний — після того, як елемент анімувався, немає причин продовжувати за ним стежити. Це звільняє ресурси для елементів, які ще чекають.",
+            "h.parallax": "Пастка паралаксу",
+            "body.parallax1": "Паралакс-ефекти виглядають чудово, але сумно відомі своєю дороговизною. Наївна реалізація оновлює <code>style.transform</code> на кожній scroll-події, викликаючи layout thrashing.",
+            "body.parallax2": "Рішення: групувати оновлення через <code>requestAnimationFrame</code>:",
+            "body.parallax3": "Це гарантує, що браузер оновить transform один раз за кадр, а не один раз за scroll-подію. На мобільних це різниця між плавним і непридатним.",
+            "h.numbers": "Реальні цифри",
+            "body.numbers1": "У Hot Wheels Market після переходу з scroll-слухачів на <code>IntersectionObserver</code> та transform-анімації:",
+            "li.numbers1": "FPS під час скролу: <strong>42fps → 59fps</strong>",
+            "li.numbers2": "Total blocking time: <strong>180мс → 40мс</strong>",
+            "li.numbers3": "Завантаження CPU під час скролу: <strong>скоротилося приблизно вдвічі</strong>",
+            "body.numbers2": "Той самий візуальний результат. Радикально кращий досвід.",
+            "h.checklist": "Короткий чек-ліст",
+            "li.check1": "Анімуйте лише <code>transform</code> та <code>opacity</code>",
+            "li.check2": "Використовуйте <code>will-change</code> ощадливо — лише на елементах, які реально анімуються",
+            "li.check3": "Використовуйте <code>IntersectionObserver</code>, а не scroll-слухачі",
+            "li.check4": "Групуйте оновлення скролу через <code>requestAnimationFrame</code>",
+            "li.check5": "Відписуйтеся від спостереження після завершення анімації",
+            "li.check6": "Тестуйте на реальному мобільному пристрої, а не лише в DevTools throttling",
+            "body.final": "Продуктивність — це не фіча, яку додають потім. Це звичка, яку будують з першого рядка CSS. Розберіться з цими основами — і ваші анімації відчуватимуться легкими на будь-якому пристрої.",
+            "footer.text": "Автор: Simon · Веб-дизайнер і розробник",
+            "footer.cta": "Почати проєкт"
+        }
+    };
+
+    const langBtns = document.querySelectorAll('.lang-btn');
+
+    function applyLanguage(lang) {
+        const dict = translations[lang];
+        if (!dict) return;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key] === undefined) return;
+            if (dict[key].includes('<')) {
+                el.innerHTML = dict[key];
+            } else {
+                el.textContent = dict[key];
+            }
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
+        });
+        if (dict['page.title']) document.title = dict['page.title'];
+        document.documentElement.lang = lang;
+        localStorage.setItem('lang', lang);
+    }
+
+    const savedLang = localStorage.getItem('lang') || 'en';
+    langBtns.forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[data-lang="${savedLang}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+    applyLanguage(savedLang);
+
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            langBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyLanguage(btn.dataset.lang);
+        });
+    });
+</script>
+
+</body>
+</html>

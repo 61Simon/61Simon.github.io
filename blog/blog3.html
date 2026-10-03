@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">Why Cheap Websites Cost You More | Simon's Blog</title>
+    <meta name="description" content="The hidden cost of template-based sites — and why custom design, clean code, and SEO actually save money long-term.">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #131313;
+            --accent: #7b61ff;
+            --accent-light: #9d8aff;
+            --text: #f5f5f5;
+            --text-secondary: #b3b3b3;
+            --card-bg: #1a1a1a;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        html[data-theme="light"] {
+            --primary: #ffffff;
+            --secondary: #f5f5f7;
+            --text: #0a0a0a;
+            --text-secondary: #3d3d3d;
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--primary);
+            color: var(--text);
+            line-height: 1.8;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        h1, h2, h3 { font-family: 'Syne', sans-serif; font-weight: 700; line-height: 1.2; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { color: var(--accent-light); }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+        header {
+            padding: 20px 0; position: sticky; top: 0;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            z-index: 100; border-bottom: 1px solid var(--card-border);
+        }
+        html[data-theme="light"] header { background: rgba(255, 255, 255, 0.85); }
+        .header-inner { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+        .logo {
+            font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 14px; font-weight: 500; color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        .back-link:hover { color: var(--accent); }
+        .back-link i { transition: transform 0.3s ease; }
+        .back-link:hover i { transform: translateX(-4px); }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .lang-switcher {
+            display: flex; gap: 2px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px; padding: 4px;
+        }
+        .lang-btn {
+            width: 34px; height: 26px; border-radius: 50px;
+            border: none; background: transparent;
+            color: var(--text-secondary);
+            font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+            cursor: pointer; transition: var(--transition);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .lang-btn.active { background: var(--accent); color: white; }
+        .lang-btn:hover:not(.active) { color: var(--text); }
+        .theme-toggle {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            color: var(--text); display: flex; align-items: center; justify-content: center;
+            font-size: 14px; cursor: pointer; transition: var(--transition);
+        }
+        .theme-toggle:hover { background: var(--accent); color: white; border-color: var(--accent); }
+        article { padding: 60px 0 100px; }
+        .article-meta {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+            font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;
+        }
+        .article-tag { color: var(--accent); }
+        .article-date { color: var(--text-secondary); opacity: 0.7; }
+        .article-title { font-size: 52px; line-height: 1.15; margin-bottom: 24px; }
+        .article-subtitle { font-size: 20px; color: var(--text-secondary); margin-bottom: 40px; line-height: 1.6; }
+        .article-hero {
+            width: 100%; border-radius: 20px; margin-bottom: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        .article-body h2 {
+            font-size: 32px; margin: 60px 0 22px; padding-bottom: 12px;
+            border-bottom: 2px solid var(--card-border);
+        }
+        .article-body h3 { font-size: 22px; margin: 40px 0 16px; color: var(--accent-light); }
+        .article-body p { color: var(--text-secondary); margin-bottom: 22px; font-size: 17px; }
+        .article-body ul, .article-body ol {
+            color: var(--text-secondary); margin-bottom: 22px; padding-left: 24px; font-size: 17px;
+        }
+        .article-body li { margin-bottom: 10px; }
+        .article-body strong { color: var(--text); }
+        .article-body code {
+            background: rgba(123, 97, 255, 0.1); border: 1px solid rgba(123, 97, 255, 0.2);
+            border-radius: 6px; padding: 2px 8px; font-size: 15px;
+            font-family: 'Courier New', monospace; color: var(--accent-light);
+        }
+        .article-body pre {
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 14px; padding: 24px 28px; overflow-x: auto;
+            margin-bottom: 28px; font-size: 14px; line-height: 1.7;
+        }
+        .article-body pre code { background: none; border: none; padding: 0; color: var(--text); }
+        .callout {
+            background: rgba(123, 97, 255, 0.08); border-left: 4px solid var(--accent);
+            border-radius: 0 12px 12px 0; padding: 24px 28px; margin: 32px 0;
+        }
+        .callout p { margin-bottom: 0; color: var(--text); font-weight: 500; }
+        .compare-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 32px 0;
+        }
+        .compare-card {
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 16px; padding: 28px 24px;
+        }
+        .compare-card h4 {
+            font-family: 'Syne', sans-serif; font-size: 18px; margin-bottom: 16px;
+        }
+        .compare-card.bad h4 { color: #f87171; }
+        .compare-card.good h4 { color: #4ade80; }
+        .compare-card ul { padding-left: 20px; margin-bottom: 0; font-size: 15px; }
+        .compare-card li { margin-bottom: 8px; }
+        .article-footer {
+            margin-top: 70px; padding-top: 40px; border-top: 1px solid var(--card-border);
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 20px; flex-wrap: wrap;
+        }
+        .article-footer-text { color: var(--text-secondary); font-size: 15px; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border-radius: 50px;
+            font-weight: 600; font-size: 15px; transition: var(--transition);
+            border: none; cursor: pointer; font-family: 'Space Grotesk', sans-serif;
+            color: inherit;
+        }
+        .btn-primary {
+            background: var(--accent); color: #ffffff;
+            box-shadow: 0 4px 20px rgba(123, 97, 255, 0.3);
+        }
+        .btn-primary:hover {
+            background: var(--accent-light); color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(123, 97, 255, 0.4);
+        }
+        @media (max-width: 768px) {
+            .article-title { font-size: 36px; }
+            .article-subtitle { font-size: 17px; }
+            .article-body h2 { font-size: 26px; }
+            .article-body pre { padding: 18px 20px; font-size: 13px; }
+            .compare-grid { grid-template-columns: 1fr; }
+            .back-link span { display: none; }
+        }
+        @media (max-width: 576px) {
+            .article-title { font-size: 28px; }
+            .article-body p, .article-body ul, .article-body ol { font-size: 16px; }
+            .lang-btn { width: 30px; height: 24px; font-size: 9px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container header-inner">
+        <a href="../index.html" class="logo">Simon</a>
+        <a href="../index.html#blog" class="back-link">
+            <i class="fas fa-arrow-left"></i> <span data-i18n="nav.back">Back to Blog</span>
+        </a>
+        <div class="header-actions">
+            <div class="lang-switcher" role="group" aria-label="Language">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="ua">UA</button>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class="fas fa-sun"></i></button>
+        </div>
+    </div>
+</header>
+
+<article>
+    <div class="container">
+        <div class="article-meta">
+            <span class="article-tag" data-i18n="meta.tag">Opinion</span>
+            <span class="article-date" data-i18n="meta.date">October 2026</span>
+        </div>
+
+        <h1 class="article-title" data-i18n="article.title">Why Cheap Websites Cost You More</h1>
+        <p class="article-subtitle" data-i18n="article.subtitle">The hidden cost of template-based sites — and why custom design, clean code, and SEO actually save money long-term.</p>
+
+        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80" alt="Business website analytics" class="article-hero">
+
+        <div class="article-body">
+            <p data-i18n="body.intro1">Let me guess: you've seen those ads. "Website for $99!" "Premium template, ready in 24 hours!" "No developer needed — build it yourself!"</p>
+
+            <p data-i18n="body.intro2">They sound great. And sometimes, for a personal blog or a quick landing page, they're actually fine. But for a business? <strong>That cheap website is the most expensive thing you'll ever buy.</strong></p>
+
+            <p data-i18n="body.intro3">Here's why — and what actually matters when your website is your storefront.</p>
+
+            <h2 data-i18n="h.template">The True Cost of a Template</h2>
+
+            <p data-i18n="body.template1">A template costs $50. Sounds like a deal. But that's the purchase price, not the total cost. Let's break it down:</p>
+
+            <div class="compare-grid">
+                <div class="compare-card bad">
+                    <h4 data-i18n="compare.badTitle"><i class="fas fa-times-circle"></i> Template ($50–500)</h4>
+                    <ul>
+                        <li data-i18n="li.bad1">Looks like 10,000 other sites</li>
+                        <li data-i18n="li.bad2">Bloated code — slow loading</li>
+                        <li data-i18n="li.bad3">Poor mobile experience</li>
+                        <li data-i18n="li.bad4">No SEO structure</li>
+                        <li data-i18n="li.bad5">Paid plugins for basic features</li>
+                        <li data-i18n="li.bad6">Breaks with every update</li>
+                    </ul>
+                </div>
+                <div class="compare-card good">
+                    <h4 data-i18n="compare.goodTitle"><i class="fas fa-check-circle"></i> Custom ($300–1,500)</h4>
+                    <ul>
+                        <li data-i18n="li.good1">Unique to your brand</li>
+                        <li data-i18n="li.good2">Clean, minimal code</li>
+                        <li data-i18n="li.good3">Mobile-first by default</li>
+                        <li data-i18n="li.good4">SEO built into structure</li>
+                        <li data-i18n="li.good5">Exactly what you need</li>
+                        <li data-i18n="li.good6">You own the code</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p data-i18n="body.template2">The template's $50 price tag is just the beginning. Add premium plugins ($100–300/year), a developer to fix things when they break ($50–100/hour), and the lost revenue from a slow, generic site — and suddenly that "cheap" option isn't so cheap.</p>
+
+            <h2 data-i18n="h.speed">Speed Is Revenue</h2>
+
+            <p data-i18n="body.speed1">Amazon found that every 100ms of latency costs them 1% in sales. Google's own research shows that 53% of mobile users abandon sites that take longer than 3 seconds to load.</p>
+
+            <p data-i18n="body.speed2">Templates are notorious for loading tons of unused CSS, JavaScript libraries you don't need, and high-resolution images that were never optimized. A custom-built site loads only what it needs.</p>
+
+            <p data-i18n="body.speed3">My <a href="https://61simon.github.io/Hot-Wheels-Market/" target="_blank" rel="noopener">Hot Wheels Market</a> catalog loads in under a second on 4G — because every line of code has a reason to exist. No jQuery, no Bootstrap, no icon fonts loading 2,000 glyphs when you use 12.</p>
+
+            <div class="callout">
+                <p data-i18n="callout.math">💡 <strong>The math:</strong> If your site loads 2 seconds slower and you get 1,000 visitors per month, that's ~500 people who left before seeing your product. At even $10 average order value, that's $5,000/month in lost revenue.</p>
+            </div>
+
+            <h2 data-i18n="h.fixLater">The "I'll Fix It Later" Trap</h2>
+
+            <p data-i18n="body.fixLater1">Every business owner who buys a cheap template says the same thing: "I'll customize it later." But here's what actually happens:</p>
+
+            <ol>
+                <li data-i18n="li.fix1">The template is built on a specific framework with its own quirks.</li>
+                <li data-i18n="li.fix2">You hire a freelancer to customize it. They spend 10 hours just understanding the structure.</li>
+                <li data-i18n="li.fix3">Every customization fights against the framework.</li>
+                <li data-i18n="li.fix4">A major update breaks everything.</li>
+                <li data-i18n="li.fix5">You're now locked into that specific template and developer forever.</li>
+            </ol>
+
+            <p data-i18n="body.fixLater2">A custom site, even a simple one, has none of these problems. The code is yours. Any developer can work with it. You're not dependent on a template vendor that might disappear tomorrow.</p>
+
+            <h2 data-i18n="h.seo">SEO: Where Cheap Really Hurts</h2>
+
+            <p data-i18n="body.seo1">Search engines don't care how pretty your site is. They care about structure, speed, mobile usability, and semantic HTML.</p>
+
+            <p data-i18n="body.seo2">Templates usually score poorly on all four:</p>
+
+            <ul>
+                <li data-i18n="li.seo1"><strong>Structure:</strong> Wrong heading hierarchy, missing semantic tags</li>
+                <li data-i18n="li.seo2"><strong>Speed:</strong> Bloated assets, no lazy loading, render-blocking resources</li>
+                <li data-i18n="li.seo3"><strong>Mobile:</strong> "Responsive" but with tiny text and cramped layouts</li>
+                <li data-i18n="li.seo4"><strong>Semantics:</strong> &lt;div&gt; soup instead of meaningful HTML</li>
+            </ul>
+
+            <p data-i18n="body.seo3">A custom-built site can score 95+ on Core Web Vitals out of the box. That means better rankings, more organic traffic, and less money spent on ads.</p>
+
+            <h2 data-i18n="h.paying">What You're Actually Paying For</h2>
+
+            <p data-i18n="body.paying1">When you pay for a custom website, you're not paying for "a website." You're paying for:</p>
+
+            <ul>
+                <li data-i18n="li.paying1"><strong>Strategy</strong> — someone thought about your goals, audience, and conversion path</li>
+                <li data-i18n="li.paying2"><strong>Design</strong> — a unique visual identity, not a template everyone else uses</li>
+                <li data-i18n="li.paying3"><strong>Code</strong> — performance, accessibility, and SEO baked in from the start</li>
+                <li data-i18n="li.paying4"><strong>Ownership</strong> — the source code is yours, free and clear</li>
+            </ul>
+
+            <p data-i18n="body.paying2">That last point matters more than most people realize. With a template, you're renting. With custom, you own.</p>
+
+            <h2 data-i18n="h.bottom">The Bottom Line</h2>
+
+            <p data-i18n="body.bottom1">A cheap website is like a cheap suit: it might look okay from a distance, but it fits badly, falls apart quickly, and everyone can tell.</p>
+
+            <p data-i18n="body.bottom2">If you're building a personal blog — sure, use a template. If you're building a business — invest in something built for you. You'll spend less in the long run, rank higher, convert better, and sleep easier knowing your site isn't held together with duct tape.</p>
+
+            <p data-i18n="body.bottom3">Want to see what custom-built actually looks like? Check out my <a href="../index.html#portfolio">portfolio</a> or <a href="../index.html#contact">get in touch</a> — I'll show you exactly what your budget can get.</p>
+        </div>
+
+        <div class="article-footer">
+            <span class="article-footer-text" data-i18n="footer.text">Written by Simon · Web Designer & Developer</span>
+            <a href="../index.html#contact" class="btn btn-primary">
+                <span data-i18n="footer.cta">Start Your Project</span> <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</article>
+
+<script>
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+    themeToggle.addEventListener('click', () => {
+        const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        htmlEl.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        themeIcon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    });
+
+    const translations = {
+        en: {
+            "page.title": "Why Cheap Websites Cost You More | Simon's Blog",
+            "nav.back": "Back to Blog",
+            "meta.tag": "Opinion",
+            "meta.date": "October 2026",
+            "article.title": "Why Cheap Websites Cost You More",
+            "article.subtitle": "The hidden cost of template-based sites — and why custom design, clean code, and SEO actually save money long-term.",
+            "body.intro1": "Let me guess: you've seen those ads. \"Website for $99!\" \"Premium template, ready in 24 hours!\" \"No developer needed — build it yourself!\"",
+            "body.intro2": "They sound great. And sometimes, for a personal blog or a quick landing page, they're actually fine. But for a business? <strong>That cheap website is the most expensive thing you'll ever buy.</strong>",
+            "body.intro3": "Here's why — and what actually matters when your website is your storefront.",
+            "h.template": "The True Cost of a Template",
+            "body.template1": "A template costs $50. Sounds like a deal. But that's the purchase price, not the total cost. Let's break it down:",
+            "compare.badTitle": "<i class=\"fas fa-times-circle\"></i> Template ($50–500)",
+            "compare.goodTitle": "<i class=\"fas fa-check-circle\"></i> Custom ($300–1,500)",
+            "li.bad1": "Looks like 10,000 other sites",
+            "li.bad2": "Bloated code — slow loading",
+            "li.bad3": "Poor mobile experience",
+            "li.bad4": "No SEO structure",
+            "li.bad5": "Paid plugins for basic features",
+            "li.bad6": "Breaks with every update",
+            "li.good1": "Unique to your brand",
+            "li.good2": "Clean, minimal code",
+            "li.good3": "Mobile-first by default",
+            "li.good4": "SEO built into structure",
+            "li.good5": "Exactly what you need",
+            "li.good6": "You own the code",
+            "body.template2": "The template's $50 price tag is just the beginning. Add premium plugins ($100–300/year), a developer to fix things when they break ($50–100/hour), and the lost revenue from a slow, generic site — and suddenly that \"cheap\" option isn't so cheap.",
+            "h.speed": "Speed Is Revenue",
+            "body.speed1": "Amazon found that every 100ms of latency costs them 1% in sales. Google's own research shows that 53% of mobile users abandon sites that take longer than 3 seconds to load.",
+            "body.speed2": "Templates are notorious for loading tons of unused CSS, JavaScript libraries you don't need, and high-resolution images that were never optimized. A custom-built site loads only what it needs.",
+            "body.speed3": "My <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a> catalog loads in under a second on 4G — because every line of code has a reason to exist. No jQuery, no Bootstrap, no icon fonts loading 2,000 glyphs when you use 12.",
+            "callout.math": "💡 <strong>The math:</strong> If your site loads 2 seconds slower and you get 1,000 visitors per month, that's ~500 people who left before seeing your product. At even $10 average order value, that's $5,000/month in lost revenue.",
+            "h.fixLater": "The \"I'll Fix It Later\" Trap",
+            "body.fixLater1": "Every business owner who buys a cheap template says the same thing: \"I'll customize it later.\" But here's what actually happens:",
+            "li.fix1": "The template is built on a specific framework with its own quirks.",
+            "li.fix2": "You hire a freelancer to customize it. They spend 10 hours just understanding the structure.",
+            "li.fix3": "Every customization fights against the framework.",
+            "li.fix4": "A major update breaks everything.",
+            "li.fix5": "You're now locked into that specific template and developer forever.",
+            "body.fixLater2": "A custom site, even a simple one, has none of these problems. The code is yours. Any developer can work with it. You're not dependent on a template vendor that might disappear tomorrow.",
+            "h.seo": "SEO: Where Cheap Really Hurts",
+            "body.seo1": "Search engines don't care how pretty your site is. They care about structure, speed, mobile usability, and semantic HTML.",
+            "body.seo2": "Templates usually score poorly on all four:",
+            "li.seo1": "<strong>Structure:</strong> Wrong heading hierarchy, missing semantic tags",
+            "li.seo2": "<strong>Speed:</strong> Bloated assets, no lazy loading, render-blocking resources",
+            "li.seo3": "<strong>Mobile:</strong> \"Responsive\" but with tiny text and cramped layouts",
+            "li.seo4": "<strong>Semantics:</strong> <div> soup instead of meaningful HTML",
+            "body.seo3": "A custom-built site can score 95+ on Core Web Vitals out of the box. That means better rankings, more organic traffic, and less money spent on ads.",
+            "h.paying": "What You're Actually Paying For",
+            "body.paying1": "When you pay for a custom website, you're not paying for \"a website.\" You're paying for:",
+            "li.paying1": "<strong>Strategy</strong> — someone thought about your goals, audience, and conversion path",
+            "li.paying2": "<strong>Design</strong> — a unique visual identity, not a template everyone else uses",
+            "li.paying3": "<strong>Code</strong> — performance, accessibility, and SEO baked in from the start",
+            "li.paying4": "<strong>Ownership</strong> — the source code is yours, free and clear",
+            "body.paying2": "That last point matters more than most people realize. With a template, you're renting. With custom, you own.",
+            "h.bottom": "The Bottom Line",
+            "body.bottom1": "A cheap website is like a cheap suit: it might look okay from a distance, but it fits badly, falls apart quickly, and everyone can tell.",
+            "body.bottom2": "If you're building a personal blog — sure, use a template. If you're building a business — invest in something built for you. You'll spend less in the long run, rank higher, convert better, and sleep easier knowing your site isn't held together with duct tape.",
+            "body.bottom3": "Want to see what custom-built actually looks like? Check out my <a href=\"../index.html#portfolio\">portfolio</a> or <a href=\"../index.html#contact\">get in touch</a> — I'll show you exactly what your budget can get.",
+            "footer.text": "Written by Simon · Web Designer & Developer",
+            "footer.cta": "Start Your Project"
+        },
+        ru: {
+            "page.title": "Почему дешёвые сайты обходятся дороже | Блог Саймона",
+            "nav.back": "Назад в блог",
+            "meta.tag": "Мнение",
+            "meta.date": "Октябрь 2026",
+            "article.title": "Почему дешёвые сайты обходятся дороже",
+            "article.subtitle": "Скрытая стоимость сайтов на шаблонах — и почему кастомный дизайн, чистый код и SEO реально экономят деньги в долгосрочной перспективе.",
+            "body.intro1": "Угадаю: вы видели эти объявления. «Сайт за $99!» «Премиум-шаблон, готов за 24 часа!» «Разработчик не нужен — сделай сам!»",
+            "body.intro2": "Звучит отлично. И иногда для личного блога или быстрого лендинга они действительно подходят. Но для бизнеса? <strong>Этот дешёвый сайт — самая дорогая покупка в вашей жизни.</strong>",
+            "body.intro3": "Вот почему — и что действительно важно, когда ваш сайт — это ваша витрина.",
+            "h.template": "Реальная стоимость шаблона",
+            "body.template1": "Шаблон стоит $50. Звучит как сделка. Но это цена покупки, а не полная стоимость. Разберём по полочкам:",
+            "compare.badTitle": "<i class=\"fas fa-times-circle\"></i> Шаблон ($50–500)",
+            "compare.goodTitle": "<i class=\"fas fa-check-circle\"></i> Кастом ($300–1,500)",
+            "li.bad1": "Выглядит как 10 000 других сайтов",
+            "li.bad2": "Раздутый код — медленная загрузка",
+            "li.bad3": "Плохой мобильный опыт",
+            "li.bad4": "Нет SEO-структуры",
+            "li.bad5": "Платные плагины за базовые функции",
+            "li.bad6": "Ломается при каждом обновлении",
+            "li.good1": "Уникален для вашего бренда",
+            "li.good2": "Чистый, минимальный код",
+            "li.good3": "Mobile-first по умолчанию",
+            "li.good4": "SEO заложено в структуру",
+            "li.good5": "Ровно то, что вам нужно",
+            "li.good6": "Код принадлежит вам",
+            "body.template2": "Ценник в $50 — только начало. Добавьте премиум-плагины ($100–300/год), разработчика для правок ($50–100/час) и потерянную выручку из-за медленного шаблонного сайта — и вдруг «дешёвый» вариант оказывается не таким уж дешёвым.",
+            "h.speed": "Скорость — это выручка",
+            "body.speed1": "Amazon выяснил, что каждая 100 мс задержки стоит им 1% продаж. Исследование Google показывает: 53% мобильных пользователей уходят с сайтов, которые грузятся дольше 3 секунд.",
+            "body.speed2": "Шаблоны печально известны тем, что грузят тонны неиспользуемого CSS, ненужные JS-библиотеки и неоптимизированные изображения в высоком разрешении. Кастомный сайт грузит только то, что нужно.",
+            "body.speed3": "Мой каталог <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a> загружается меньше секунды на 4G — потому что каждая строка кода имеет причину существовать. Никакого jQuery, Bootstrap и иконочных шрифтов, грузящих 2000 глифов, когда вы используете 12.",
+            "callout.math": "💡 <strong>Математика:</strong> Если сайт грузится на 2 секунды дольше, а у вас 1000 посетителей в месяц — это ~500 человек, ушедших до того, как увидели ваш продукт. Даже при среднем чеке $10 это $5000 в месяц потерянной выручки.",
+            "h.fixLater": "Ловушка «доделаю потом»",
+            "body.fixLater1": "Каждый владелец бизнеса, купивший дешёвый шаблон, говорит одно и то же: «Потом докастомизирую». Но вот что происходит на самом деле:",
+            "li.fix1": "Шаблон построен на конкретном фреймворке со своими странностями.",
+            "li.fix2": "Вы нанимаете фрилансера для кастомизации. Он тратит 10 часов только на понимание структуры.",
+            "li.fix3": "Каждая кастомизация борется с фреймворком.",
+            "li.fix4": "Крупное обновление ломает всё.",
+            "li.fix5": "Теперь вы навсегда привязаны к этому шаблону и разработчику.",
+            "body.fixLater2": "У кастомного сайта, даже простого, нет ни одной из этих проблем. Код ваш. Любой разработчик может с ним работать. Вы не зависите от вендора шаблона, который может исчезнуть завтра.",
+            "h.seo": "SEO: где дешевизна реально бьёт",
+            "body.seo1": "Поисковикам всё равно, насколько красив ваш сайт. Им важны структура, скорость, мобильность и семантичный HTML.",
+            "body.seo2": "Шаблоны обычно плохи по всем четырём пунктам:",
+            "li.seo1": "<strong>Структура:</strong> неправильная иерархия заголовков, отсутствие семантичных тегов",
+            "li.seo2": "<strong>Скорость:</strong> раздутые ассеты, нет lazy loading, render-blocking ресурсы",
+            "li.seo3": "<strong>Мобильность:</strong> «адаптивность» с мелким текстом и сжатыми лейаутами",
+            "li.seo4": "<strong>Семантика:</strong> суп из <div> вместо осмысленного HTML",
+            "body.seo3": "Кастомный сайт может набирать 95+ по Core Web Vitals из коробки. Это значит лучшие позиции, больше органического трафика и меньше денег на рекламу.",
+            "h.paying": "За что вы на самом деле платите",
+            "body.paying1": "Когда вы платите за кастомный сайт, вы платите не за «сайт». Вы платите за:",
+            "li.paying1": "<strong>Стратегию</strong> — кто-то подумал о ваших целях, аудитории и пути конверсии",
+            "li.paying2": "<strong>Дизайн</strong> — уникальная визуальная айдентика, а не шаблон, который используют все",
+            "li.paying3": "<strong>Код</strong> — производительность, доступность и SEO заложены с самого начала",
+            "li.paying4": "<strong>Собственность</strong> — исходный код ваш, свободно и без ограничений",
+            "body.paying2": "Последний пункт важнее, чем кажется. С шаблоном вы арендуете. С кастомом — владеете.",
+            "h.bottom": "Итог",
+            "body.bottom1": "Дешёвый сайт как дешёвый костюм: издалека вроде нормально, но сидит плохо, быстро разваливается, и все это видят.",
+            "body.bottom2": "Если делаете личный блог — конечно, берите шаблон. Если делаете бизнес — инвестируйте в то, что сделано под вас. В долгосрочной перспективе потратите меньше, будете выше в поиске, лучше конвертить и спать спокойнее, зная, что ваш сайт не склеен скотчем.",
+            "body.bottom3": "Хотите увидеть, как выглядит настоящий кастом? Загляните в моё <a href=\"../index.html#portfolio\">портфолио</a> или <a href=\"../index.html#contact\">свяжитесь со мной</a> — покажу, что можно получить за ваш бюджет.",
+            "footer.text": "Автор: Simon · Веб-дизайнер и разработчик",
+            "footer.cta": "Начать проект"
+        },
+        ua: {
+            "page.title": "Чому дешеві сайти коштують дорожче | Блог Саймона",
+            "nav.back": "Назад до блогу",
+            "meta.tag": "Думка",
+            "meta.date": "Жовтень 2026",
+            "article.title": "Чому дешеві сайти коштують дорожче",
+            "article.subtitle": "Прихована вартість сайтів на шаблонах — і чому кастомний дизайн, чистий код та SEO реально економлять гроші в довгостроковій перспективі.",
+            "body.intro1": "Вгадаю: ви бачили ці оголошення. «Сайт за $99!» «Преміум-шаблон, готовий за 24 години!» «Розробник не потрібен — зроби сам!»",
+            "body.intro2": "Звучить чудово. І іноді для особистого блогу чи швидкого лендінгу вони справді підходять. Але для бізнесу? <strong>Цей дешевий сайт — найдорожча покупка у вашому житті.</strong>",
+            "body.intro3": "Ось чому — і що насправді важливо, коли ваш сайт — це ваша вітрина.",
+            "h.template": "Реальна вартість шаблону",
+            "body.template1": "Шаблон коштує $50. Звучить як вигідна угода. Але це ціна покупки, а не повна вартість. Розберемо по полицях:",
+            "compare.badTitle": "<i class=\"fas fa-times-circle\"></i> Шаблон ($50–500)",
+            "compare.goodTitle": "<i class=\"fas fa-check-circle\"></i> Кастом ($300–1,500)",
+            "li.bad1": "Виглядає як 10 000 інших сайтів",
+            "li.bad2": "Роздутий код — повільне завантаження",
+            "li.bad3": "Поганий мобільний досвід",
+            "li.bad4": "Немає SEO-структури",
+            "li.bad5": "Платні плагіни за базові функції",
+            "li.bad6": "Ламається при кожному оновленні",
+            "li.good1": "Унікальний для вашого бренду",
+            "li.good2": "Чистий, мінімальний код",
+            "li.good3": "Mobile-first за замовчуванням",
+            "li.good4": "SEO закладено в структуру",
+            "li.good5": "Рівно те, що вам потрібно",
+            "li.good6": "Код належить вам",
+            "body.template2": "Цінник у $50 — лише початок. Додайте преміум-плагіни ($100–300/рік), розробника для правок ($50–100/год) і втрачений дохід через повільний шаблонний сайт — і раптом «дешевий» варіант виявляється не таким вже й дешевим.",
+            "h.speed": "Швидкість — це дохід",
+            "body.speed1": "Amazon з'ясував, що кожні 100 мс затримки коштують їм 1% продажів. Дослідження Google показує: 53% мобільних користувачів йдуть із сайтів, які завантажуються довше 3 секунд.",
+            "body.speed2": "Шаблони сумно відомі тим, що завантажують тонни невикористаного CSS, непотрібні JS-бібліотеки та неоптимізовані зображення у високій роздільності. Кастомний сайт завантажує лише те, що потрібно.",
+            "body.speed3": "Мій каталог <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a> завантажується менш ніж за секунду на 4G — бо кожен рядок коду має причину існувати. Жодного jQuery, Bootstrap та іконкових шрифтів, що завантажують 2000 гліфів, коли ви використовуєте 12.",
+            "callout.math": "💡 <strong>Математика:</strong> Якщо сайт завантажується на 2 секунди довше, а у вас 1000 відвідувачів на місяць — це ~500 людей, які пішли до того, як побачили ваш продукт. Навіть при середньому чеку $10 це $5000 на місяць втраченого доходу.",
+            "h.fixLater": "Пастка «дороблю потім»",
+            "body.fixLater1": "Кожен власник бізнесу, який купив дешевий шаблон, каже одне й те саме: «Потім докастомізую». Але ось що відбувається насправді:",
+            "li.fix1": "Шаблон побудований на конкретному фреймворку зі своїми дивацтвами.",
+            "li.fix2": "Ви наймаєте фрилансера для кастомізації. Він витрачає 10 годин лише на розуміння структури.",
+            "li.fix3": "Кожна кастомізація бореться з фреймворком.",
+            "li.fix4": "Велике оновлення ламає все.",
+            "li.fix5": "Тепер ви назавжди прив'язані до цього шаблону та розробника.",
+            "body.fixLater2": "У кастомного сайту, навіть простого, немає жодної з цих проблем. Код ваш. Будь-який розробник може з ним працювати. Ви не залежите від вендора шаблону, який може зникнути завтра.",
+            "h.seo": "SEO: де дешевизна реально б'є",
+            "body.seo1": "Пошуковикам байдуже, наскільки гарний ваш сайт. Їм важливі структура, швидкість, мобільність і семантичний HTML.",
+            "body.seo2": "Шаблони зазвичай погані за всіма чотирма пунктами:",
+            "li.seo1": "<strong>Структура:</strong> неправильна ієрархія заголовків, відсутність семантичних тегів",
+            "li.seo2": "<strong>Швидкість:</strong> роздуті ассети, немає lazy loading, render-blocking ресурси",
+            "li.seo3": "<strong>Мобільність:</strong> «адаптивність» з дрібним текстом та стиснутими лейаутами",
+            "li.seo4": "<strong>Семантика:</strong> суп з <div> замість осмисленого HTML",
+            "body.seo3": "Кастомний сайт може набирати 95+ за Core Web Vitals з коробки. Це означає кращі позиції, більше органічного трафіку та менше грошей на рекламу.",
+            "h.paying": "За що ви насправді платите",
+            "body.paying1": "Коли ви платите за кастомний сайт, ви платите не за «сайт». Ви платите за:",
+            "li.paying1": "<strong>Стратегію</strong> — хтось подумав про ваші цілі, аудиторію та шлях конверсії",
+            "li.paying2": "<strong>Дизайн</strong> — унікальна візуальна ідентичність, а не шаблон, який використовують усі",
+            "li.paying3": "<strong>Код</strong> — продуктивність, доступність та SEO закладені від початку",
+            "li.paying4": "<strong>Власність</strong> — вихідний код ваш, вільно й без обмежень",
+            "body.paying2": "Останній пункт важливіший, ніж здається. З шаблоном ви орендуєте. З кастомом — володієте.",
+            "h.bottom": "Підсумок",
+            "body.bottom1": "Дешевий сайт як дешевий костюм: здалеку ніби нормально, але сидить погано, швидко розвалюється, і всі це бачать.",
+            "body.bottom2": "Якщо робите особистий блог — звісно, беріть шаблон. Якщо робите бізнес — інвестуйте в те, що зроблено під вас. У довгостроковій перспективі витратите менше, будете вище в пошуку, краще конвертити та спати спокійніше, знаючи, що ваш сайт не склеєний скотчем.",
+            "body.bottom3": "Хочете побачити, як виглядає справжній кастом? Зазирніть у моє <a href=\"../index.html#portfolio\">портфоліо</a> або <a href=\"../index.html#contact\">зв'яжіться зі мною</a> — покажу, що можна отримати за ваш бюджет.",
+            "footer.text": "Автор: Simon · Веб-дизайнер і розробник",
+            "footer.cta": "Почати проєкт"
+        }
+    };
+
+    const langBtns = document.querySelectorAll('.lang-btn');
+
+    function applyLanguage(lang) {
+        const dict = translations[lang];
+        if (!dict) return;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key] === undefined) return;
+            if (dict[key].includes('<')) {
+                el.innerHTML = dict[key];
+            } else {
+                el.textContent = dict[key];
+            }
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
+        });
+        if (dict['page.title']) document.title = dict['page.title'];
+        document.documentElement.lang = lang;
+        localStorage.setItem('lang', lang);
+    }
+
+    const savedLang = localStorage.getItem('lang') || 'en';
+    langBtns.forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[data-lang="${savedLang}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+    applyLanguage(savedLang);
+
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            langBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyLanguage(btn.dataset.lang);
+        });
+    });
+</script>
+
+</body>
+</html>
