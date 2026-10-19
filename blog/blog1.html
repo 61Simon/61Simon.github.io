@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="page.title">How I Built the Hot Wheels Market | Simon's Blog</title>
-    <meta name="description" content="Lessons from building a full e-commerce catalog with vanilla JavaScript — filtering, search, performance, and design decisions behind the dark UI.">
+    <title data-i18n="page.title">How I Built AURELIA — A Luxury Automotive Atelier | Simon's Blog</title>
+    <meta name="description" content="Lessons from building a premium detailing site — SPA routing without a framework, before/after sliders, gallery filtering, and the design system behind the gold-on-obsidian aesthetic.">
     <link rel="icon" type="image/png" href="../favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -281,155 +281,151 @@
             <span class="article-date" data-i18n="meta.date">October 2026</span>
         </div>
 
-        <h1 class="article-title" data-i18n="article.title">How I Built the Hot Wheels Market</h1>
-        <p class="article-subtitle" data-i18n="article.subtitle">Lessons from building a full e-commerce catalog with vanilla JavaScript — filtering, search, performance, and design decisions behind the dark UI.</p>
+        <h1 class="article-title" data-i18n="article.title">How I Built AURELIA — A Luxury Automotive Atelier</h1>
+        <p class="article-subtitle" data-i18n="article.subtitle">Lessons from building a premium detailing site — SPA routing without a framework, before/after sliders, gallery filtering, and the design system behind the gold-on-obsidian aesthetic.</p>
 
-        <img src="https://i.ibb.co/BHjsPVpK/image.png" alt="Hot Wheels Market" class="article-hero">
+        <img src="https://i.ibb.co/zhv6Yd2n/DE84-C8-A2-42-C3-4886-AF28-69-B428-BC697-D.png" alt="AURELIA Automotive Atelier" class="article-hero">
 
         <div class="article-body">
-            <p data-i18n="body.intro1">When I started building the <a href="https://61simon.github.io/Hot-Wheels-Market/" target="_blank" rel="noopener">Hot Wheels Market</a>, I had one rule: <strong>no frameworks</strong>. No React, no Vue, no jQuery. Just HTML, CSS, and vanilla JavaScript.</p>
+            <p data-i18n="body.intro1">When I started building <a href="#" target="_blank" rel="noopener">AURELIA</a>, I had one specific question in mind: <strong>can you make a website feel expensive without using a single framework?</strong></p>
 
-            <p data-i18n="body.intro2">Was it a smart decision? Honestly, it depends. But it taught me more about JavaScript than any framework ever could. Here's how I built it, what I learned, and where I'd do things differently.</p>
+            <p data-i18n="body.intro2">No React, no Framer Motion, no GSAP. Just HTML, CSS, and vanilla JavaScript. The result is a luxury automotive detailing atelier that looks like it belongs on a premium brand's website — with SPA routing, interactive components, and a dark gold aesthetic. Here's how I built it.</p>
 
             <h2 data-i18n="h.challenge">The Challenge</h2>
 
-            <p data-i18n="body.challenge1">Hot Wheels collectors need to browse hundreds of models. Existing collector sites are either outdated forums or clunky mobile apps. The goal was simple: build a fast, modern catalog that works perfectly on any device — and can be deployed anywhere with zero backend.</p>
-
-            <p data-i18n="body.challenge2">The requirements were clear:</p>
+            <p data-i18n="body.challenge1">The brief I set for myself was strict:</p>
 
             <ul>
-                <li data-i18n="li.req1">Instant search across product names and series</li>
-                <li data-i18n="li.req2">Multi-criteria filtering (by series, rarity, price range)</li>
-                <li data-i18n="li.req3">Shopping cart with localStorage persistence</li>
-                <li data-i18n="li.req4">Dark UI that makes the car photos pop</li>
-                <li data-i18n="li.req5">No build step, no dependencies — just static files</li>
+                <li data-i18n="li.req1">A luxury automotive brand feel — gold on obsidian, serif headlines, generous whitespace</li>
+                <li data-i18n="li.req2">Five content sections managed as a single-page app</li>
+                <li data-i18n="li.req3">A before/after slider for paint correction</li>
+                <li data-i18n="li.req4">A filterable portfolio gallery with a fullscreen lightbox</li>
+                <li data-i18n="li.req5">Form validation with floating labels</li>
+                <li data-i18n="li.req6">Mobile-first responsive design</li>
+                <li data-i18n="li.req7">No build step — deployable as static files</li>
             </ul>
 
-            <h2 data-i18n="h.whyVanilla">Why Vanilla JavaScript?</h2>
+            <p data-i18n="body.challenge2">Luxury brands are tricky. Everything has to feel intentional. A misplaced border-radius or a slightly wrong easing curve can make a "premium" site look cheap. So most of the work was in the details.</p>
 
-            <p data-i18n="body.why1">Let me be honest: React would have been faster to build. But vanilla JS forced me to solve problems at the foundation level — and that's where the real learning happens.</p>
+            <h2 data-i18n="h.design">The Design System</h2>
 
-            <p data-i18n="body.why2">The biggest win was <strong>performance</strong>. No framework overhead, no virtual DOM, no hydration. The entire site loads in under a second, even on slow connections. That matters when your audience is browsing from a phone at a collector convention.</p>
+            <p data-i18n="body.design1">The whole site is built on a small set of CSS custom properties. Two font families: <strong>Playfair Display</strong> for headlines (serif, editorial), <strong>Inter</strong> for everything else. This combination is the closest you can get to "silent luxury" without custom typefaces.</p>
 
-            <div class="callout">
-                <p data-i18n="callout.lesson">💡 <strong>Lesson learned:</strong> Frameworks solve problems you don't have yet. For a catalog with a few hundred items, vanilla JS is not just viable — it's optimal.</p>
-            </div>
-
-            <h2 data-i18n="h.filters">Building the Filter System</h2>
-
-            <p data-i18n="body.filters1">The filter system is the heart of the catalog. Here's the core logic:</p>
-
-<pre><code>function filterProducts() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const activeSeries = [...document.querySelectorAll('.series-filter:checked')]
-        .map(cb =&gt; cb.value);
-    const minPrice = parseFloat(minInput.value) || 0;
-    const maxPrice = parseFloat(maxInput.value) || Infinity;
-
-    return products.filter(product =&gt; {
-        const matchesSearch = product.name.toLowerCase().includes(searchTerm)
-            || product.series.toLowerCase().includes(searchTerm);
-
-        const matchesSeries = activeSeries.length === 0
-            || activeSeries.includes(product.series);
-
-        const matchesPrice = product.price &gt;= minPrice
-            &amp;&amp; product.price &lt;= maxPrice;
-
-        return matchesSearch &amp;&amp; matchesSeries &amp;&amp; matchesPrice;
-    });
-}</code></pre>
-
-            <p data-i18n="body.filters2">The key insight: <strong>filtering should never touch the DOM directly</strong>. First compute the filtered array, then render. This keeps logic and presentation separate — and makes debugging 10× easier.</p>
-
-            <h3 data-i18n="h3.render">The render function</h3>
-
-            <p data-i18n="body.render1">Rendering is where most vanilla JS projects get messy. My approach: build HTML as a string, then inject once.</p>
-
-<pre><code>function renderProducts(products) {
-    if (products.length === 0) {
-        grid.innerHTML = '&lt;div class="empty"&gt;No cars found&lt;/div&gt;';
-        return;
-    }
-
-    grid.innerHTML = products.map(product =&gt; `
-        &lt;article class="product-card" data-id="${product.id}"&gt;
-            &lt;img src="${product.image}" alt="${product.name}" loading="lazy"&gt;
-            &lt;h3&gt;${product.name}&lt;/h3&gt;
-            &lt;span class="series"&gt;${product.series}&lt;/span&gt;
-            &lt;span class="price"&gt;${formatPrice(product.price)}&lt;/span&gt;
-        &lt;/article&gt;
-    `).join('');
-}</code></pre>
-
-            <p data-i18n="body.render2">Why innerHTML instead of createElement? For this use case, it's faster and more readable. When you have hundreds of items, string concatenation wins. Just be careful with user-generated content — always sanitize.</p>
-
-            <h2 data-i18n="h.darkUI">The Dark UI Decision</h2>
-
-            <p data-i18n="body.dark1">The dark theme wasn't just aesthetic. Hot Wheels cars are colorful, glossy, and often photographed on white backgrounds. A dark UI makes those colors <strong>pop</strong> — it's the same principle museums use when displaying jewelry.</p>
-
-            <p data-i18n="body.dark2">I used CSS custom properties for the entire color system:</p>
+            <p data-i18n="body.design2">The gold is <code>#C5A880</code> — a muted, desaturated gold. Not <code>#FFD700</code>. Bright yellow-gold screams "cheap"; muted gold whispers "expensive". This single color decision does most of the heavy lifting.</p>
 
 <pre><code>:root {
-    --bg: #0a0a0a;
-    --card: #1a1a1a;
-    --text: #f5f5f5;
-    --accent: #7b61ff;
-    --border: rgba(255, 255, 255, 0.05);
+    --bg-base: #050505;
+    --bg-surface: #0a0a0a;
+    --gold: #C5A880;
+    --text-main: #F5F5F5;
+    --text-muted: #888888;
 }</code></pre>
 
-            <p data-i18n="body.dark3">This made theme switching trivial — just swap the variables. No duplicated CSS, no complex class toggling.</p>
+            <p data-i18n="body.design3">Everything else — cards, borders, buttons — inherits from these five variables. Change the gold, and the entire site changes with it.</p>
 
-            <h2 data-i18n="h.searchPerf">Search Performance</h2>
+            <h2 data-i18n="h.spa">SPA Routing Without a Framework</h2>
 
-            <p data-i18n="body.search1">Typing in a search field shouldn't re-render 500 items on every keystroke. I debounced the input:</p>
+            <p data-i18n="body.spa1">All content sections live in one HTML file. The router is about 20 lines:</p>
 
-<pre><code>let debounceTimer;
-searchInput.addEventListener('input', () =&gt; {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() =&gt; {
-        renderProducts(filterProducts());
-    }, 150);
+<pre><code>const router = {
+    navigate(targetId) {
+        document.querySelectorAll('.section').forEach(sec => {
+            sec.classList.remove('active');
+            sec.style.display = 'none';
+        });
+        
+        const target = document.getElementById(targetId);
+        if (target) {
+            target.style.display = 'block';
+            setTimeout(() => { target.classList.add('active'); }, 50);
+        }
+        
+        document.querySelectorAll('.nav__link').forEach(link => {
+            link.classList.toggle('active', link.getAttribute('data-target') === targetId);
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+};</code></pre>
+
+            <p data-i18n="body.spa2">The key insight: <code>display: none</code>/<code>block</code> for hard visibility, and a small <code>setTimeout</code> to allow the opacity transition to actually run. Without the timeout, the browser would batch the class change with the display change and the fade would never play.</p>
+
+            <p data-i18n="body.spa3">The active class handles the opacity fade — using <code>cubic-bezier(0.16, 1, 0.3, 1)</code>, my favourite easing curve. It starts fast and settles into stillness. Feels "weighty" without feeling slow.</p>
+
+            <h2 data-i18n="h.interactive">Interactive Components</h2>
+
+            <h3 data-i18n="h3.beforeAfter">Before/After Slider</h3>
+
+            <p data-i18n="body.ba1">This was the most fun component. The trick is to use <code>clip-path</code> on the "after" image:</p>
+
+<pre><code>.ba-after { 
+    clip-path: inset(0 0 0 50%); 
+}</code></pre>
+
+            <p data-i18n="body.ba2">The <code>inset(0 0 0 X%)</code> reveals the image from the right side. Move the handle, and you move the reveal. Mouse and touch events are handled — no library needed.</p>
+
+            <h3 data-i18n="h3.portfolio">Portfolio Filtering</h3>
+
+            <p data-i18n="body.portfolio1">Filtering the gallery is done in ten lines:</p>
+
+<pre><code>filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+
+        galleryItems.forEach(item => {
+            const match = filter === 'all' || item.dataset.category === filter;
+            item.classList.toggle('hidden', !match);
+        });
+    });
 });</code></pre>
 
-            <p data-i18n="body.search2">150ms feels instant to the user but prevents unnecessary renders. This one line made the search feel dramatically smoother.</p>
+            <p data-i18n="body.portfolio2">Each gallery item has a <code>data-category</code> attribute. When a filter is clicked, non-matching items get <code>.hidden</code> (which sets <code>display: none</code>). That's it.</p>
 
-            <h2 data-i18n="h.cart">Cart with localStorage</h2>
+            <h3 data-i18n="h3.modal">Image Modal</h3>
 
-            <p data-i18n="body.cart1">The shopping cart persists across page reloads using localStorage. The pattern is simple:</p>
+            <p data-i18n="body.modal1">Clicking a gallery item opens a fullscreen lightbox showing the high-res version. The full-res URL is stored in the same <code>data-src</code> attribute. Setting <code>document.body.style.overflow = 'hidden'</code> prevents background scrolling — a small detail that most custom modals forget.</p>
 
-<pre><code>function saveCart() {
-    localStorage.setItem('hw-cart', JSON.stringify(cart));
-}
+            <h3 data-i18n="h3.form">Floating Label Form</h3>
 
-function loadCart() {
-    try {
-        return JSON.parse(localStorage.getItem('hw-cart')) || [];
-    } catch {
-        return [];
-    }
+            <p data-i18n="body.form1">The contact form uses floating labels — the label sits inside the input until you type, then moves up. This is done with <code>:placeholder-shown</code> and a fake placeholder:</p>
+
+<pre><code>.form-control::placeholder { color: transparent; }
+
+.form-control:focus ~ .form-label,
+.form-control:not(:placeholder-shown) ~ .form-label {
+    top: -10px; 
+    font-size: 0.7rem; 
+    color: var(--gold);
 }</code></pre>
 
-            <p data-i18n="body.cart2">No backend, no login, no database. For a collector catalog, that's all you need. The cart lives in the browser — and it survives refreshes, tab closes, and even browser restarts.</p>
+            <p data-i18n="body.form2">The trick: set the placeholder to a single space. Now <code>:placeholder-shown</code> works correctly, and the label transitions into position as soon as you type.</p>
+
+            <h3 data-i18n="h3.reveal">Reveal Animations</h3>
+
+            <p data-i18n="body.reveal1">Every section fades in as you scroll. This is done with an Intersection Observer. The <code>unobserve()</code> call is important — once an element has revealed, there's no need to keep watching it. Saves CPU.</p>
 
             <h2 data-i18n="h.different">What I'd Do Differently</h2>
 
-            <p data-i18n="body.diff1">Hindsight is 20/20. If I started over:</p>
-
             <ol>
-                <li data-i18n="li.diff1"><strong>Use a data file.</strong> Products are currently hardcoded in JS. A separate <code>products.json</code> would make updates easier.</li>
-                <li data-i18n="li.diff2"><strong>Add URL state.</strong> Filters should sync to the URL so users can share filtered views.</li>
-                <li data-i18n="li.diff3"><strong>Lazy load images from day one.</strong> I added <code>loading="lazy"</code> later — should have been there from the start.</li>
-                <li data-i18n="li.diff4"><strong>Write tests.</strong> Even a few unit tests for the filter logic would have saved debugging time.</li>
+                <li data-i18n="li.diff1"><strong>Add URL state to the router.</strong> Right now navigating between sections doesn't update the URL. If I did it again, I'd use <code>history.pushState()</code> so users could bookmark specific sections.</li>
+                <li data-i18n="li.diff2"><strong>Lazy-load portfolio images.</strong> Some of them are 1600px wide. <code>loading="lazy"</code> should be on every gallery image.</li>
+                <li data-i18n="li.diff3"><strong>Add reduced-motion support.</strong> Some users get motion sickness from animations. <code>@media (prefers-reduced-motion: reduce)</code> should disable all transitions.</li>
+                <li data-i18n="li.diff4"><strong>Split the CSS.</strong> 1500 lines in one <code>&lt;style&gt;</code> tag is a lot to scroll through. Even without a build step, I could use multiple <code>&lt;link&gt;</code> tags.</li>
             </ol>
+
+            <div class="callout">
+                <p data-i18n="callout.lesson">💡 <strong>Lesson learned:</strong> You don't need a framework to build a premium-feeling website. AURELIA is pure HTML, CSS, and JavaScript — no dependencies, no build step, deploys anywhere as static files.</p>
+            </div>
 
             <h2 data-i18n="h.final">Final Thoughts</h2>
 
-            <p data-i18n="body.final1">Building a full catalog with vanilla JavaScript is absolutely doable. It's not always the right choice — but it's a fantastic learning exercise. You'll understand the DOM, event handling, and state management at a level that frameworks abstract away.</p>
+            <p data-i18n="body.final1">AURELIA proved to me that restraint is a design skill. Every animation, every color, every typeface is a choice — and the best luxury sites are the ones that choose less.</p>
 
-            <p data-i18n="body.final2">If you're building something similar: start simple, optimize later, and don't reach for a framework until you actually need one.</p>
+            <p data-i18n="body.final2">The framework question is really: what problems are you solving? For a five-section marketing site with interactive components, vanilla JS is perfect. For a data-heavy app with complex state, React is the right tool.</p>
 
-            <p data-i18n="body.final3">The <a href="https://61simon.github.io/Hot-Wheels-Market/" target="_blank" rel="noopener">Hot Wheels Market</a> is live — check it out and let me know what you think.</p>
+            <p data-i18n="body.final3">The site is live — go take a look.</p>
         </div>
 
         <div class="article-footer">
@@ -459,152 +455,164 @@ function loadCart() {
 
     const translations = {
         en: {
-            "page.title": "How I Built the Hot Wheels Market | Simon's Blog",
+            "page.title": "How I Built AURELIA — A Luxury Automotive Atelier | Simon's Blog",
             "nav.back": "Back to Blog",
             "meta.tag": "Case Study",
             "meta.date": "October 2026",
-            "article.title": "How I Built the Hot Wheels Market",
-            "article.subtitle": "Lessons from building a full e-commerce catalog with vanilla JavaScript — filtering, search, performance, and design decisions behind the dark UI.",
-            "body.intro1": "When I started building the <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a>, I had one rule: <strong>no frameworks</strong>. No React, no Vue, no jQuery. Just HTML, CSS, and vanilla JavaScript.",
-            "body.intro2": "Was it a smart decision? Honestly, it depends. But it taught me more about JavaScript than any framework ever could. Here's how I built it, what I learned, and where I'd do things differently.",
+            "article.title": "How I Built AURELIA — A Luxury Automotive Atelier",
+            "article.subtitle": "Lessons from building a premium detailing site — SPA routing without a framework, before/after sliders, gallery filtering, and the design system behind the gold-on-obsidian aesthetic.",
+            "body.intro1": "When I started building <a href=\"#\" target=\"_blank\" rel=\"noopener\">AURELIA</a>, I had one specific question in mind: <strong>can you make a website feel expensive without using a single framework?</strong>",
+            "body.intro2": "No React, no Framer Motion, no GSAP. Just HTML, CSS, and vanilla JavaScript. The result is a luxury automotive detailing atelier that looks like it belongs on a premium brand's website — with SPA routing, interactive components, and a dark gold aesthetic. Here's how I built it.",
             "h.challenge": "The Challenge",
-            "body.challenge1": "Hot Wheels collectors need to browse hundreds of models. Existing collector sites are either outdated forums or clunky mobile apps. The goal was simple: build a fast, modern catalog that works perfectly on any device — and can be deployed anywhere with zero backend.",
-            "body.challenge2": "The requirements were clear:",
-            "li.req1": "Instant search across product names and series",
-            "li.req2": "Multi-criteria filtering (by series, rarity, price range)",
-            "li.req3": "Shopping cart with localStorage persistence",
-            "li.req4": "Dark UI that makes the car photos pop",
-            "li.req5": "No build step, no dependencies — just static files",
-            "h.whyVanilla": "Why Vanilla JavaScript?",
-            "body.why1": "Let me be honest: React would have been faster to build. But vanilla JS forced me to solve problems at the foundation level — and that's where the real learning happens.",
-            "body.why2": "The biggest win was <strong>performance</strong>. No framework overhead, no virtual DOM, no hydration. The entire site loads in under a second, even on slow connections. That matters when your audience is browsing from a phone at a collector convention.",
-            "callout.lesson": "💡 <strong>Lesson learned:</strong> Frameworks solve problems you don't have yet. For a catalog with a few hundred items, vanilla JS is not just viable — it's optimal.",
-            "h.filters": "Building the Filter System",
-            "body.filters1": "The filter system is the heart of the catalog. Here's the core logic:",
-            "body.filters2": "The key insight: <strong>filtering should never touch the DOM directly</strong>. First compute the filtered array, then render. This keeps logic and presentation separate — and makes debugging 10× easier.",
-            "h3.render": "The render function",
-            "body.render1": "Rendering is where most vanilla JS projects get messy. My approach: build HTML as a string, then inject once.",
-            "body.render2": "Why innerHTML instead of createElement? For this use case, it's faster and more readable. When you have hundreds of items, string concatenation wins. Just be careful with user-generated content — always sanitize.",
-            "h.darkUI": "The Dark UI Decision",
-            "body.dark1": "The dark theme wasn't just aesthetic. Hot Wheels cars are colorful, glossy, and often photographed on white backgrounds. A dark UI makes those colors <strong>pop</strong> — it's the same principle museums use when displaying jewelry.",
-            "body.dark2": "I used CSS custom properties for the entire color system:",
-            "body.dark3": "This made theme switching trivial — just swap the variables. No duplicated CSS, no complex class toggling.",
-            "h.searchPerf": "Search Performance",
-            "body.search1": "Typing in a search field shouldn't re-render 500 items on every keystroke. I debounced the input:",
-            "body.search2": "150ms feels instant to the user but prevents unnecessary renders. This one line made the search feel dramatically smoother.",
-            "h.cart": "Cart with localStorage",
-            "body.cart1": "The shopping cart persists across page reloads using localStorage. The pattern is simple:",
-            "body.cart2": "No backend, no login, no database. For a collector catalog, that's all you need. The cart lives in the browser — and it survives refreshes, tab closes, and even browser restarts.",
+            "body.challenge1": "The brief I set for myself was strict:",
+            "li.req1": "A luxury automotive brand feel — gold on obsidian, serif headlines, generous whitespace",
+            "li.req2": "Five content sections managed as a single-page app",
+            "li.req3": "A before/after slider for paint correction",
+            "li.req4": "A filterable portfolio gallery with a fullscreen lightbox",
+            "li.req5": "Form validation with floating labels",
+            "li.req6": "Mobile-first responsive design",
+            "li.req7": "No build step — deployable as static files",
+            "body.challenge2": "Luxury brands are tricky. Everything has to feel intentional. A misplaced border-radius or a slightly wrong easing curve can make a \"premium\" site look cheap. So most of the work was in the details.",
+            "h.design": "The Design System",
+            "body.design1": "The whole site is built on a small set of CSS custom properties. Two font families: <strong>Playfair Display</strong> for headlines (serif, editorial), <strong>Inter</strong> for everything else. This combination is the closest you can get to \"silent luxury\" without custom typefaces.",
+            "body.design2": "The gold is <code>#C5A880</code> — a muted, desaturated gold. Not <code>#FFD700</code>. Bright yellow-gold screams \"cheap\"; muted gold whispers \"expensive\". This single color decision does most of the heavy lifting.",
+            "body.design3": "Everything else — cards, borders, buttons — inherits from these five variables. Change the gold, and the entire site changes with it.",
+            "h.spa": "SPA Routing Without a Framework",
+            "body.spa1": "All content sections live in one HTML file. The router is about 20 lines:",
+            "body.spa2": "The key insight: <code>display: none</code>/<code>block</code> for hard visibility, and a small <code>setTimeout</code> to allow the opacity transition to actually run. Without the timeout, the browser would batch the class change with the display change and the fade would never play.",
+            "body.spa3": "The active class handles the opacity fade — using <code>cubic-bezier(0.16, 1, 0.3, 1)</code>, my favourite easing curve. It starts fast and settles into stillness. Feels \"weighty\" without feeling slow.",
+            "h.interactive": "Interactive Components",
+            "h3.beforeAfter": "Before/After Slider",
+            "body.ba1": "This was the most fun component. The trick is to use <code>clip-path</code> on the \"after\" image:",
+            "body.ba2": "The <code>inset(0 0 0 X%)</code> reveals the image from the right side. Move the handle, and you move the reveal. Mouse and touch events are handled — no library needed.",
+            "h3.portfolio": "Portfolio Filtering",
+            "body.portfolio1": "Filtering the gallery is done in ten lines:",
+            "body.portfolio2": "Each gallery item has a <code>data-category</code> attribute. When a filter is clicked, non-matching items get <code>.hidden</code> (which sets <code>display: none</code>). That's it.",
+            "h3.modal": "Image Modal",
+            "body.modal1": "Clicking a gallery item opens a fullscreen lightbox showing the high-res version. The full-res URL is stored in the same <code>data-src</code> attribute. Setting <code>document.body.style.overflow = 'hidden'</code> prevents background scrolling — a small detail that most custom modals forget.",
+            "h3.form": "Floating Label Form",
+            "body.form1": "The contact form uses floating labels — the label sits inside the input until you type, then moves up. This is done with <code>:placeholder-shown</code> and a fake placeholder:",
+            "body.form2": "The trick: set the placeholder to a single space. Now <code>:placeholder-shown</code> works correctly, and the label transitions into position as soon as you type.",
+            "h3.reveal": "Reveal Animations",
+            "body.reveal1": "Every section fades in as you scroll. This is done with an Intersection Observer. The <code>unobserve()</code> call is important — once an element has revealed, there's no need to keep watching it. Saves CPU.",
             "h.different": "What I'd Do Differently",
-            "body.diff1": "Hindsight is 20/20. If I started over:",
-            "li.diff1": "<strong>Use a data file.</strong> Products are currently hardcoded in JS. A separate products.json would make updates easier.",
-            "li.diff2": "<strong>Add URL state.</strong> Filters should sync to the URL so users can share filtered views.",
-            "li.diff3": "<strong>Lazy load images from day one.</strong> I added loading=\"lazy\" later — should have been there from the start.",
-            "li.diff4": "<strong>Write tests.</strong> Even a few unit tests for the filter logic would have saved debugging time.",
+            "li.diff1": "<strong>Add URL state to the router.</strong> Right now navigating between sections doesn't update the URL. If I did it again, I'd use <code>history.pushState()</code> so users could bookmark specific sections.",
+            "li.diff2": "<strong>Lazy-load portfolio images.</strong> Some of them are 1600px wide. <code>loading=\"lazy\"</code> should be on every gallery image.",
+            "li.diff3": "<strong>Add reduced-motion support.</strong> Some users get motion sickness from animations. <code>@media (prefers-reduced-motion: reduce)</code> should disable all transitions.",
+            "li.diff4": "<strong>Split the CSS.</strong> 1500 lines in one <code>&lt;style&gt;</code> tag is a lot to scroll through. Even without a build step, I could use multiple <code>&lt;link&gt;</code> tags.",
+            "callout.lesson": "💡 <strong>Lesson learned:</strong> You don't need a framework to build a premium-feeling website. AURELIA is pure HTML, CSS, and JavaScript — no dependencies, no build step, deploys anywhere as static files.",
             "h.final": "Final Thoughts",
-            "body.final1": "Building a full catalog with vanilla JavaScript is absolutely doable. It's not always the right choice — but it's a fantastic learning exercise. You'll understand the DOM, event handling, and state management at a level that frameworks abstract away.",
-            "body.final2": "If you're building something similar: start simple, optimize later, and don't reach for a framework until you actually need one.",
-            "body.final3": "The <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a> is live — check it out and let me know what you think.",
+            "body.final1": "AURELIA proved to me that restraint is a design skill. Every animation, every color, every typeface is a choice — and the best luxury sites are the ones that choose less.",
+            "body.final2": "The framework question is really: what problems are you solving? For a five-section marketing site with interactive components, vanilla JS is perfect. For a data-heavy app with complex state, React is the right tool.",
+            "body.final3": "The site is live — go take a look.",
             "footer.text": "Written by Simon · Web Designer & Developer",
             "footer.cta": "Start Your Project"
         },
         ru: {
-            "page.title": "Как я сделал Hot Wheels Market | Блог Саймона",
+            "page.title": "Как я сделал AURELIA — сайт люксового автомобильного ателье | Блог Саймона",
             "nav.back": "Назад в блог",
             "meta.tag": "Кейс",
             "meta.date": "Октябрь 2026",
-            "article.title": "Как я сделал Hot Wheels Market",
-            "article.subtitle": "Уроки создания полноценного e-commerce каталога на чистом JavaScript — фильтрация, поиск, производительность и решения по дизайну тёмного интерфейса.",
-            "body.intro1": "Когда я начинал делать <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a>, у меня было одно правило: <strong>никаких фреймворков</strong>. Никакого React, Vue или jQuery. Только HTML, CSS и чистый JavaScript.",
-            "body.intro2": "Было ли это умным решением? Честно — зависит от ситуации. Но это научило меня JavaScript глубже, чем любой фреймворк. Расскажу, как я это сделал, что узнал и что бы сделал иначе.",
+            "article.title": "Как я сделал AURELIA — сайт люксового автомобильного ателье",
+            "article.subtitle": "Уроки создания премиального сайта детейлинг-ателье — SPA-роутинг без фреймворка, слайдеры «до/после», фильтрация галереи и дизайн-система в эстетике золота на обсидиане.",
+            "body.intro1": "Когда я начинал делать <a href=\"#\" target=\"_blank\" rel=\"noopener\">AURELIA</a>, у меня был конкретный вопрос: <strong>можно ли сделать сайт, который ощущается дорого, без единого фреймворка?</strong>",
+            "body.intro2": "Никакого React, Framer Motion или GSAP. Только HTML, CSS и чистый JavaScript. Результат — сайт люксового автомобильного детейлинг-ателье, который выглядит как страница премиум-бренда: SPA-роутинг, интерактивные компоненты и тёмная золотая эстетика. Рассказываю, как я это сделал.",
             "h.challenge": "Задача",
-            "body.challenge1": "Коллекционерам Hot Wheels нужно просматривать сотни моделей. Существующие сайты — либо устаревшие форумы, либо неудобные мобильные приложения. Цель была простой: быстрый современный каталог, работающий идеально на любом устройстве — и разворачиваемый где угодно без бэкенда.",
-            "body.challenge2": "Требования были чёткими:",
-            "li.req1": "Мгновенный поиск по названиям и сериям товаров",
-            "li.req2": "Мульти-фильтрация (по серии, редкости, цене)",
-            "li.req3": "Корзина с сохранением в localStorage",
-            "li.req4": "Тёмный интерфейс, на котором фотографии машинок выглядят ярко",
-            "li.req5": "Без сборки, без зависимостей — только статические файлы",
-            "h.whyVanilla": "Почему Vanilla JavaScript?",
-            "body.why1": "Честно: на React было бы быстрее. Но чистый JS заставил меня решать задачи на уровне фундамента — и именно там происходит настоящее обучение.",
-            "body.why2": "Главный плюс — <strong>производительность</strong>. Нет накладных расходов фреймворка, нет виртуального DOM, нет гидратации. Весь сайт загружается меньше секунды даже на медленном соединении. Это важно, когда посетители листают каталог с телефона на конвенции коллекционеров.",
-            "callout.lesson": "💡 <strong>Вывод:</strong> Фреймворки решают проблемы, которых у вас ещё нет. Для каталога на несколько сотен товаров чистый JS — не просто рабочий вариант, а оптимальный.",
-            "h.filters": "Создание системы фильтров",
-            "body.filters1": "Система фильтров — сердце каталога. Вот основная логика:",
-            "body.filters2": "Ключевой момент: <strong>фильтрация никогда не должна работать с DOM напрямую</strong>. Сначала вычисляем отфильтрованный массив, потом рендерим. Это разделяет логику и представление — и упрощает отладку в 10 раз.",
-            "h3.render": "Функция рендера",
-            "body.render1": "Рендеринг — самое беспорядочное место в большинстве проектов на чистом JS. Мой подход: собираю HTML строкой и вставляю один раз.",
-            "body.render2": "Почему innerHTML, а не createElement? Для этого случая — быстрее и читабельнее. Когда у вас сотни элементов, конкатенация строк побеждает. Только будьте аккуратны с пользовательским контентом — всегда санируйте.",
-            "h.darkUI": "Решение о тёмном интерфейсе",
-            "body.dark1": "Тёмная тема — это не только эстетика. Машинки Hot Wheels яркие, глянцевые и часто фотографируются на белом фоне. Тёмный UI заставляет эти цвета <strong>светиться</strong> — тот же принцип используют музеи, выставляя ювелирные украшения.",
-            "body.dark2": "Я использовал CSS-переменные для всей цветовой системы:",
-            "body.dark3": "Это сделало переключение темы тривиальным — просто меняем переменные. Никакого дублирования CSS, никакого сложного переключения классов.",
-            "h.searchPerf": "Производительность поиска",
-            "body.search1": "Ввод в поле поиска не должен перерисовывать 500 элементов на каждый символ. Я использовал debounce:",
-            "body.search2": "150 мс кажутся пользователю мгновенными, но предотвращают лишние рендеры. Одна эта строка сделала поиск значительно плавнее.",
-            "h.cart": "Корзина с localStorage",
-            "body.cart1": "Корзина сохраняется между перезагрузками через localStorage. Паттерн простой:",
-            "body.cart2": "Без бэкенда, без логина, без базы данных. Для каталога коллекционеров этого достаточно. Корзина живёт в браузере — и переживает обновления, закрытия вкладок и даже перезапуск браузера.",
+            "body.challenge1": "Бриф, который я поставил себе, был строгим:",
+            "li.req1": "Ощущение люксового автомобильного бренда — золото на обсидиане, serif-заголовки, много воздуха",
+            "li.req2": "Пять контентных секций как одностраничное приложение",
+            "li.req3": "Слайдер «до/после» для коррекции ЛКП",
+            "li.req4": "Фильтруемая галерея портфолио с полноэкранным лайтбоксом",
+            "li.req5": "Валидация формы с плавающими лейблами",
+            "li.req6": "Mobile-first адаптивная верстка",
+            "li.req7": "Без сборки — деплоится как статические файлы",
+            "body.challenge2": "Люксовые бренды — сложная штука. Всё должно ощущаться намеренным. Неправильный border-radius или чуть не та кривая анимации — и «премиальный» сайт выглядит дешёвым. Поэтому основная работа была в деталях.",
+            "h.design": "Дизайн-система",
+            "body.design1": "Весь сайт построен на небольшом наборе CSS-переменных. Два шрифта: <strong>Playfair Display</strong> для заголовков (serif, редакционный) и <strong>Inter</strong> для всего остального. Эта комбинация — максимально близко к «тихой роскоши» без кастомных шрифтов.",
+            "body.design2": "Золото — <code>#C5A880</code>, приглушённое, десатурированное. Не <code>#FFD700</code>. Яркое жёлто-золотое кричит «дешёвка», приглушённое шепчет «дорого». Одно это цветовое решение делает основную работу.",
+            "body.design3": "Всё остальное — карточки, границы, кнопки — наследуется от этих пяти переменных. Меняешь золото — меняется весь сайт.",
+            "h.spa": "SPA-роутинг без фреймворка",
+            "body.spa1": "Все контентные секции живут в одном HTML-файле. Роутер — около 20 строк:",
+            "body.spa2": "Ключевой момент: <code>display: none</code>/<code>block</code> для жёсткой видимости и небольшой <code>setTimeout</code>, чтобы transition по opacity успел сработать. Без таймаута браузер сбатчил бы смену класса с изменением display — и фейд бы не проиграл.",
+            "body.spa3": "Класс active отвечает за плавное появление — через <code>cubic-bezier(0.16, 1, 0.3, 1)</code>, мою любимую easing-кривую. Стартует быстро и затихает. Ощущается «весомым», но не медленным.",
+            "h.interactive": "Интерактивные компоненты",
+            "h3.beforeAfter": "Слайдер «до/после»",
+            "body.ba1": "Это был самый весёлый компонент. Трюк — использовать <code>clip-path</code> на «после»-изображении:",
+            "body.ba2": "<code>inset(0 0 0 X%)</code> открывает изображение справа. Двигаешь ручку — двигаешь «раскрытие». Обрабатываются и мышь, и тач — без библиотек.",
+            "h3.portfolio": "Фильтрация портфолио",
+            "body.portfolio1": "Фильтрация галереи — десять строк:",
+            "body.portfolio2": "У каждого элемента галереи есть атрибут <code>data-category</code>. При клике на фильтр несовпадающие элементы получают <code>.hidden</code> (а это <code>display: none</code>). Всё.",
+            "h3.modal": "Модалка изображения",
+            "body.modal1": "Клик по элементу галереи открывает полноэкранный лайтбокс с версией в высоком разрешении. URL хранится в том же <code>data-src</code>. Установка <code>document.body.style.overflow = 'hidden'</code> предотвращает скролл фона — мелочь, которую забывают в большинстве кастомных модалок.",
+            "h3.form": "Форма с плавающими лейблами",
+            "body.form1": "Контактная форма использует плавающие лейблы — лейбл сидит внутри инпута, пока не начнёшь печатать, потом уезжает наверх. Это делается через <code>:placeholder-shown</code> и фейковый плейсхолдер:",
+            "body.form2": "Трюк: ставим placeholder в один пробел. Теперь <code>:placeholder-shown</code> работает корректно, и лейбл уезжает вверх сразу, как только начинаешь печатать.",
+            "h3.reveal": "Анимации появления",
+            "body.reveal1": "Каждая секция плавно проявляется при скролле. Через Intersection Observer. Вызов <code>unobserve()</code> важен — как только элемент проявился, следить за ним больше не нужно. Экономит CPU.",
             "h.different": "Что бы я сделал иначе",
-            "body.diff1": "Задним умом все крепки. Если бы начинал заново:",
-            "li.diff1": "<strong>Использовать data-файл.</strong> Сейчас товары захардкожены в JS. Отдельный products.json упростил бы обновления.",
-            "li.diff2": "<strong>Добавить состояние в URL.</strong> Фильтры должны синхронизироваться с URL, чтобы пользователи могли делиться отфильтрованными видами.",
-            "li.diff3": "<strong>Ленивая загрузка изображений с первого дня.</strong> Я добавил loading=\"lazy\" позже — стоило сделать сразу.",
-            "li.diff4": "<strong>Писать тесты.</strong> Даже несколько юнит-тестов для логики фильтра сэкономили бы время на отладке.",
+            "li.diff1": "<strong>Добавить состояние в URL роутера.</strong> Сейчас навигация между секциями не меняет URL. Если бы делал заново — использовал бы <code>history.pushState()</code>, чтобы можно было давать ссылку на конкретную секцию.",
+            "li.diff2": "<strong>Лениво грузить изображения портфолио.</strong> Некоторые по 1600px в ширину. <code>loading=\"lazy\"</code> должен быть на каждом изображении галереи.",
+            "li.diff3": "<strong>Добавить поддержку reduced-motion.</strong> Некоторых пользователей укачивает от анимаций. <code>@media (prefers-reduced-motion: reduce)</code> должен отключать все transition.",
+            "li.diff4": "<strong>Разбить CSS.</strong> 1500 строк в одном <code>&lt;style&gt;</code> — многовато. Даже без сборки можно использовать несколько <code>&lt;link&gt;</code>.",
+            "callout.lesson": "💡 <strong>Вывод:</strong> Чтобы сделать сайт, который ощущается премиальным, фреймворк не нужен. AURELIA — чистый HTML, CSS и JavaScript. Без зависимостей, без сборки, деплоится где угодно как статика.",
             "h.final": "Итоговые мысли",
-            "body.final1": "Сделать полноценный каталог на чистом JavaScript абсолютно реально. Это не всегда правильный выбор — но отличное упражнение для обучения. Вы поймёте DOM, работу с событиями и управление состоянием на уровне, который фреймворки скрывают.",
-            "body.final2": "Если делаете что-то похожее: начните просто, оптимизируйте потом, и не хватайтесь за фреймворк, пока он действительно не понадобится.",
-            "body.final3": "<a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a> уже работает — загляните и скажите, что думаете.",
+            "body.final1": "AURELIA доказал мне, что сдержанность — это дизайн-навык. Каждая анимация, каждый цвет, каждый шрифт — выбор. И лучшие люксовые сайты — те, что выбирают меньше.",
+            "body.final2": "Вопрос про фреймворки на самом деле звучит так: какие задачи ты решаешь? Для маркетингового сайта на пять секций с интерактивными компонентами чистый JS — идеален. Для приложения с тяжёлым состоянием и данными — React.",
+            "body.final3": "Сайт уже работает — загляните.",
             "footer.text": "Автор: Simon · Веб-дизайнер и разработчик",
             "footer.cta": "Начать проект"
         },
         ua: {
-            "page.title": "Як я зробив Hot Wheels Market | Блог Саймона",
+            "page.title": "Як я зробив AURELIA — сайт люксового автомобільного ательє | Блог Саймона",
             "nav.back": "Назад до блогу",
             "meta.tag": "Кейс",
             "meta.date": "Жовтень 2026",
-            "article.title": "Як я зробив Hot Wheels Market",
-            "article.subtitle": "Уроки створення повноцінного e-commerce каталогу на чистому JavaScript — фільтрація, пошук, продуктивність та рішення щодо дизайну темного інтерфейсу.",
-            "body.intro1": "Коли я починав робити <a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a>, у мене було одне правило: <strong>жодних фреймворків</strong>. Ніякого React, Vue чи jQuery. Тільки HTML, CSS та чистий JavaScript.",
-            "body.intro2": "Чи було це розумним рішенням? Чесно — залежить від ситуації. Але це навчило мене JavaScript глибше, ніж будь-який фреймворк. Розповім, як я це зробив, що дізнався і що б зробив інакше.",
+            "article.title": "Як я зробив AURELIA — сайт люксового автомобільного ательє",
+            "article.subtitle": "Уроки створення преміального сайту детейлінг-ательє — SPA-роутинг без фреймворку, слайдери «до/після», фільтрація галереї та дизайн-система в естетиці золота на обсидіані.",
+            "body.intro1": "Коли я починав робити <a href=\"#\" target=\"_blank\" rel=\"noopener\">AURELIA</a>, у мене було конкретне питання: <strong>чи можна зробити сайт, який відчувається дорого, без жодного фреймворку?</strong>",
+            "body.intro2": "Жодного React, Framer Motion чи GSAP. Тільки HTML, CSS та чистий JavaScript. Результат — сайт люксового автомобільного детейлінг-ательє, який виглядає як сторінка преміум-бренду: SPA-роутинг, інтерактивні компоненти та темна золота естетика. Розповідаю, як я це зробив.",
             "h.challenge": "Завдання",
-            "body.challenge1": "Колекціонерам Hot Wheels потрібно переглядати сотні моделей. Існуючі сайти — або застарілі форуми, або незручні мобільні застосунки. Мета була простою: швидкий сучасний каталог, що ідеально працює на будь-якому пристрої — і розгортається будь-де без бекенду.",
-            "body.challenge2": "Вимоги були чіткими:",
-            "li.req1": "Миттєвий пошук за назвами та серіями товарів",
-            "li.req2": "Мульти-фільтрація (за серією, рідкістю, ціною)",
-            "li.req3": "Кошик зі збереженням у localStorage",
-            "li.req4": "Темний інтерфейс, на якому фотографії машинок виглядають яскраво",
-            "li.req5": "Без збірки, без залежностей — лише статичні файли",
-            "h.whyVanilla": "Чому Vanilla JavaScript?",
-            "body.why1": "Чесно: на React було б швидше. Але чистий JS змусив мене вирішувати задачі на рівні фундаменту — і саме там відбувається справжнє навчання.",
-            "body.why2": "Головний плюс — <strong>продуктивність</strong>. Немає накладних витрат фреймворку, немає віртуального DOM, немає гідратації. Весь сайт завантажується менш ніж за секунду навіть на повільному з'єднанні. Це важливо, коли відвідувачі гортають каталог з телефона на конвенції колекціонерів.",
-            "callout.lesson": "💡 <strong>Висновок:</strong> Фреймворки вирішують проблеми, яких у вас ще немає. Для каталогу на кілька сотень товарів чистий JS — не просто робочий варіант, а оптимальний.",
-            "h.filters": "Створення системи фільтрів",
-            "body.filters1": "Система фільтрів — серце каталогу. Ось основна логіка:",
-            "body.filters2": "Ключовий момент: <strong>фільтрація ніколи не повинна працювати з DOM напряму</strong>. Спершу обчислюємо відфільтрований масив, потім рендеримо. Це розділяє логіку та представлення — і спрощує відлагодження в 10 разів.",
-            "h3.render": "Функція рендеру",
-            "body.render1": "Рендеринг — найбезладніше місце в більшості проєктів на чистому JS. Мій підхід: збираю HTML рядком і вставляю один раз.",
-            "body.render2": "Чому innerHTML, а не createElement? Для цього випадку — швидше й читабельніше. Коли у вас сотні елементів, конкатенація рядків перемагає. Тільки будьте обережні з користувацьким контентом — завжди саніруйте.",
-            "h.darkUI": "Рішення про темний інтерфейс",
-            "body.dark1": "Темна тема — це не лише естетика. Машинки Hot Wheels яскраві, глянцеві й часто фотографуються на білому фоні. Темний UI змушує ці кольори <strong>сяяти</strong> — той самий принцип використовують музеї, виставляючи ювелірні прикраси.",
-            "body.dark2": "Я використав CSS-змінні для всієї колірної системи:",
-            "body.dark3": "Це зробило перемикання теми тривіальним — просто змінюємо змінні. Жодного дублювання CSS, жодного складного перемикання класів.",
-            "h.searchPerf": "Продуктивність пошуку",
-            "body.search1": "Введення в поле пошуку не повинно перемальовувати 500 елементів на кожен символ. Я використав debounce:",
-            "body.search2": "150 мс здаються користувачу миттєвими, але запобігають зайвим рендерам. Один цей рядок зробив пошук значно плавнішим.",
-            "h.cart": "Кошик з localStorage",
-            "body.cart1": "Кошик зберігається між перезавантаженнями через localStorage. Патерн простий:",
-            "body.cart2": "Без бекенду, без логіну, без бази даних. Для каталогу колекціонерів цього достатньо. Кошик живе в браузері — і переживає оновлення, закриття вкладок і навіть перезапуск браузера.",
+            "body.challenge1": "Бриф, який я поставив собі, був строгим:",
+            "li.req1": "Відчуття люксового автомобільного бренду — золото на обсидіані, serif-заголовки, багато повітря",
+            "li.req2": "П'ять контентних секцій як односторінковий додаток",
+            "li.req3": "Слайдер «до/після» для корекції ЛКП",
+            "li.req4": "Фільтрована галерея портфоліо з повноекранним лайтбоксом",
+            "li.req5": "Валідація форми з плаваючими лейблами",
+            "li.req6": "Mobile-first адаптивна верстка",
+            "li.req7": "Без збірки — деплоїться як статичні файли",
+            "body.challenge2": "Люксові бренди — складна штука. Усе має відчуватися навмисним. Неправильний border-radius чи трохи не та крива анімації — і «преміальний» сайт виглядає дешево. Тож основна робота була в деталях.",
+            "h.design": "Дизайн-система",
+            "body.design1": "Весь сайт побудований на невеликому наборі CSS-змінних. Два шрифти: <strong>Playfair Display</strong> для заголовків (serif, редакційний) та <strong>Inter</strong> для всього іншого. Ця комбінація — максимально близько до «тихої розкоші» без кастомних шрифтів.",
+            "body.design2": "Золото — <code>#C5A880</code>, приглушене, десатуроване. Не <code>#FFD700</code>. Яскраве жовто-золоте кричить «дешевка», приглушене шепоче «дорого». Одне це колірне рішення робить основну роботу.",
+            "body.design3": "Усе інше — картки, межі, кнопки — успадковується від цих п'яти змінних. Змінюєш золото — змінюється весь сайт.",
+            "h.spa": "SPA-роутинг без фреймворку",
+            "body.spa1": "Усі контентні секції живуть в одному HTML-файлі. Роутер — близько 20 рядків:",
+            "body.spa2": "Ключовий момент: <code>display: none</code>/<code>block</code> для жорсткої видимості та невеликий <code>setTimeout</code>, щоб transition по opacity встиг спрацювати. Без таймауту браузер збатчив би зміну класу зі зміною display — і фейд би не проіграв.",
+            "body.spa3": "Клас active відповідає за плавну появу — через <code>cubic-bezier(0.16, 1, 0.3, 1)</code>, мою улюблену easing-криву. Стартує швидко і затихає. Відчувається «вагомим», але не повільним.",
+            "h.interactive": "Інтерактивні компоненти",
+            "h3.beforeAfter": "Слайдер «до/після»",
+            "body.ba1": "Це був найвеселіший компонент. Трюк — використати <code>clip-path</code> на «після»-зображенні:",
+            "body.ba2": "<code>inset(0 0 0 X%)</code> відкриває зображення справа. Рухаєш ручку — рухаєш «розкриття». Обробляються і миша, і тач — без бібліотек.",
+            "h3.portfolio": "Фільтрація портфоліо",
+            "body.portfolio1": "Фільтрація галереї — десять рядків:",
+            "body.portfolio2": "У кожного елемента галереї є атрибут <code>data-category</code>. При кліку на фільтр невідповідні елементи отримують <code>.hidden</code> (а це <code>display: none</code>). Усе.",
+            "h3.modal": "Модалка зображення",
+            "body.modal1": "Клік по елементу галереї відкриває повноекранний лайтбокс з версією у високій роздільній здатності. URL зберігається в тому ж <code>data-src</code>. Встановлення <code>document.body.style.overflow = 'hidden'</code> запобігає скролу фону — дрібниця, яку забувають у більшості кастомних модалок.",
+            "h3.form": "Форма з плаваючими лейблами",
+            "body.form1": "Контактна форма використовує плаваючі лейбли — лейбл сидить всередині інпута, поки не почнеш друкувати, потім їде вгору. Це робиться через <code>:placeholder-shown</code> і фейковий плейсхолдер:",
+            "body.form2": "Трюк: ставимо placeholder в один пробіл. Тепер <code>:placeholder-shown</code> працює коректно, і лейбл їде вгору одразу, як тільки починаєш друкувати.",
+            "h3.reveal": "Анімації появи",
+            "body.reveal1": "Кожна секція плавно проявляється при скролі. Через Intersection Observer. Виклик <code>unobserve()</code> важливий — як тільки елемент проявився, стежити за ним більше не потрібно. Економить CPU.",
             "h.different": "Що б я зробив інакше",
-            "body.diff1": "Заднім умом усі міцні. Якби починав заново:",
-            "li.diff1": "<strong>Використати data-файл.</strong> Зараз товари захардкоджені в JS. Окремий products.json спростив би оновлення.",
-            "li.diff2": "<strong>Додати стан у URL.</strong> Фільтри мають синхронізуватися з URL, щоб користувачі могли ділитися відфільтрованими видами.",
-            "li.diff3": "<strong>Ліниве завантаження зображень з першого дня.</strong> Я додав loading=\"lazy\" пізніше — варто було зробити відразу.",
-            "li.diff4": "<strong>Писати тести.</strong> Навіть кілька юніт-тестів для логіки фільтра зекономили б час на відлагодженні.",
+            "li.diff1": "<strong>Додати стан у URL роутера.</strong> Зараз навігація між секціями не змінює URL. Якби робив заново — використав би <code>history.pushState()</code>, щоб можна було давати посилання на конкретну секцію.",
+            "li.diff2": "<strong>Ліниво вантажити зображення портфоліо.</strong> Деякі по 1600px завширшки. <code>loading=\"lazy\"</code> має бути на кожному зображенні галереї.",
+            "li.diff3": "<strong>Додати підтримку reduced-motion.</strong> Деяких користувачів заколисує від анімацій. <code>@media (prefers-reduced-motion: reduce)</code> має вимикати всі transition.",
+            "li.diff4": "<strong>Розбити CSS.</strong> 1500 рядків в одному <code>&lt;style&gt;</code> — забагато. Навіть без збірки можна використати кілька <code>&lt;link&gt;</code>.",
+            "callout.lesson": "💡 <strong>Висновок:</strong> Щоб зробити сайт, який відчувається преміальним, фреймворк не потрібен. AURELIA — чистий HTML, CSS та JavaScript. Без залежностей, без збірки, деплоїться будь-де як статика.",
             "h.final": "Підсумкові думки",
-            "body.final1": "Зробити повноцінний каталог на чистому JavaScript абсолютно реально. Це не завжди правильний вибір — але чудова вправа для навчання. Ви зрозумієте DOM, роботу з подіями та керування станом на рівні, який фреймворки приховують.",
-            "body.final2": "Якщо робите щось схоже: почніть просто, оптимізуйте потім, і не хапайтеся за фреймворк, поки він справді не знадобиться.",
-            "body.final3": "<a href=\"https://61simon.github.io/Hot-Wheels-Market/\" target=\"_blank\" rel=\"noopener\">Hot Wheels Market</a> вже працює — зазирніть і скажіть, що думаєте.",
+            "body.final1": "AURELIA довів мені, що стриманість — це дизайн-навичка. Кожна анімація, кожен колір, кожен шрифт — вибір. І найкращі люксові сайти — ті, що вибирають менше.",
+            "body.final2": "Питання про фреймворки насправді звучить так: які задачі ти вирішуєш? Для маркетингового сайту на п'ять секцій з інтерактивними компонентами чистий JS — ідеальний. Для додатку з важким станом і даними — React.",
+            "body.final3": "Сайт уже працює — зазирніть.",
             "footer.text": "Автор: Simon · Веб-дизайнер і розробник",
             "footer.cta": "Почати проєкт"
         }
